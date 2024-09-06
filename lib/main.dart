@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plant_friends/authentication/login/login_page.dart';
+import 'package:plant_friends/themes/dark_theme.dart';
+import 'package:plant_friends/themes/light_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,16 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-          brightness: Brightness.light,
-          primaryColor: Colors.green,
-          scaffoldBackgroundColor: Colors.white
-      ),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          primaryColor: Colors.green,
-          scaffoldBackgroundColor: Colors.black
-      ),
+      theme: lightTheme(),
+      darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: LoginPage(),

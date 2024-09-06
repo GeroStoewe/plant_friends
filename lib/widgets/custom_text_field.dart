@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final IconData icon;
   final String hintText;
   final bool obscureText;
 
-  const MyTextField({
+  const CustomTextField({
     Key? key,
     required this.controller,
     required this.icon,
@@ -16,18 +16,18 @@ class MyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      style: const TextStyle(
-          color: Colors.white,
-          fontSize: 20
-      ),
+      style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white.withOpacity(0.1),
+        fillColor: isDarkMode ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.1),
         prefixIcon: Icon(
-          icon, color: Colors.white.withOpacity(0.3)
+            icon,
+            color: isDarkMode ? Colors.white.withOpacity(0.3) : Colors.black.withOpacity(0.5)
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
@@ -35,7 +35,7 @@ class MyTextField extends StatelessWidget {
         ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(18),
-            borderSide: const BorderSide(color: Colors.green)
+              borderSide: BorderSide(color: Theme.of(context).focusColor)
           ),
         hintText: hintText
       ),

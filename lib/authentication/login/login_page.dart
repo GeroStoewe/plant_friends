@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/authentication/widgets/square_tile.dart';
-import 'package:plant_friends/authentication/widgets/my_button.dart';
-import 'package:plant_friends/authentication/widgets/my_text_field.dart';
+import 'package:plant_friends/authentication/login/square_tile.dart';
+import 'package:plant_friends/themes/colors.dart';
+import 'package:plant_friends/widgets/custom_button.dart';
+import 'package:plant_friends/widgets/custom_text_field.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -13,6 +14,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: GestureDetector(
@@ -48,23 +50,19 @@ class LoginPage extends StatelessWidget {
                     child: Column(
                       children: [
                         const SizedBox(height: 5),
-                        const Text(
+                        Text(
                             "Welcome to PlantFriends",
-                            style: TextStyle(
-                              fontSize: 28,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700
-                            )
+                            style: Theme.of(context).textTheme.headlineMedium
                         ),
                         const SizedBox(height: 20),
-                        MyTextField(
+                        CustomTextField(
                             controller: usernameController,
                             icon: Icons.alternate_email_rounded,
                             hintText: "Email Address",
                             obscureText: false
                         ),
                         const SizedBox(height: 20),
-                        MyTextField(
+                        CustomTextField(
                             controller: passwordController,
                             icon: Icons.lock_outline_rounded,
                             hintText: "Password",
@@ -73,7 +71,7 @@ class LoginPage extends StatelessWidget {
                         const SizedBox(height: 10),
                         GestureDetector(
                           onTap: () {},
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text.rich(
@@ -82,13 +80,13 @@ class LoginPage extends StatelessWidget {
                                           TextSpan(
                                               text: "Forgot Password? ",
                                               style: TextStyle(
-                                                  color: Colors.white38
+                                                  color: isDarkMode ? dmLightGrey : lmDarkGrey
                                               )
                                           ),
                                           TextSpan(
                                               text: "Reset Here",
                                               style: TextStyle(
-                                                  color: Colors.lightGreenAccent
+                                                  color: Theme.of(context).hintColor
                                               )
                                           )
                                         ]
@@ -98,52 +96,52 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         const SizedBox(height: 15),
-                        MyButton(
+                        CustomButton(
                             onTap: login,
                             text: "LOGIN"
                         ),
                         const SizedBox(height: 25),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Divider(
                                   thickness: 0.5,
-                                  color: Colors.white24
+                                  color: isDarkMode ? dmDarkGrey : lmLightGrey
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                 child: Text(
                                   "Or continue with",
                                   style: TextStyle(
-                                    color: Colors.white38
+                                    color: isDarkMode ? dmLightGrey : lmDarkGrey
                                   ),
                                 ),
                               ),
                               Expanded(
                                 child: Divider(
                                     thickness: 0.5,
-                                    color: Colors.white24
+                                    color: isDarkMode ? dmDarkGrey : lmLightGrey
                                 ),
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 25),
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SquareTile(imagePath: 'lib/images/auth_Img/google_logo.png'),
-                            SquareTile(imagePath: 'lib/images/auth_Img/apple_logo_dark_mode.png'),
-                            SquareTile(imagePath: 'lib/images/auth_Img/x_logo_dark_mode.png'),
+                            const SquareTile(imagePath: 'lib/authentication/login/images/google_logo.png'),
+                            SquareTile(imagePath: isDarkMode ? 'lib/authentication/login/images/apple_logo_dark_mode.png' : 'lib/authentication/login/images/apple_logo_light_mode.png'),
+                            SquareTile(imagePath: isDarkMode ? 'lib/authentication/login/images/x_logo_dark_mode.png' : 'lib/authentication/login/images/x_logo_light_mode.png'),
                           ],
                         ),
                         const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {},
-                          child: const Center(
+                          child: Center(
                               child: Text.rich(
                                   TextSpan(
                                       children: [
@@ -151,14 +149,14 @@ class LoginPage extends StatelessWidget {
                                             text: "New to PlantFriends? ",
                                             style: TextStyle(
                                                 fontSize: 18,
-                                                color: Colors.white38
+                                                color: isDarkMode ? dmLightGrey : lmDarkGrey
                                             )
                                         ),
                                         TextSpan(
                                             text: "Create Account",
                                             style: TextStyle(
                                                 fontSize: 18,
-                                                color: Colors.lightGreenAccent
+                                                color: Theme.of(context).hintColor
                                             )
                                         )
                                       ]

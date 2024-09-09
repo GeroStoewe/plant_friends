@@ -195,7 +195,6 @@ class PlantDetailPage extends StatelessWidget {
 
   void _showFullImageDialog(BuildContext context) {
     final imageUrl = plant['image_url'] ?? '';
-    final shortenedUrl = imageUrl.length > 20 ? '${imageUrl.substring(0, 20)}...' : imageUrl;
 
     showDialog(
       context: context,
@@ -259,10 +258,15 @@ class PlantDetailPage extends StatelessWidget {
                   child: Container(
                     color: Colors.black.withOpacity(0.7),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Text(
-                      shortenedUrl,
-                      style: const TextStyle(color: Colors.white),
-                      overflow: TextOverflow.ellipsis,
+                    child: Row(
+                      children: [
+                        const Icon(Icons.link, color: Colors.white),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'View URL',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -273,4 +277,5 @@ class PlantDetailPage extends StatelessWidget {
       },
     );
   }
+
 }

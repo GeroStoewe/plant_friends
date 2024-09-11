@@ -39,6 +39,12 @@ dependencies:
   flutter_screenutil: ^5.9.3  # Überprüfe immer die neueste Version auf pub.dev
   readmore: ^2.0.0  # Füge die neueste Version hinzu, wenn verfügbar
   url_launcher: ^6.0.0
+  firebase_core: ^3.4.1
+  firebase_database: ^11.1.2
+  firebase_storage: ^12.3.0
+  intl: ^0.18.1  # Hier wird die intl-Abhängigkeit hinzugefügt
+  image_picker: ^0.8.7+3
+  image_cropper: ^3.0.1
 
 dev_dependencies:
   flutter_test:

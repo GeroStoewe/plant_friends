@@ -78,7 +78,7 @@ class _WikiPageState extends State<WikiPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantDetailPage(plant: plant),
+                  builder: (context) => PlantWikiDetailPage(plant: plant),
                 ),
               );
             },

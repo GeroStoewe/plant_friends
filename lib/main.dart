@@ -1,10 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_friends/firebase_options.dart';
 import 'package:plant_friends/widgets/my_navigation_bar.dart';
 import 'package:flutter/services.dart';
 
 
-void main() {
-  //WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(const MyApp());
 }

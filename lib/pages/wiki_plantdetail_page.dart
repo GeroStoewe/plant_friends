@@ -1,9 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-class PlantDetailPage extends StatelessWidget {
+class PlantWikiDetailPage extends StatelessWidget {
   final dynamic plant;
 
-  const PlantDetailPage({super.key, required this.plant});
+  const PlantWikiDetailPage({super.key, required this.plant});
 
   @override
   Widget build(BuildContext context) {

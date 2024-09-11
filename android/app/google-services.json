@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "545786364087",
+    "project_id": "plant-friends-app",
+    "storage_bucket": "plant-friends-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545786364087:android:6c52e373666adc59bbcd32",
+        "android_client_info": {
+          "package_name": "com.hwr.plant_friends"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx_EwH-Dc0oXBcaxPqtKncLtyf-WqWYx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

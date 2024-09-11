@@ -7,19 +7,18 @@ import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Stor
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:plant_friends/pages/plant_detail_page.dart';
-import 'package:plant_friends/pages/wiki_plantdetail_page.dart';
+import 'package:plant_friends/pages/plant_detail_page_Test.dart';
 
 import '../models/plant_model.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageTest extends StatefulWidget {
+  const HomePageTest({super.key});
 
   @override
-  State<HomePage> createState() => _HomeScreenState();
+  State<HomePageTest> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomePage> {
+class _HomeScreenState extends State<HomePageTest> {
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL: 'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app',
@@ -218,7 +217,7 @@ class _HomeScreenState extends State<HomePage> {
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PlantDetailPage(plant: plant, dbRef: dbRef),
+            builder: (context) => PlantDetailPageTest(plant: plant, dbRef: dbRef),
           ),
         );
 

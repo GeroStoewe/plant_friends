@@ -6,17 +6,17 @@ import 'package:intl/intl.dart';
 
 import '../models/plant_model.dart';
 
-class PlantDetailPage extends StatefulWidget {
+class PlantDetailPageTest extends StatefulWidget {
   final Plant plant;
   final DatabaseReference dbRef;
 
-  const PlantDetailPage({super.key, required this.plant, required this.dbRef});
+  const PlantDetailPageTest({super.key, required this.plant, required this.dbRef});
 
   @override
-  State<PlantDetailPage> createState() => _PlantDetailPageState();
+  State<PlantDetailPageTest> createState() => _PlantDetailPageTestState();
 }
 
-class _PlantDetailPageState extends State<PlantDetailPage> {
+class _PlantDetailPageTestState extends State<PlantDetailPageTest> {
   bool isEditing = false;
   late TextEditingController _nameController;
   late TextEditingController _scienceNameController;

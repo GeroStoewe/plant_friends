@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/widgets/my_navigation_bar.dart';
 import 'package:flutter/services.dart';
-import 'package:plant_friends/authentication/login/login_page.dart';
-import 'package:plant_friends/themes/dark_theme.dart';
-import 'package:plant_friends/themes/light_theme.dart';
+
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  //WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(const MyApp());
 }

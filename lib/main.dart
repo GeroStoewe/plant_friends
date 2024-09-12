@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:plant_friends/authentication/login/login_page.dart';
+import 'package:plant_friends/authentication/login_page.dart';
+import 'package:plant_friends/authentication/signup_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
+
+import 'authentication/forgot_password_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: ForgotPasswordPage(),
     );
   }
 }

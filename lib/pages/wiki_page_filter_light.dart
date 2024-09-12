@@ -1,81 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/pages/wiki_page_filter_group.dart';
-import 'package:plant_friends/pages/wiki_page_filter_light.dart';
-import 'package:plant_friends/pages/wiki_page_filter_water.dart';
-import 'package:plant_friends/pages/wiki_page_filter_difficulty.dart';
-import 'package:plant_friends/pages/wiki_page_filter_result_page.dart';
+import 'wiki_page_filter_result_page.dart'; // Importiere die Ergebnis-Seite
 
-class WikiPage extends StatelessWidget {
-  const WikiPage({super.key});
+class LightFilterPage extends StatelessWidget {
+  const LightFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Plant Filters',
+          'Plants by Light Needs',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.yellowAccent,
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
+      body: GridView(
         padding: const EdgeInsets.all(16),
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
         children: [
           _buildFilterCard(
             context,
-            'All Plants',
-            Icons.all_inbox,
+            'Low Light',
+            Icons.brightness_2,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'all'),
+                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Low Light'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'Plants by Type',
-            Icons.category,
+            'Partial Shade',
+            Icons.brightness_3,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const GroupFilterPage(),
+                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Partial shade'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'Plants by Water Needs',
-            Icons.water,
-                () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const WaterFilterPage(),
-              ),
-            ),
-          ),
-          _buildFilterCard(
-            context,
-            'Plants by Light Needs',
+            'Indirect Light',
             Icons.wb_sunny,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const LightFilterPage(),
+                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Indirect sunlight'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'Plants by Difficulty',
-            Icons.star,
+            'Direct Light',
+            Icons.wb_sunny_outlined,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const DifficultyFilterPage(),
+                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Direct sunlight'),
               ),
             ),
           ),
@@ -104,7 +91,7 @@ class WikiPage extends StatelessWidget {
             Icon(
               icon,
               size: 50,
-              color: Colors.green,
+              color: Colors.orangeAccent,
             ),
             const SizedBox(height: 10),
             Text(

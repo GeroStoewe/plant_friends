@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:plant_friends/authentication/login/login_page.dart';
+import 'package:plant_friends/quiz/quiz_test_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: QuizTestPage(),
     );
   }
 }

@@ -1,22 +1,20 @@
-// quiz_functions.dart
 import 'package:flutter/material.dart';
 import 'quiz_logic.dart'; // Importiere die Spiellogik
 
 class QuizFunctions {
-  OverlayEntry? overlayEntry; // Verwende 'OverlayEntry?' und initialisiere es mit null
+  OverlayEntry? overlayEntry;
   int currentQuestionIndex = 0;
-  int careScore = 0; // Punktzahl für Pflege
-  int environmentScore = 0; // Punktzahl für Umgebung
+  int careScore = 0;
+  int environmentScore = 0;
 
-  // Funktion zum Schließen des Quiz
+
   void closeQuiz() {
     overlayEntry?.remove();
-    overlayEntry = null; // Setze das Overlay auf null, wenn es geschlossen wird
+    overlayEntry = null;
   }
 
-  // Funktion zum Anzeigen des Ergebnisses
   void showResult(BuildContext context, OverlayState overlayState) {
-    bool hasPets = true; // Beispielannahme, dass der Benutzer ein Haustier hat
+    bool hasPets = true;
     Map<String, String> groups = calculateGroups(careScore, environmentScore, hasPets);
 
     overlayEntry = OverlayEntry(
@@ -40,27 +38,28 @@ class QuizFunctions {
               ],
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Ergebnis',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  'Result',
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Du bist in der Pflegegruppe: ${groups['careGroup']}',
-                  style: TextStyle(fontSize: 18),
+                  'Your care group: ${groups['careGroup']}',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
-                  'Du bist in der Umweltgruppe: ${groups['environmentGroup']}',
-                  style: TextStyle(fontSize: 18),
+                  'Your environment group: ${groups['environmentGroup']}',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 if (groups['petsWarning']!.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: Text(
                       groups['petsWarning']!,
-                      style: TextStyle(fontSize: 16, color: Colors.orangeAccent),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 SizedBox(height: 20),
@@ -68,7 +67,7 @@ class QuizFunctions {
                   onPressed: () {
                     closeQuiz();
                   },
-                  child: Text('Schließen'),
+                  child: Text('Close'),
                 ),
               ],
             ),
@@ -127,7 +126,7 @@ class QuizFunctions {
                   children: [
                     Text(
                       'Frage ${currentQuestionIndex + 1} von ${questions.length}',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     IconButton(
                       icon: Icon(Icons.close),
@@ -141,7 +140,7 @@ class QuizFunctions {
                 Center(  // Center-Widget verwenden, um den Text zu zentrieren
                   child: Text(
                     questions[currentQuestionIndex].question,
-                    style: TextStyle(fontSize: 16),
+                    style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.center,  // Text zentrieren
                   ),
                 ),
@@ -174,5 +173,4 @@ class QuizFunctions {
     // Overlay anzeigen
     overlayState.insert(overlayEntry!);
   }
-
 }

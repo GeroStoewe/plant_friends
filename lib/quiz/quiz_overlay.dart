@@ -1,6 +1,6 @@
 // quiz_overlay.dart
 import 'package:flutter/material.dart';
-import 'quiz_functions.dart'; // Importiere die ausgelagerten Funktionen
+import 'quiz_functions.dart';
 
 // Quiz Overlay
 void showQuizOverlay(BuildContext context) {

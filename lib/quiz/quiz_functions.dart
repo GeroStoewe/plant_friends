@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'quiz_logic.dart'; // Importiere die Spiellogik
+import 'quiz_logic.dart';
 
 class QuizFunctions {
   OverlayEntry? overlayEntry;
   int currentQuestionIndex = 0;
   int careScore = 0;
   int environmentScore = 0;
-
+  List<int> userAnswers = []; // Speichert die Antworten als Index
 
   void closeQuiz() {
     overlayEntry?.remove();
     overlayEntry = null;
   }
 
+  bool hasPets() {
+    if (userAnswers.isNotEmpty && userAnswers.length == questions.length) {
+      int lastAnswerIndex = userAnswers.last; // Index der Haustierfrage
+      return questions.last.answers[lastAnswerIndex] == 'Yes';
+    }
+    return false;
+  }
+
   void showResult(BuildContext context, OverlayState overlayState) {
-    bool hasPets = true;
-    Map<String, String> groups = calculateGroups(careScore, environmentScore, hasPets);
+    bool pets = hasPets();
+    Map<String, String> groups = calculateGroups(careScore, environmentScore, pets);
 
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
@@ -79,9 +87,10 @@ class QuizFunctions {
   }
 
   // Funktion zur Überprüfung der Antwort und Punktzuweisung
-  void checkAnswer(int carePoints, int environmentPoints, BuildContext context, OverlayState overlayState) {
+  void checkAnswer(int carePoints, int environmentPoints, BuildContext context, OverlayState overlayState, int answerIndex) {
     careScore += carePoints;
     environmentScore += environmentPoints;
+    userAnswers.add(answerIndex); // Benutzerantwort speichern
 
     // Schließe das aktuelle Overlay (Fragefenster), bevor die nächste Frage angezeigt wird
     closeQuiz();
@@ -93,7 +102,6 @@ class QuizFunctions {
       showResult(context, overlayState); // Zeige das Ergebnis, wenn alle Fragen beantwortet wurden
     }
   }
-
 
   // Funktion zum Anzeigen der aktuellen Frage
   void showQuestion(BuildContext context, OverlayState overlayState) {
@@ -119,7 +127,7 @@ class QuizFunctions {
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center, // Zentriere den Inhalt horizontal
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,18 +145,18 @@ class QuizFunctions {
                   ],
                 ),
                 SizedBox(height: 10),
-                Center(  // Center-Widget verwenden, um den Text zu zentrieren
+                Center(
                   child: Text(
                     questions[currentQuestionIndex].question,
                     style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,  // Text zentrieren
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(height: 20),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center, // Zentriere die Antwortmöglichkeiten
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: List.generate(questions[currentQuestionIndex].answers.length, (index) {
-                    return Center( // Center-Widget verwenden, um die Buttons zu zentrieren
+                    return Center(
                       child: ElevatedButton(
                         onPressed: () {
                           checkAnswer(
@@ -156,6 +164,7 @@ class QuizFunctions {
                             questions[currentQuestionIndex].environmentPoints[index],
                             context,
                             overlayState,
+                            index,
                           );
                         },
                         child: Text(questions[currentQuestionIndex].answers[index]),

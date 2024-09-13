@@ -99,7 +99,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Search by name or scientific name',
                 prefixIcon: Icon(Icons.search),

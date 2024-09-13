@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'wiki_page_filter_result_page.dart'; // Import the result page
+import '../wiki_page_filter_result_page.dart'; // Importiere die Ergebnis-Seite
 
-class WaterFilterPage extends StatelessWidget {
-  const WaterFilterPage({super.key});
+class LightFilterPage extends StatelessWidget {
+  const LightFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Plants by Water Needs',
+          'Plants by Light Needs',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.yellowAccent,
       ),
       body: GridView(
         padding: const EdgeInsets.all(16),
@@ -24,34 +24,45 @@ class WaterFilterPage extends StatelessWidget {
         children: [
           _buildFilterCard(
             context,
-            'Low',
-            Icons.water_drop_outlined,
+            'Low Light',
+            Icons.brightness_2,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'water', filterValue: 'low'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Low Light'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'Medium',
-            Icons.opacity,
+            'Partial Shade',
+            Icons.brightness_3,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'water', filterValue: 'medium'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Partial shade'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'High',
-            Icons.water_drop,
+            'Indirect Light',
+            Icons.wb_sunny,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'water', filterValue: 'high'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Indirect sunlight'),
+              ),
+            ),
+          ),
+          _buildFilterCard(
+            context,
+            'Direct Light',
+            Icons.wb_sunny_outlined,
+                () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Direct sunlight'),
               ),
             ),
           ),
@@ -80,7 +91,7 @@ class WaterFilterPage extends StatelessWidget {
             Icon(
               icon,
               size: 50,
-              color: Colors.blue,
+              color: Colors.orangeAccent,
             ),
             const SizedBox(height: 10),
             Text(

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'wiki_page_filter_result_page.dart'; // Importiere die Ergebnis-Seite
+import '../wiki_page_filter_result_page.dart'; // Importiere die Ergebnis-Seite
 
-class LightFilterPage extends StatelessWidget {
-  const LightFilterPage({super.key});
+class DifficultyFilterPage extends StatelessWidget {
+  const DifficultyFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Plants by Light Needs',
+          'Plants by Difficulty',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.yellowAccent,
+        backgroundColor: Colors.orangeAccent,
       ),
       body: GridView(
         padding: const EdgeInsets.all(16),
@@ -24,45 +24,34 @@ class LightFilterPage extends StatelessWidget {
         children: [
           _buildFilterCard(
             context,
-            'Low Light',
-            Icons.brightness_2,
+            'Easy',
+            Icons.star_border,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Low Light'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'difficulty', filterValue: 'easy'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'Partial Shade',
-            Icons.brightness_3,
+            'Medium',
+            Icons.star_half,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Partial shade'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'difficulty', filterValue: 'medium'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'Indirect Light',
-            Icons.wb_sunny,
+            'Difficult',
+            Icons.star_outlined,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Indirect sunlight'),
-              ),
-            ),
-          ),
-          _buildFilterCard(
-            context,
-            'Direct Light',
-            Icons.wb_sunny_outlined,
-                () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'light', filterValue: 'Direct sunlight'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'difficulty', filterValue: 'difficult'),
               ),
             ),
           ),
@@ -91,7 +80,7 @@ class LightFilterPage extends StatelessWidget {
             Icon(
               icon,
               size: 50,
-              color: Colors.orangeAccent,
+              color: Colors.orange,
             ),
             const SizedBox(height: 10),
             Text(

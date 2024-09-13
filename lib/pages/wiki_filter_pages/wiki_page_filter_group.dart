@@ -22,7 +22,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'succulents'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'succulents'),
                 ),
               );
             },
@@ -34,7 +34,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'tropical plants'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'tropical plants'),
                 ),
               );
             },
@@ -46,7 +46,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'climbing plants'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'climbing plants'),
                 ),
               );
             },
@@ -58,7 +58,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'flowering plants'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'flowering plants'),
                 ),
               );
             },
@@ -70,7 +70,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'trees'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'trees'),
                 ),
               );
             },
@@ -82,7 +82,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'bamboo plants'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'bamboo plants'),
                 ),
               );
             },
@@ -94,7 +94,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'air plants'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'air plants'),
                 ),
               );
             },
@@ -106,7 +106,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'moss-like plants'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'moss-like plants'),
                 ),
               );
             },
@@ -118,7 +118,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'ferns'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'ferns'),
                 ),
               );
             },
@@ -130,7 +130,7 @@ class GroupFilterPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlantFilterResultPage(filterType: 'group', filterValue: 'palms'),
+                  builder: (context) => const PlantFilterResultPage(filterType: 'group', filterValue: 'palms'),
                 ),
               );
             },

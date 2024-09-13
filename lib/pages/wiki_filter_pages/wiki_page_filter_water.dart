@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'wiki_page_filter_result_page.dart'; // Importiere die Ergebnis-Seite
+import '../wiki_page_filter_result_page.dart'; // Import the result page
 
-class DifficultyFilterPage extends StatelessWidget {
-  const DifficultyFilterPage({super.key});
+class WaterFilterPage extends StatelessWidget {
+  const WaterFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Plants by Difficulty',
+          'Plants by Water Needs',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.blueAccent,
       ),
       body: GridView(
         padding: const EdgeInsets.all(16),
@@ -24,34 +24,34 @@ class DifficultyFilterPage extends StatelessWidget {
         children: [
           _buildFilterCard(
             context,
-            'Easy',
-            Icons.star_border,
+            'Low',
+            Icons.water_drop_outlined,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'difficulty', filterValue: 'easy'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'water', filterValue: 'low'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
             'Medium',
-            Icons.star_half,
+            Icons.opacity,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'difficulty', filterValue: 'medium'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'water', filterValue: 'medium'),
               ),
             ),
           ),
           _buildFilterCard(
             context,
-            'Difficult',
-            Icons.star_outlined,
+            'High',
+            Icons.water_drop,
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'difficulty', filterValue: 'difficult'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'water', filterValue: 'high'),
               ),
             ),
           ),
@@ -80,7 +80,7 @@ class DifficultyFilterPage extends StatelessWidget {
             Icon(
               icon,
               size: 50,
-              color: Colors.orange,
+              color: Colors.blue,
             ),
             const SizedBox(height: 10),
             Text(

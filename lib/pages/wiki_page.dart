@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/pages/wiki_page_filter_group.dart';
-import 'package:plant_friends/pages/wiki_page_filter_light.dart';
-import 'package:plant_friends/pages/wiki_page_filter_water.dart';
-import 'package:plant_friends/pages/wiki_page_filter_difficulty.dart';
+import 'package:plant_friends/pages/wiki_filter_pages/wiki_page_filter_group.dart';
+import 'package:plant_friends/pages/wiki_filter_pages/wiki_page_filter_light.dart';
+import 'package:plant_friends/pages/wiki_filter_pages/wiki_page_filter_water.dart';
+import 'package:plant_friends/pages/wiki_filter_pages/wiki_page_filter_difficulty.dart';
 import 'package:plant_friends/pages/wiki_page_filter_result_page.dart';
 
 class WikiPage extends StatelessWidget {
@@ -31,7 +31,7 @@ class WikiPage extends StatelessWidget {
                 () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantFilterResultPage(filterType: 'all'),
+                builder: (context) => const PlantFilterResultPage(filterType: 'all'),
               ),
             ),
           ),

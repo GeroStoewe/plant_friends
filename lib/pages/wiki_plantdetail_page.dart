@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class PlantWikiDetailPage extends StatelessWidget {
@@ -259,11 +258,11 @@ class PlantWikiDetailPage extends StatelessWidget {
                   child: Container(
                     color: Colors.black.withOpacity(0.7),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(Icons.link, color: Colors.white),
-                        const SizedBox(width: 8),
-                        const Text(
+                        Icon(Icons.link, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
                           'View URL',
                           style: TextStyle(color: Colors.white),
                         ),

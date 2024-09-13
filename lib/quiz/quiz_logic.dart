@@ -123,7 +123,7 @@ Map<String, String> calculateGroups(int careScore, int environmentScore, bool ha
  if (careScore >= 15 && environmentScore >= 7) {
    goodCareGoodEnvironment = "You have a green thumb and your space is perfect for plants! With your excellent care and the ideal environment, you can grow almost any plant successfully.";
  } else if (careScore >= 15 && environmentScore >= 7) {
-   goodCareMediumEnvironment = "You’re a dedicated plant parent, but your environment might have some minor challenges. Don’t worry – with your commitment, your plants will still thrive!";
+   goodCareMediumEnvironment = "You’re a dedicated plant parente, but your environment might have some minor challenges. Don’t worry – with your commitment, your plants will still thrive!";
 
  } else if (careScore >= 15 && environmentScore >= 7) {
 

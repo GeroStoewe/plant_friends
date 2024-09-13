@@ -91,63 +91,34 @@ Map<String, int> calculateScores(List<int> userAnswers) {
 }
 
 Map<String, String> calculateGroups(int careScore, int environmentScore, bool hasPets) {
-  String careGroup;
-  String environmentGroup;
 
-  String goodCareGoodEnvironment;
-  String goodCareMediumEnvironment;
-  String goodCareBadEnvironment;
-  String mediumCareGoodEnvironment;
-  String mediumCareMediumEnvironment;
-  String mediumCareBadEnvironment;
-  String badCareGoodEnvironment;
-  String badCareMediumEnvironment;
-  String badCareBadEnvironment;
-
-  if (careScore >= 15) {
-    careGroup = "Good care";
-  } else if (careScore >= 8) {
-    careGroup = "Medium care";
-  } else {
-    careGroup = "Bad care";
-  }
-
-  if (environmentScore >= 7) {
-    environmentGroup = "Good environment";
-  } else if (environmentScore >= 8) {
-    environmentGroup = "Medium environment";
-  } else {
-    environmentGroup = "Bad environment";
-  }
+  String message;
 
  if (careScore >= 15 && environmentScore >= 7) {
-   goodCareGoodEnvironment = "You have a green thumb and your space is perfect for plants! With your excellent care and the ideal environment, you can grow almost any plant successfully.";
- } else if (careScore >= 15 && environmentScore >= 7) {
-   goodCareMediumEnvironment = "You’re a dedicated plant parente, but your environment might have some minor challenges. Don’t worry – with your commitment, your plants will still thrive!";
-
- } else if (careScore >= 15 && environmentScore >= 7) {
-
- } else if (careScore >= 15 && environmentScore >= 7) {
-
- } else if (careScore >= 15 && environmentScore >= 7) {
-
- } else if (careScore >= 15 && environmentScore >= 7) {
-
- } else if (careScore >= 15 && environmentScore >= 7) {
-
- } else if (careScore >= 15 && environmentScore >= 7) {
-
- } else if (careScore >= 15 && environmentScore >= 7) {
-
+   message = "You have a green thumb and your space is perfect for plants! With your excellent care and the ideal environment, you can grow almost any plant successfully.";
+ } else if (careScore >= 15 && environmentScore >= 4) {
+   message = "You’re a dedicated plant parent, but your environment might have some minor challenges. Don’t worry – with your commitment, your plants will still thrive!";
+ } else if (careScore >= 15 && environmentScore >= 0) {
+   message = "Your care for plants is top-notch, but the environment isn’t the easiest. Luckily, your attentiveness will help you keep even the hardiest plants happy.";
+ } else if (careScore >= 8 && environmentScore >= 7) {
+  message = "You have a great environment for plants, and with just a little bit of effort, your plants will flourish. A few low-maintenance plants could be perfect for you.";
+ } else if (careScore >= 8 && environmentScore >= 4) {
+   message = "You’re a relaxed plant parent, and your environment is fairly average. Choose plants that are easygoing and don’t need too much fuss – they’ll fit right in!";
+ } else if (careScore >= 8 && environmentScore >= 0) {
+   message = "You have a bit of a challenge with your environment and you prefer low-maintenance plants. Opt for plants that are almost impossible to kill and can handle tougher conditions.";
+ } else if (careScore >= 0 && environmentScore >= 7) {
+   message = "Your space is a plant's dream home, but you don’t have much time or interest in intensive care. Easy-to-grow plants are just right for you.";
+ } else if (careScore >= 0 && environmentScore >= 4) {
+   message = "You’re not overly attentive when it comes to plant care, and your environment isn’t perfect either. Stick to plants that don’t mind a bit of neglect and can still thrive.";
+ } else if (careScore >= 0 && environmentScore >= 0) {
+   message = "Your environment presents some challenges, and you’re not one to fuss over plants. Look for ultra-tough, low-maintenance plants that can handle a bit of a rough patch.";
  } else {
-   //xxx
+   message = "Error! Please restart the quiz.";
  }
 
-
   return {
-    'careGroup': careGroup,
-    'environmentGroup': environmentGroup,
-    'petsWarning': hasPets ? 'Pet warning: Do not buy poisonous plants!' : '',
+    'petsWarning': hasPets ? 'Pet warning: Check which plants are poisonous!' : '',
+    'message' : message,
   };
 }
 

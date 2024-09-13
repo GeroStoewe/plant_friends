@@ -55,11 +55,7 @@ class QuizFunctions {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Your care group: ${groups['careGroup']}',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  'Your environment group: ${groups['environmentGroup']}',
+                  'Your group: ${groups['message']}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 if (groups['petsWarning']!.isNotEmpty)

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/authentication/login/square_tile.dart';
+import 'package:plant_friends/authentication/forgot_password_page.dart';
+import 'package:plant_friends/authentication/signup_page.dart';
+import 'package:plant_friends/authentication/square_tile.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
 import 'package:plant_friends/widgets/custom_text_field.dart';
@@ -29,7 +31,7 @@ class LoginPage extends StatelessWidget {
                   width: size.width,
                   height: size.height * 0.45,
                   child: Image.asset(
-                    'lib/authentication/login/images/login_wallpaper.jpg',
+                    'lib/authentication/images/login_wallpaper.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -75,7 +77,14 @@ class LoginPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ForgotPasswordPage()
+                                  )
+                              );
+                            },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -138,14 +147,21 @@ class LoginPage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const SquareTile(imagePath: 'lib/authentication/login/images/google_logo.png'),
-                              SquareTile(imagePath: isDarkMode ? 'lib/authentication/login/images/apple_logo_dark_mode.png' : 'lib/authentication/login/images/apple_logo_light_mode.png'),
-                              SquareTile(imagePath: isDarkMode ? 'lib/authentication/login/images/x_logo_dark_mode.png' : 'lib/authentication/login/images/x_logo_light_mode.png'),
+                              const SquareTile(imagePath: 'lib/authentication/images/google_logo.png'),
+                              SquareTile(imagePath: isDarkMode ? 'lib/authentication/images/apple_logo_dark_mode.png' : 'lib/authentication/images/apple_logo_light_mode.png'),
+                              SquareTile(imagePath: isDarkMode ? 'lib/authentication/images/x_logo_dark_mode.png' : 'lib/authentication/images/x_logo_light_mode.png'),
                             ],
                           ),
                           const SizedBox(height: 20),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignupPage()
+                                  )
+                              );
+                            },
                             child: Center(
                                 child: Text.rich(
                                     TextSpan(

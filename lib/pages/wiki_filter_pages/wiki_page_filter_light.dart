@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../wiki_page_filter_result_page.dart'; // Importiere die Ergebnis-Seite
+import 'package:plant_friends/themes/colors.dart';
+import '../../widgets/card_filter.dart';
+import '../wiki_page_filter_result_page.dart'; // Import the result page
 
 class LightFilterPage extends StatelessWidget {
   const LightFilterPage({super.key});
@@ -12,7 +14,7 @@ class LightFilterPage extends StatelessWidget {
           'Plants by Light Needs',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.yellowAccent,
+        backgroundColor: seaGreen,
       ),
       body: GridView(
         padding: const EdgeInsets.all(16),
@@ -22,87 +24,59 @@ class LightFilterPage extends StatelessWidget {
           mainAxisSpacing: 16,
         ),
         children: [
-          _buildFilterCard(
-            context,
-            'Low Light',
-            Icons.brightness_2,
-                () => Navigator.push(
+          FilterCard(
+            title: 'Low Light',
+            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-1.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Low Light'),
+                builder: (context) => const PlantFilterResultPage(
+                  filterType: 'light',
+                  filterValue: 'Low Light',
+                ),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Partial Shade',
-            Icons.brightness_3,
-                () => Navigator.push(
+          FilterCard(
+            title: 'Partial Shade',
+            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-2.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Partial shade'),
+                builder: (context) => const PlantFilterResultPage(
+                  filterType: 'light',
+                  filterValue: 'Partial shade',
+                ),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Indirect Light',
-            Icons.wb_sunny,
-                () => Navigator.push(
+          FilterCard(
+            title: 'Indirect Light',
+            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-3.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Indirect sunlight'),
+                builder: (context) => const PlantFilterResultPage(
+                  filterType: 'light',
+                  filterValue: 'Indirect sunlight',
+                ),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Direct Light',
-            Icons.wb_sunny_outlined,
-                () => Navigator.push(
+          FilterCard(
+            title: 'Direct Light',
+            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-4.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const PlantFilterResultPage(filterType: 'light', filterValue: 'Direct sunlight'),
+                builder: (context) => const PlantFilterResultPage(
+                  filterType: 'light',
+                  filterValue: 'Direct sunlight',
+                ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFilterCard(
-      BuildContext context,
-      String title,
-      IconData icon,
-      VoidCallback onTap,
-      ) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 50,
-              color: Colors.orangeAccent,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

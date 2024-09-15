@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plant_friends/themes/colors.dart';
 import '../wiki_page_filter_result_page.dart'; // Import the result page
 
 class WaterFilterPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class WaterFilterPage extends StatelessWidget {
           'Plants by Water Needs',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: seaGreen,
       ),
       body: GridView(
         padding: const EdgeInsets.all(16),
@@ -25,7 +26,7 @@ class WaterFilterPage extends StatelessWidget {
           _buildFilterCard(
             context,
             'Low',
-            Icons.water_drop_outlined,
+            'lib/pages/wiki_images/water/Wiki-Water-1.png',
                 () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -36,7 +37,7 @@ class WaterFilterPage extends StatelessWidget {
           _buildFilterCard(
             context,
             'Medium',
-            Icons.opacity,
+            'lib/pages/wiki_images/water/Wiki-Water-2.png',
                 () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -47,7 +48,7 @@ class WaterFilterPage extends StatelessWidget {
           _buildFilterCard(
             context,
             'High',
-            Icons.water_drop,
+            'lib/pages/wiki_images/water/Wiki-Water-3.png',
                 () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -63,7 +64,7 @@ class WaterFilterPage extends StatelessWidget {
   Widget _buildFilterCard(
       BuildContext context,
       String title,
-      IconData icon,
+      String imagePath, // Add an image path parameter
       VoidCallback onTap,
       ) {
     return Card(
@@ -77,16 +78,17 @@ class WaterFilterPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 50,
-              color: Colors.blue,
+            Image.asset(
+              imagePath,
+              width: 130,
+              height: 130,
+              fit: BoxFit.cover,
             ),
             const SizedBox(height: 10),
             Text(
               title,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),

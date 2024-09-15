@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../wiki_page_filter_result_page.dart'; // Importiere die Ergebnis-Seite
+import 'package:plant_friends/themes/colors.dart';
+import '../../widgets/card_filter.dart';
+import '../wiki_page_filter_result_page.dart'; // Import the result page
 
 class DifficultyFilterPage extends StatelessWidget {
   const DifficultyFilterPage({super.key});
@@ -12,7 +14,7 @@ class DifficultyFilterPage extends StatelessWidget {
           'Plants by Difficulty',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: seaGreen,
       ),
       body: GridView(
         padding: const EdgeInsets.all(16),
@@ -22,76 +24,46 @@ class DifficultyFilterPage extends StatelessWidget {
           mainAxisSpacing: 16,
         ),
         children: [
-          _buildFilterCard(
-            context,
-            'Easy',
-            Icons.star_border,
-                () => Navigator.push(
+          FilterCard(
+            title: 'Easy',
+            imagePath: 'lib/pages/wiki_images/difficulty/Wiki-Difficulty-1.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const PlantFilterResultPage(filterType: 'difficulty', filterValue: 'easy'),
+                builder: (context) => const PlantFilterResultPage(
+                  filterType: 'difficulty',
+                  filterValue: 'easy',
+                ),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Medium',
-            Icons.star_half,
-                () => Navigator.push(
+          FilterCard(
+            title: 'Medium',
+            imagePath: 'lib/pages/wiki_images/difficulty/Wiki-Difficulty-2.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const PlantFilterResultPage(filterType: 'difficulty', filterValue: 'medium'),
+                builder: (context) => const PlantFilterResultPage(
+                  filterType: 'difficulty',
+                  filterValue: 'medium',
+                ),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Difficult',
-            Icons.star_outlined,
-                () => Navigator.push(
+          FilterCard(
+            title: 'Difficult',
+            imagePath: 'lib/pages/wiki_images/difficulty/Wiki-Difficulty-3.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const PlantFilterResultPage(filterType: 'difficulty', filterValue: 'difficult'),
+                builder: (context) => const PlantFilterResultPage(
+                  filterType: 'difficulty',
+                  filterValue: 'difficult',
+                ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFilterCard(
-      BuildContext context,
-      String title,
-      IconData icon,
-      VoidCallback onTap,
-      ) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 50,
-              color: Colors.orange,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

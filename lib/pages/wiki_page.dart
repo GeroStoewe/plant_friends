@@ -5,6 +5,8 @@ import 'package:plant_friends/pages/wiki_filter_pages/wiki_page_filter_water.dar
 import 'package:plant_friends/pages/wiki_filter_pages/wiki_page_filter_difficulty.dart';
 import 'package:plant_friends/pages/wiki_page_filter_result_page.dart';
 
+import '../widgets/card_filter.dart';
+
 class WikiPage extends StatelessWidget {
   const WikiPage({super.key});
 
@@ -24,55 +26,50 @@ class WikiPage extends StatelessWidget {
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
         children: [
-          _buildFilterCard(
-            context,
-            'All Plants',
-            Icons.all_inbox,
-                () => Navigator.push(
+          FilterCard(
+            title: 'All Plants',
+            imagePath: 'lib/pages/wiki_images/Wiki-Category-1.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const PlantFilterResultPage(filterType: 'all'),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Plants by Type',
-            Icons.category,
-                () => Navigator.push(
+          FilterCard(
+            title: 'By Type',
+            imagePath: 'lib/pages/wiki_images/Wiki-Category-2.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const GroupFilterPage(),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Plants by Water Needs',
-            Icons.water,
-                () => Navigator.push(
+          FilterCard(
+            title: 'By Water Needs',
+            imagePath: 'lib/pages/wiki_images/Wiki-Category-3.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const WaterFilterPage(),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Plants by Light Needs',
-            Icons.wb_sunny,
-                () => Navigator.push(
+          FilterCard(
+            title: 'By Light Needs',
+            imagePath: 'lib/pages/wiki_images/Wiki-Category-4.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const LightFilterPage(),
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Plants by Difficulty',
-            Icons.star,
-                () => Navigator.push(
+          FilterCard(
+            title: 'By Difficulty',
+            imagePath: 'lib/pages/wiki_images/Wiki-Category-5.png',
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const DifficultyFilterPage(),
@@ -80,42 +77,6 @@ class WikiPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFilterCard(
-      BuildContext context,
-      String title,
-      IconData icon,
-      VoidCallback onTap,
-      ) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 50,
-              color: Colors.green,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

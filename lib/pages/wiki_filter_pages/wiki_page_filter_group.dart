@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/wiki_page_filter_result_page.dart';
+import 'package:plant_friends/themes/colors.dart';
 
 class GroupFilterPage extends StatelessWidget {
   const GroupFilterPage({super.key});
@@ -12,7 +13,7 @@ class GroupFilterPage extends StatelessWidget {
           'Plants by Group',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: seaGreen,
       ),
       body: ListView(
         children: [

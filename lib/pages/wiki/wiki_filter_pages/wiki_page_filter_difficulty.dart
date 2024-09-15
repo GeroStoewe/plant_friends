@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/themes/colors.dart';
-import '../../widgets/card_filter.dart';
+import '../../../widgets/card_filter.dart';
 import '../wiki_page_filter_result_page.dart'; // Import the result page
 
 class DifficultyFilterPage extends StatelessWidget {
@@ -26,7 +26,7 @@ class DifficultyFilterPage extends StatelessWidget {
         children: [
           FilterCard(
             title: 'Easy',
-            imagePath: 'lib/pages/wiki_images/difficulty/Wiki-Difficulty-1.png',
+            imagePath: 'lib/pages/wiki/wiki_images/difficulty/Wiki-Difficulty-1.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -39,7 +39,7 @@ class DifficultyFilterPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'Medium',
-            imagePath: 'lib/pages/wiki_images/difficulty/Wiki-Difficulty-2.png',
+            imagePath: 'lib/pages/wiki/wiki_images/difficulty/Wiki-Difficulty-2.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -52,7 +52,7 @@ class DifficultyFilterPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'Difficult',
-            imagePath: 'lib/pages/wiki_images/difficulty/Wiki-Difficulty-3.png',
+            imagePath: 'lib/pages/wiki/wiki_images/difficulty/Wiki-Difficulty-3.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(

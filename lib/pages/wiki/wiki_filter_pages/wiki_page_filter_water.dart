@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/themes/colors.dart';
+import '../../../widgets/card_filter.dart';
 import '../wiki_page_filter_result_page.dart'; // Import the result page
 
 class WaterFilterPage extends StatelessWidget {
@@ -23,10 +24,10 @@ class WaterFilterPage extends StatelessWidget {
           mainAxisSpacing: 16,
         ),
         children: [
-          _buildFilterCard(
-            context,
-            'Low',
-            'lib/pages/wiki_images/water/Wiki-Water-1.png',
+          FilterCard(
+            title:'Low',
+            imagePath: 'lib/pages/wiki/wiki_images/water/Wiki-Water-1.png',
+            onTap:
                 () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -34,10 +35,10 @@ class WaterFilterPage extends StatelessWidget {
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'Medium',
-            'lib/pages/wiki_images/water/Wiki-Water-2.png',
+          FilterCard(
+            title: 'Medium',
+            imagePath: 'lib/pages/wiki/wiki_images/water/Wiki-Water-2.png',
+            onTap:
                 () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -45,10 +46,10 @@ class WaterFilterPage extends StatelessWidget {
               ),
             ),
           ),
-          _buildFilterCard(
-            context,
-            'High',
-            'lib/pages/wiki_images/water/Wiki-Water-3.png',
+          FilterCard(
+            title: 'High',
+            imagePath: 'lib/pages/wiki/wiki_images/water/Wiki-Water-3.png',
+            onTap:
                 () => Navigator.push(
               context,
               MaterialPageRoute(

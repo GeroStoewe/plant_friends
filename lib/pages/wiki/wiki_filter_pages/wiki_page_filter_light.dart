@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/themes/colors.dart';
-import '../../widgets/card_filter.dart';
+import '../../../widgets/card_filter.dart';
 import '../wiki_page_filter_result_page.dart'; // Import the result page
 
 class LightFilterPage extends StatelessWidget {
@@ -26,7 +26,7 @@ class LightFilterPage extends StatelessWidget {
         children: [
           FilterCard(
             title: 'Low Light',
-            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-1.png',
+            imagePath: 'lib/pages/wiki/wiki_images/light/Wiki-Light-1.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -39,7 +39,7 @@ class LightFilterPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'Partial Shade',
-            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-2.png',
+            imagePath: 'lib/pages/wiki/wiki_images/light/Wiki-Light-2.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -52,7 +52,7 @@ class LightFilterPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'Indirect Light',
-            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-3.png',
+            imagePath: 'lib/pages/wiki/wiki_images/light/Wiki-Light-3.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -65,7 +65,7 @@ class LightFilterPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'Direct Light',
-            imagePath: 'lib/pages/wiki_images/light/Wiki-Light-4.png',
+            imagePath: 'lib/pages/wiki/wiki_images/light/Wiki-Light-4.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(

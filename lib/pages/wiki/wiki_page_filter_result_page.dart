@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:plant_friends/pages/wiki/wiki_new_plant_request_form.dart';
 import 'dart:convert';
 
-import 'package:plant_friends/pages/wiki_plantdetail_page.dart';
+import 'package:plant_friends/pages/wiki/wiki_plantdetail_page.dart';
+
+import '../../widgets/custom_button_outlined_small.dart';
+import '../../widgets/custom_text_field.dart'; // Import the custom text field
 
 class PlantFilterResultPage extends StatefulWidget {
   final String filterType;
@@ -97,18 +101,38 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
+            child: CustomTextField(
               controller: searchController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Search by name or scientific name',
-                prefixIcon: Icon(Icons.search),
-              ),
+              icon: Icons.search,
+              hintText: 'Search by name or scientific name',
+              obscureText: false,
             ),
           ),
           Expanded(
             child: filteredPlantData.isEmpty
-                ? const Center(child: Text('No plants match this filter.'))
+                ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'No plants match this filter.',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomButtonOutlinedSmall(
+                    text: 'Request to Add a Plant',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RequestPlantFormPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            )
                 : ListView.builder(
               itemCount: filteredPlantData.length,
               itemBuilder: (context, index) {

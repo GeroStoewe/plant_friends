@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/pages/wiki_page_filter_result_page.dart';
+import 'package:plant_friends/pages/wiki/wiki_page_filter_result_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 
 class GroupFilterPage extends StatelessWidget {

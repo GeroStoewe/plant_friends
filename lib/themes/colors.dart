@@ -10,4 +10,7 @@ const Color dmLightGrey = Colors.white38;
 const Color lmLightGrey = Colors.black54;
 const Color dmDarkGrey = Colors.white24;
 const Color lmDarkGrey = Colors.black87;
-const Color darkBG = Color(0xFF121212);
+const Color darkBG = Color(0xFF1E1F22);
+Color? dmCardBG = Colors.grey[850];
+Color? lmCardBG = Colors.green[50];
+

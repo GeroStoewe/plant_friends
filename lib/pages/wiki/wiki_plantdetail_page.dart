@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../themes/colors.dart';
+import '../../widgets/custom_info_card.dart';
 
 class PlantWikiDetailPage extends StatelessWidget {
   final dynamic plant;
@@ -21,10 +23,11 @@ class PlantWikiDetailPage extends StatelessWidget {
               child: Container(
                 height: size.height * 0.55,
                 width: size.width,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
                   ),
                 ),
                 child: Padding(
@@ -42,6 +45,16 @@ class PlantWikiDetailPage extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ),
+            // Add this Positioned widget to display the image in the bottom corner
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: Image.asset(
+                'lib/pages/wiki/wiki_images/wiki_bottom_corner_plant.png',
+                width: 120, // Set the desired width
+                height: 120, // Set the desired height
               ),
             ),
           ],
@@ -71,6 +84,7 @@ class PlantWikiDetailPage extends StatelessWidget {
   }
 
   Positioned backButton(Size size, BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Positioned(
       top: MediaQuery.of(context).padding.top, // Adjust for safe area
       left: 20,
@@ -78,15 +92,15 @@ class PlantWikiDetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
         ),
         child: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.black,
+              color: isDarkMode ? dmLightGrey : lmDarkGrey
           ),
         ),
       ),
@@ -106,7 +120,7 @@ class PlantWikiDetailPage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Scientific Name: ${plant['scientifical_name'] ?? 'N/A'}',
+          '${plant['scientifical_name'] ?? 'N/A'}',
           style: const TextStyle(
             fontSize: 18,
             color: Colors.grey,
@@ -116,80 +130,51 @@ class PlantWikiDetailPage extends StatelessWidget {
     );
   }
 
-  Row plantInfo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Column plantInfo() {
+    return Column(
       children: [
-        infoCard(
-          icon: Icons.wb_sunny,
-          color: Colors.green,
-          backgroundColor: Colors.green.withOpacity(0.5),
-          title: 'Light',
-          value: plant['light'] ?? 'N/A',
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.wb_sunny,
+                title: 'Light',
+                value: plant['light'] ?? 'N/A',
+              ),
+            ),
+            SizedBox(width: 16), // Add spacing between cards
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.water_drop,
+                title: 'Water',
+                value: plant['water'] ?? 'N/A',
+              ),
+            ),
+          ],
         ),
-        infoCard(
-          icon: Icons.water_drop,
-          color: Colors.blue,
-          backgroundColor: Colors.blue.withOpacity(0.5),
-          title: 'Water',
-          value: plant['water'] ?? 'N/A',
-        ),
-        infoCard(
-          icon: Icons.star,
-          color: Colors.orange,
-          backgroundColor: Colors.orange.withOpacity(0.5),
-          title: 'Difficulty',
-          value: plant['difficulty'] ?? 'N/A',
+        SizedBox(height: 16), // Space between rows
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.star,
+                title: 'Difficulty',
+                value: plant['difficulty'] ?? 'N/A',
+              ),
+            ),
+            SizedBox(width: 16), // Add spacing between cards
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.local_florist,
+                title: 'Plant Type',
+                value: plant['group'] ?? 'N/A',
+              ),
+            ),
+          ],
         ),
       ],
-    );
-  }
-
-  Widget infoCard({
-    required IconData icon,
-    required Color color,
-    required Color backgroundColor,
-    required String title,
-    required String value,
-  }) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Stack(
-        children: [
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: backgroundColor,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  color: color,
-                  size: 30,
-                ),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -232,19 +217,19 @@ class PlantWikiDetailPage extends StatelessWidget {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           backgroundColor: Colors.black,
-                          title: const Text(
+                          title:  Text(
                             'Image URL',
-                            style: TextStyle(color: Colors.white),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           content: Text(
                             imageUrl,
-                            style: const TextStyle(color: Colors.white),
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           actions: [
                             TextButton(
-                              child: const Text(
+                              child: Text(
                                 'Close',
-                                style: TextStyle(color: Colors.white),
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               onPressed: () {
                                 Navigator.of(context).pop(); // Close the URL dialog
@@ -277,5 +262,4 @@ class PlantWikiDetailPage extends StatelessWidget {
       },
     );
   }
-
 }

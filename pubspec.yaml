@@ -71,21 +71,22 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/authentication/images/
-    - lib/pages/wiki_images/Wiki-Category-1.png
-    - lib/pages/wiki_images/Wiki-Category-2.png
-    - lib/pages/wiki_images/Wiki-Category-3.png
-    - lib/pages/wiki_images/Wiki-Category-4.png
-    - lib/pages/wiki_images/Wiki-Category-5.png
-    - lib/pages/wiki_images/light/Wiki-Light-1.png
-    - lib/pages/wiki_images/light/Wiki-Light-2.png
-    - lib/pages/wiki_images/light/Wiki-Light-3.png
-    - lib/pages/wiki_images/light/Wiki-Light-4.png
-    - lib/pages/wiki_images/difficulty/Wiki-Difficulty-1.png
-    - lib/pages/wiki_images/difficulty/Wiki-Difficulty-2.png
-    - lib/pages/wiki_images/difficulty/Wiki-Difficulty-3.png
-    - lib/pages/wiki_images/water/Wiki-Water-1.png
-    - lib/pages/wiki_images/water/Wiki-Water-2.png
-    - lib/pages/wiki_images/water/Wiki-Water-3.png
+    - lib/pages/wiki/wiki_images/Wiki-Category-1.png
+    - lib/pages/wiki/wiki_images/Wiki-Category-2.png
+    - lib/pages/wiki/wiki_images/Wiki-Category-3.png
+    - lib/pages/wiki/wiki_images/Wiki-Category-4.png
+    - lib/pages/wiki/wiki_images/Wiki-Category-5.png
+    - lib/pages/wiki/wiki_images/light/Wiki-Light-1.png
+    - lib/pages/wiki/wiki_images/light/Wiki-Light-2.png
+    - lib/pages/wiki/wiki_images/light/Wiki-Light-3.png
+    - lib/pages/wiki/wiki_images/light/Wiki-Light-4.png
+    - lib/pages/wiki/wiki_images/difficulty/Wiki-Difficulty-1.png
+    - lib/pages/wiki/wiki_images/difficulty/Wiki-Difficulty-2.png
+    - lib/pages/wiki/wiki_images/difficulty/Wiki-Difficulty-3.png
+    - lib/pages/wiki/wiki_images/water/Wiki-Water-1.png
+    - lib/pages/wiki/wiki_images/water/Wiki-Water-2.png
+    - lib/pages/wiki/wiki_images/water/Wiki-Water-3.png
+    - lib/pages/wiki/wiki_images/wiki_bottom_corner_plant.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

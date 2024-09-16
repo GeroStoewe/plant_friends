@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/authentication/login_page.dart';
 import 'package:plant_friends/authentication/square_tile.dart';
 
@@ -78,7 +79,7 @@ class ForgotPasswordPage extends StatelessWidget {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginPage()
+                                      builder: (context) => const AuthPage()
                                   )
                               );
                             },

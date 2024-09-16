@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/authentication/login_page.dart';
+import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/authentication/square_tile.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 
-class SignupPage extends StatelessWidget {
-  SignupPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   // Variables
   final fullnameController = TextEditingController();
+
   final usernameController = TextEditingController();
+
   final passwordController = TextEditingController();
+
+  bool isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,10 +87,23 @@ class SignupPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 15),
                           CustomTextField(
-                              controller: passwordController,
-                              icon: Icons.lock_outline_rounded,
-                              hintText: "Password",
-                              obscureText: true
+                            controller: passwordController,
+                            icon: Icons.lock_outline_rounded,
+                            hintText: "Password",
+                            obscureText: !isPasswordVisible,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Theme.of(context).hintColor,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
                           const SizedBox(height: 20),
                           CustomButton(
@@ -132,7 +154,7 @@ class SignupPage extends StatelessWidget {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginPage()
+                                      builder: (context) => const AuthPage()
                                   )
                               );
                             },

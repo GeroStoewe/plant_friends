@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/account_page.dart';
-import 'package:plant_friends/pages/calendar_page.dart';
+import 'package:plant_friends/laurasTestFolder/calendar_page.dart';
 import 'package:plant_friends/pages/home_page_test.dart';
 import 'package:plant_friends/pages/wiki/wiki_page.dart';
 

@@ -1,14 +1,12 @@
 import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:plant_friends/models/test_calendar_event.dart';
+import 'package:plant_friends/laurasTestFolder/test_calendar_event.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../models/test_add_event.dart';
-import '../models/test_edit_event.dart';
-import '../models/test_event_item.dart';
+import 'test_add_event.dart';
+import 'test_event_item.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -32,6 +30,8 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
+
+
     _events = LinkedHashMap(
       equals: isSameDay,
       hashCode: getHashCode,
@@ -57,6 +57,7 @@ class _CalendarPageState extends State<CalendarPage> {
         fromFirestore: CalendarEvent.fromFirestore,
         toFirestore: (event, options) => event.toFirestore())
         .get();
+
     for (var doc in snap.docs) {
       final event = doc.data();
       final day =
@@ -65,9 +66,14 @@ class _CalendarPageState extends State<CalendarPage> {
         _events[day] = [];
       }
       _events[day]!.add(event);
+
+      // Benachrichtigung auslösen, wenn das Event für heute ist
+      if (isSameDay(day, DateTime.now())) {
+      }
     }
     setState(() {});
   }
+
 
   List<CalendarEvent> _getEventsForTheDay(DateTime day) {
     return _events[day] ?? [];
@@ -98,7 +104,6 @@ class _CalendarPageState extends State<CalendarPage> {
             },
             selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
             onDaySelected: (selectedDay, focusedDay) {
-              print(_events[selectedDay]);
               setState(() {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
@@ -120,59 +125,14 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           ..._getEventsForTheDay(_selectedDay).map(
                 (event) => EventItem(
-                event: event,
-                onTap: () async {
-                  final res = await Navigator.push<bool>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => EditEvent(
-                          firstDate: _firstDay,
-                          lastDate: _lastDay,
-                          event: event),
-                    ),
-                  );
-                  if (res ?? false) {
-                    _loadFirestoreEvents();
-                  }
-                },
-                onDelete: () async {
-                  final delete = await showDialog<bool>(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: const Text("Delete Event?"),
-                      content: const Text("Are you sure you want to delete?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.black,
-                          ),
-                          child: const Text("No"),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.red,
-                          ),
-                          child: const Text("Yes"),
-                        ),
-                      ],
-                    ),
-                  );
-                  if (delete ?? false) {
-                    await FirebaseFirestore.instance
-                        .collection('events')
-                        .doc(event.id)
-                        .delete();
-                    _loadFirestoreEvents();
-                  }
-                }),
+              event: event,
+              onStatusChanged: _loadFirestoreEvents,  // Pass the refresh callback
+            ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Navigiere zu AddEvent und übergebe die Start- und Enddaten sowie das Intervall
           final result = await Navigator.push<bool>(
             context,
             MaterialPageRoute(
@@ -182,14 +142,12 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
           );
-          // Überprüfe das Ergebnis und lade die Firestore-Daten neu, wenn nötig
           if (result ?? false) {
             _loadFirestoreEvents();
           }
         },
         child: const Icon(Icons.add),
       ),
-
     );
   }
 }

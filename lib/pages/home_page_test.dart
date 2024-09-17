@@ -7,7 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Stor
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:plant_friends/pages/plant_detail_page_Test.dart';
+import 'package:plant_friends/laurasTestFolder/plant_detail_page_Test.dart';
 
 import '../models/plant_model.dart';
 

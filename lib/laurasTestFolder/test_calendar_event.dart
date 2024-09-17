@@ -2,17 +2,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CalendarEvent {
-  final String title;
-  final String description;
-  final DateTime date;
   final String id;
+  final String plantID;
+  final String plantName;
+  final String eventType;
   final bool isDone;
+  final DateTime date;
+
   CalendarEvent({
-    required this.title,
-    required this.description,
-    required this.date,
     required this.id,
-    required this.isDone
+    required this.plantID,
+    required this.plantName,
+    required this.eventType,
+    required this.isDone,
+    required this.date,
   });
 
   factory CalendarEvent.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -20,18 +23,21 @@ class CalendarEvent {
     final data = snapshot.data()!;
     return CalendarEvent(
       date: data['date'].toDate(),
-      title: data['title'],
-      description: data['description'],
+      plantID: data['plantID'],
+      plantName: data['plantName'],
       id: snapshot.id,
       isDone: data['isDone'] ?? false,
+      eventType: data['eventType'] ?? '',
     );
   }
 
   Map<String, Object?> toFirestore() {
     return {
-      "date": Timestamp.fromDate(date),
-      "title": title,
-      "description": description
+      'plantID': plantID,
+      'plantName': plantName,
+      'eventType': eventType,
+      'isDone': isDone,
+      'date': Timestamp.fromDate(date),
     };
   }
 }

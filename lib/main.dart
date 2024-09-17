@@ -7,13 +7,16 @@ import 'package:plant_friends/themes/light_theme.dart';
 import 'package:plant_friends/widgets/my_navigation_bar.dart';
 
 import 'firebase_options.dart';
+import 'laurasTestFolder/api/firebase_api.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  await FirebaseApi().initNotifications();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   runApp(const MyApp());
 }
 

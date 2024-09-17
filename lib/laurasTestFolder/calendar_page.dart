@@ -131,6 +131,7 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
         ],
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await Navigator.push<bool>(

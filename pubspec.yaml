@@ -48,6 +48,7 @@ dependencies:
   table_calendar: ^3.0.0
   path_provider: ^2.0.14
   cloud_firestore: ^5.4.1
+  firebase_messaging: ^15.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:plant_friends/pages/wiki/wiki_new_plant_request_form.dart';
 import 'dart:convert';
-
 import 'package:plant_friends/pages/wiki/wiki_plantdetail_page.dart';
 
+import '../../themes/colors.dart';
 import '../../widgets/custom_button_outlined_small.dart';
 import '../../widgets/custom_text_field.dart'; // Import the custom text field
 
@@ -56,8 +56,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
               return plant['light']?.toLowerCase() == widget.filterValue?.toLowerCase();
             case 'difficulty':
               return plant['difficulty']?.toLowerCase() == widget.filterValue?.toLowerCase();
-            case 'group':
-              return plant['group']?.toLowerCase() == widget.filterValue?.toLowerCase();
+            case 'type':
+              return plant['type']?.toLowerCase() == widget.filterValue?.toLowerCase();
             case 'all':
               return true; // For 'all', show all plants
             default:
@@ -90,10 +90,10 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Filtered Plants - ${widget.filterType} ${widget.filterValue ?? ''}',
+          _toTitleCase('${widget.filterType}: ${widget.filterValue ?? ''}'), // Convert to title case
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -119,17 +119,24 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                     style: TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 16),
-                  CustomButtonOutlinedSmall(
-                    text: 'Request to Add a Plant',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RequestPlantFormPage(),
-                        ),
-                      );
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5, // Setzt die Breite des Buttons auf 40% der Bildschirmbreite
+                      child: CustomButtonOutlinedSmall(
+                        text: 'Request to Add a Plant',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RequestPlantFormPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
+
                 ],
               ),
             )
@@ -151,7 +158,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                   ),
                   title: Text(plant['name'] ?? 'No name'),
                   subtitle: Text(
-                    'Scientific Name: ${plant['scientifical_name'] ?? 'N/A'}',
+                    '${plant['scientifical_name'] ?? 'N/A'}',
                     style: const TextStyle(color: Colors.grey),
                   ),
                   onTap: () {
@@ -169,5 +176,13 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         ],
       ),
     );
+  }
+
+  // Converts a string to title case
+  String _toTitleCase(String text) {
+    return text.split(' ').map((str) {
+      if (str.isEmpty) return '';
+      return str[0].toUpperCase() + str.substring(1).toLowerCase();
+    }).join(' ');
   }
 }

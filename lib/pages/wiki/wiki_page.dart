@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/wiki/wiki_filter_pages/wiki_page_filter_difficulty.dart';
-import 'package:plant_friends/pages/wiki/wiki_filter_pages/wiki_page_filter_group.dart';
+import 'package:plant_friends/pages/wiki/wiki_filter_pages/wiki_page_filter_type.dart';
 import 'package:plant_friends/pages/wiki/wiki_filter_pages/wiki_page_filter_light.dart';
 import 'package:plant_friends/pages/wiki/wiki_filter_pages/wiki_page_filter_water.dart';
 import 'package:plant_friends/pages/wiki/wiki_page_filter_result_page.dart';
+import 'package:plant_friends/themes/colors.dart';
 
 import '../../widgets/card_filter.dart';
 
@@ -15,10 +16,10 @@ class WikiPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Plant Filters',
+          'Plant Wiki',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: GridView.count(
         crossAxisCount: 2,
@@ -28,7 +29,7 @@ class WikiPage extends StatelessWidget {
         children: [
           FilterCard(
             title: 'All Plants',
-            imagePath: 'lib/pages/wiki/wiki_images/Wiki-Category-1.png',
+            imagePath: 'lib/pages/wiki/wiki_images/category/Wiki-Category-1.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -38,17 +39,17 @@ class WikiPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'By Type',
-            imagePath: 'lib/pages/wiki/wiki_images/Wiki-Category-2.png',
+            imagePath: 'lib/pages/wiki/wiki_images/category/Wiki-Category-2.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const GroupFilterPage(),
+                builder: (context) => const TypeFilterPage(),
               ),
             ),
           ),
           FilterCard(
             title: 'By Water Needs',
-            imagePath: 'lib/pages/wiki/wiki_images/Wiki-Category-3.png',
+            imagePath: 'lib/pages/wiki/wiki_images/category/Wiki-Category-3.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -58,7 +59,7 @@ class WikiPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'By Light Needs',
-            imagePath: 'lib/pages/wiki/wiki_images/Wiki-Category-4.png',
+            imagePath: 'lib/pages/wiki/wiki_images/category/Wiki-Category-4.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -68,7 +69,7 @@ class WikiPage extends StatelessWidget {
           ),
           FilterCard(
             title: 'By Difficulty',
-            imagePath: 'lib/pages/wiki/wiki_images/Wiki-Category-5.png',
+            imagePath: 'lib/pages/wiki/wiki_images/category/Wiki-Category-5.png',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(

@@ -14,7 +14,7 @@ class LightFilterPage extends StatelessWidget {
           'Plants by Light Needs',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: seaGreen,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: GridView(
         padding: const EdgeInsets.all(16),

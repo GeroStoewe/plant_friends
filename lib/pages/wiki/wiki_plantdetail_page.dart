@@ -47,15 +47,10 @@ class PlantWikiDetailPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Add this Positioned widget to display the image in the bottom corner
             Positioned(
               bottom: 10,
               right: 10,
-              child: Image.asset(
-                'lib/pages/wiki/wiki_images/wiki_bottom_corner_plant.png',
-                width: 120, // Set the desired width
-                height: 120, // Set the desired height
-              ),
+              child: getPlantTypeImage(),
             ),
           ],
         ),
@@ -99,7 +94,7 @@ class PlantWikiDetailPage extends StatelessWidget {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back_ios_rounded,
+              Icons.arrow_back_ios_rounded,
               color: isDarkMode ? dmLightGrey : lmDarkGrey
           ),
         ),
@@ -169,7 +164,7 @@ class PlantWikiDetailPage extends StatelessWidget {
               child: CustomInfoCard(
                 icon: Icons.local_florist,
                 title: 'Plant Type',
-                value: plant['group'] ?? 'N/A',
+                value: plant['type'] ?? 'N/A',
               ),
             ),
           ],
@@ -261,5 +256,59 @@ class PlantWikiDetailPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget getPlantTypeImage() {
+    String plantType = plant['type'] ?? 'Others';
+    switch (plantType) {
+      case 'Cacti/Succulents':
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/succulent.png',
+          width: 120,
+          height: 120,
+        );
+      case 'Tropical Plants':
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/alocasia.png',
+          width: 120,
+          height: 120,
+        );
+      case 'Climbing Plants':
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/pothos.png',
+          width: 120,
+          height: 120,
+        );
+      case 'Flowering Plants':
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/peace-lily.png',
+          width: 120,
+          height: 120,
+        );
+      case 'Trees/Palms':
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/bonsai.png',
+          width: 120,
+          height: 120,
+        );
+      case 'Herbs':
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/basil.png',
+          width: 120,
+          height: 120,
+        );
+      case 'Others':
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/hanging-pot.png',
+          width: 120,
+          height: 120,
+        );
+      default:
+        return Image.asset(
+          'lib/pages/wiki/wiki_images/corner plant/pothos.png',
+          width: 120,
+          height: 120,
+        );
+    }
   }
 }

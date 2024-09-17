@@ -45,7 +45,9 @@ dependencies:
   intl: ^0.18.1  # Hier wird die intl-Abhängigkeit hinzugefügt
   image_picker: ^0.8.7+3
   image_cropper: ^3.0.1
-
+  table_calendar: ^3.0.0
+  path_provider: ^2.0.14
+  cloud_firestore: ^5.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -71,11 +73,11 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/authentication/images/
-    - lib/pages/wiki/wiki_images/Wiki-Category-1.png
-    - lib/pages/wiki/wiki_images/Wiki-Category-2.png
-    - lib/pages/wiki/wiki_images/Wiki-Category-3.png
-    - lib/pages/wiki/wiki_images/Wiki-Category-4.png
-    - lib/pages/wiki/wiki_images/Wiki-Category-5.png
+    - lib/pages/wiki/wiki_images/category/Wiki-Category-1.png
+    - lib/pages/wiki/wiki_images/category/Wiki-Category-2.png
+    - lib/pages/wiki/wiki_images/category/Wiki-Category-3.png
+    - lib/pages/wiki/wiki_images/category/Wiki-Category-4.png
+    - lib/pages/wiki/wiki_images/category/Wiki-Category-5.png
     - lib/pages/wiki/wiki_images/light/Wiki-Light-1.png
     - lib/pages/wiki/wiki_images/light/Wiki-Light-2.png
     - lib/pages/wiki/wiki_images/light/Wiki-Light-3.png
@@ -86,7 +88,20 @@ flutter:
     - lib/pages/wiki/wiki_images/water/Wiki-Water-1.png
     - lib/pages/wiki/wiki_images/water/Wiki-Water-2.png
     - lib/pages/wiki/wiki_images/water/Wiki-Water-3.png
-    - lib/pages/wiki/wiki_images/wiki_bottom_corner_plant.png
+    - lib/pages/wiki/wiki_images/type/Wiki_type_succulent.png
+    - lib/pages/wiki/wiki_images/type/Wiki_type_alocasia.png
+    - lib/pages/wiki/wiki_images/type/Wiki_type_pothos.png
+    - lib/pages/wiki/wiki_images/type/Wiki_type_peace-lily.png
+    - lib/pages/wiki/wiki_images/type/Wiki_type_bonsai.png
+    - lib/pages/wiki/wiki_images/type/Wiki_type_basil.png
+    - lib/pages/wiki/wiki_images/type/Wiki_type_hanging-pot.png
+    - lib/pages/wiki/wiki_images/corner plant/alocasia.png
+    - lib/pages/wiki/wiki_images/corner plant/basil.png
+    - lib/pages/wiki/wiki_images/corner plant/bonsai.png
+    - lib/pages/wiki/wiki_images/corner plant/hanging-pot.png
+    - lib/pages/wiki/wiki_images/corner plant/peace-lily.png
+    - lib/pages/wiki/wiki_images/corner plant/pothos.png
+    - lib/pages/wiki/wiki_images/corner plant/succulent.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -42,10 +42,10 @@ class NavigationBar extends StatefulWidget {
   const NavigationBar({super.key});
 
   @override
-  _NavigationBarState createState() => _NavigationBarState();
+  NavigationBarState createState() => NavigationBarState();
 }
 
-class _NavigationBarState extends State<NavigationBar> {
+class NavigationBarState extends State<NavigationBar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -64,17 +64,17 @@ class _NavigationBarState extends State<NavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Shows the current page based on index
+      body: _pages[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.transparent, // Background behind the navbar
-        color: const Color(0xFF388E3C), // Curved navbar color
-        buttonBackgroundColor: const Color(0xFF388E3C), // Color of the active button
-        height: 68, // Height of the navbar
-        index: _selectedIndex, // Current selected index
-        onTap: _onItemTapped, // Callback for taps
+        backgroundColor: Colors.transparent,
+        color: const Color(0xFF388E3C),
+        buttonBackgroundColor: const Color(0xFF388E3C),
+        height: 68,
+        index: _selectedIndex,
+        onTap: _onItemTapped,
         items: const [
           CurvedNavigationBarItem(
-            child: Icon(Icons.local_florist_sharp, color: Color(0xFFF5F5DC)),// Warm orange color),
+            child: Icon(Icons.local_florist_sharp, color: Color(0xFFF5F5DC)),
             label: 'My Plants',
               labelStyle: TextStyle(color: Color(0xFFF5F5DC))
           ),
@@ -94,7 +94,7 @@ class _NavigationBarState extends State<NavigationBar> {
               labelStyle: TextStyle(color: Color(0xFFF5F5DC))
           ),
         ],
-        animationDuration: const Duration(milliseconds: 300), // Animation duration
+        animationDuration: const Duration(milliseconds: 300),
       ),
     );
   }

@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'my_plants_details_page.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'plant.dart';
-import 'my_plants_details_page.dart';
 
 class MyPlantsPage extends StatefulWidget {
   const MyPlantsPage({super.key});
@@ -17,7 +18,7 @@ class MyPlantsPage extends StatefulWidget {
 class _MyPlantsPageState extends State<MyPlantsPage> {
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
-    databaseURL: 'https://console.firebase.google.com/project/plant-friends-app/database/plant-friends-app',
+    databaseURL: 'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
   ).ref();
 
   final TextEditingController _edtNameController = TextEditingController();
@@ -30,7 +31,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   @override
   void initState() {
     super.initState();
-    // Start listening to changes in the "Plants" node
+
     _plantSubscription = dbRef.child("Plants").onValue.listen((event) {
       final List<Plant> updatedPlantList = [];
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
@@ -81,7 +82,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   void plantDialog() {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
           child: Container(
             padding: const EdgeInsets.all(10),
@@ -118,10 +119,21 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                     };
 
                     dbRef.child("Plants").push().set(data).then((value) {
-                      Navigator.of(context).pop();
+                      if (mounted) {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Plant details updated successfully')),
+                        );
+                      }
+                    }).catchError((error) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Failed to update plant details: $error')),
+                        );
+                      }
                     });
                   },
-                  child: const Text("Save new Plant"),
+                  child: const Text("Save new plant"),
                 ),
               ],
             ),
@@ -156,9 +168,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           ),
         );
 
-        // Reload data if the result indicates a deletion
         if (result == true) {
-          setState(() {}); // Trigger a rebuild to refresh the data
+          setState(() {});
         }
       },
       child: Container(

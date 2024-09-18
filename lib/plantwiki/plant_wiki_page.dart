@@ -9,8 +9,8 @@ class PlantWikiPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Plant Wiki'),
       ),
-      body: Center(
-        child: const Text('Plant Wiki Page'),
+      body: const Center(
+        child: Text('Plant Wiki Page'),
       ),
     );
   }

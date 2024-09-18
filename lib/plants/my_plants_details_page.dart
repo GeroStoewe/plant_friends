@@ -103,7 +103,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             onPressed: () {
               saveChanges();
             },
-            child: const Text("Save Changes"),
+            child: const Text("Save changes"),
           ),
       ],
     );
@@ -141,30 +141,37 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
       "science_name": _scienceNameController.text,
       "date": _dateController.text,
     };
+
     widget.dbRef.child("Plants").child(widget.plant.key!).update(updatedData).then((value) {
-      Navigator.pop(context, true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Plant details updated successfully')),
-      );
+      if (mounted) {
+        Navigator.pop(context, true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Plant details updated successfully')),
+        );
+      }
     }).catchError((error) {
-      // Handle error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update plant: $error')),
-      );// Return to HomeScreen with result
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update plant details: $error')),
+        );
+      }
     });
   }
 
   void deletePlant() {
     widget.dbRef.child("Plants").child(widget.plant.key!).remove().then((value) {
-      Navigator.pop(context, true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Plant deleted successfully')),
-      );
+      if (mounted) {
+        Navigator.pop(context, true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Plant deleted successfully')),
+        );
+      }
     }).catchError((error) {
-      // Handle error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete plant: $error')),
-      );// Return to HomeScreen with result
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete plant: $error')),
+        ); // Return to HomeScreen with result
+      }
     });
   }
 
@@ -184,6 +191,6 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
   }
 }
 
-///TODO: Plus Button mit Funktion (name, type, photo, maybe with dob or age:...)
+///TODO: Plus Button mit Function (name, type, photo, maybe with dob or age:...)
 ///TODO: every listed plant item should be able to be removed with minus/trash icon
 

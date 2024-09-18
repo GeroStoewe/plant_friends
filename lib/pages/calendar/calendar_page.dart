@@ -1,27 +1,28 @@
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:plant_friends/laurasTestFolder/test_calendar_event.dart';
+import 'package:intl/intl.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'test_add_event.dart';
-import 'test_event_item.dart';
+import 'calendar_event.dart';
+import 'calendar_event_item.dart';
 
-class CalendarPageTest extends StatefulWidget {
-  const CalendarPageTest({super.key});
+
+class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
 
   @override
-  State<CalendarPageTest> createState() => _CalendarPageTestState();
+  State<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _CalendarPageTestState extends State<CalendarPageTest> {
+class _CalendarPageState extends State<CalendarPage> {
   late DateTime _focusedDay;
   late DateTime _firstDay;
   late DateTime _lastDay;
   late DateTime _selectedDay;
   late CalendarFormat _calendarFormat;
-  late Map<DateTime, List<CalendarEventTest>> _events;
+  late Map<DateTime, List<CalendarEvent>> _events;
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -30,8 +31,6 @@ class _CalendarPageTestState extends State<CalendarPageTest> {
   @override
   void initState() {
     super.initState();
-
-
     _events = LinkedHashMap(
       equals: isSameDay,
       hashCode: getHashCode,
@@ -54,7 +53,7 @@ class _CalendarPageTestState extends State<CalendarPageTest> {
         .where('date', isGreaterThanOrEqualTo: firstDay)
         .where('date', isLessThanOrEqualTo: lastDay)
         .withConverter(
-        fromFirestore: CalendarEventTest.fromFirestore,
+        fromFirestore: CalendarEvent.fromFirestore,
         toFirestore: (event, options) => event.toFirestore())
         .get();
 
@@ -66,16 +65,12 @@ class _CalendarPageTestState extends State<CalendarPageTest> {
         _events[day] = [];
       }
       _events[day]!.add(event);
-
-      // Benachrichtigung auslösen, wenn das Event für heute ist
-      if (isSameDay(day, DateTime.now())) {
-      }
     }
     setState(() {});
   }
 
 
-  List<CalendarEventTest> _getEventsForTheDay(DateTime day) {
+  List<CalendarEvent> _getEventsForTheDay(DateTime day) {
     return _events[day] ?? [];
   }
 
@@ -88,6 +83,9 @@ class _CalendarPageTestState extends State<CalendarPageTest> {
           TableCalendar(
             eventLoader: _getEventsForTheDay,
             calendarFormat: _calendarFormat,
+            availableCalendarFormats: const {
+              CalendarFormat.month: 'Month',
+            },
             onFormatChanged: (format) {
               setState(() {
                 _calendarFormat = format;
@@ -96,6 +94,7 @@ class _CalendarPageTestState extends State<CalendarPageTest> {
             focusedDay: _focusedDay,
             firstDay: _firstDay,
             lastDay: _lastDay,
+
             onPageChanged: (focusedDay) {
               setState(() {
                 _focusedDay = focusedDay;
@@ -113,42 +112,66 @@ class _CalendarPageTestState extends State<CalendarPageTest> {
               weekendTextStyle: TextStyle(
                 color: darkSeaGreen,
               ),
+              selectedDecoration: BoxDecoration(
+                color: seaGreen, // Hintergrundfarbe für den ausgewählten Tag
+                shape: BoxShape.circle, // Die Form des Hintergrunds
+              ),
+              selectedTextStyle: TextStyle(
+                color: Colors.white, // Textfarbe für den ausgewählten Tag
+              ),
+              todayDecoration: BoxDecoration(
+                color: darkSeaGreen, // Hintergrundfarbe für den heutigen Tag
+                shape: BoxShape.circle, // Die Form des Hintergrunds
+              ),
+              todayTextStyle: TextStyle(
+                color: Colors.white, // Textfarbe für den heutigen Tag
+              ),
             ),
             calendarBuilders: CalendarBuilders(
               headerTitleBuilder: (context, day) {
+                final headerDateFormat = DateFormat('MMMM yyyy'); // Format für den Monat und das Jahr
                 return Container(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(day.toString()),
+                  child: Text(
+                    headerDateFormat.format(day),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 );
               },
             ),
           ),
-          ..._getEventsForTheDay(_selectedDay).map(
-                (event) => EventItemTest(
+          _getEventsForTheDay(_selectedDay).isEmpty
+              ? const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "All your plants are happy. \nThere is nothing for you to do on this day.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                ),
+                SizedBox(height: 16), // Space between text and icon
+                Icon(
+                  Icons.sunny,
+                  size: 40,
+                  color: Colors.yellow, // Color for the icon
+                ),
+              ],
+            ),
+          )
+              : Column(
+            children: _getEventsForTheDay(_selectedDay)
+                .map((event) => EventItem(
               event: event,
-              onStatusChanged: _loadFirestoreEvents,  // Pass the refresh callback
-            ),
+              onStatusChanged: _loadFirestoreEvents, // Pass the refresh callback
+            ))
+                .toList(),
           ),
-        ],
-      ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push<bool>(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AddEvent(
-                firstDate: _selectedDay,
-                lastDate: _lastDay,
-              ),
-            ),
-          );
-          if (result ?? false) {
-            _loadFirestoreEvents();
-          }
-        },
-        child: const Icon(Icons.add),
+        ],
       ),
     );
   }
+
 }

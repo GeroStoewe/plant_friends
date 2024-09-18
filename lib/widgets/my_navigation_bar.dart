@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/account_page.dart';
-import 'package:plant_friends/laurasTestFolder/calendar_page.dart';
-import 'package:plant_friends/pages/home_page_test.dart';
+import 'package:plant_friends/laurasTestFolder/home_page_test.dart';
 import 'package:plant_friends/pages/wiki/wiki_page.dart';
+
+import '../pages/calendar/calendar_page.dart';
+import '../pages/home_page.dart';
 
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({super.key});
@@ -15,7 +17,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const HomePageTest(), // Meine Pflanzen
+    const HomePage(), // Meine Pflanzen
     const CalendarPage(), // Kalender-Seite
     const WikiPage(), // Pflanze-Wiki-Seite
     const AccountPage(), // Konto-Seite

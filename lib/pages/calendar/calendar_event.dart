@@ -1,7 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CalendarEventTest {
+class CalendarEvent{
   final String id;
   final String plantID;
   final String plantName;
@@ -9,7 +9,7 @@ class CalendarEventTest {
   final bool isDone;
   final DateTime date;
 
-  CalendarEventTest({
+  CalendarEvent({
     required this.id,
     required this.plantID,
     required this.plantName,
@@ -18,10 +18,10 @@ class CalendarEventTest {
     required this.date,
   });
 
-  factory CalendarEventTest.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot,
+  factory CalendarEvent.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot,
       [SnapshotOptions? options]) {
     final data = snapshot.data()!;
-    return CalendarEventTest(
+    return CalendarEvent(
       date: data['date'].toDate(),
       plantID: data['plantID'],
       plantName: data['plantName'],

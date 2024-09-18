@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:plant_friends/laurasTestFolder/test_calendar_event.dart';
 
-class EventItem extends StatefulWidget {
-  final CalendarEvent event;
+class EventItemTest extends StatefulWidget {
+  final CalendarEventTest event;
   final Function()? onTap;
   final Function() onStatusChanged;  // New callback function to reload events
 
-  const EventItem({
+  const EventItemTest({
     Key? key,
     required this.event,
     this.onTap,
@@ -15,10 +15,10 @@ class EventItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EventItemState createState() => _EventItemState();
+  _EventItemTestState createState() => _EventItemTestState();
 }
 
-class _EventItemState extends State<EventItem> {
+class _EventItemTestState extends State<EventItemTest> {
   void _toggleIsDone() async {
     // Update the isDone status in Firestore<
     await FirebaseFirestore.instance

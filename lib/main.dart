@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:plant_friends/plants/firebase_options.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
@@ -69,27 +71,27 @@ class NavigationBarState extends State<NavigationBar> {
         backgroundColor: Colors.transparent,
         color: const Color(0xFF388E3C),
         buttonBackgroundColor: const Color(0xFF388E3C),
-        height: 68,
+        height: 80,
         index: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
           CurvedNavigationBarItem(
-            child: Icon(Icons.local_florist_sharp, color: Color(0xFFF5F5DC)),
+            child: Icon(FluentIcons.leaf_three_24_regular, color: Color(0xFFF5F5DC)),
             label: 'My Plants',
               labelStyle: TextStyle(color: Color(0xFFF5F5DC))
           ),
           CurvedNavigationBarItem(
-            child: Icon(Icons.calendar_today, color: Color(0xFFF5F5DC)),
+            child: Icon(LineIcons.calendarWithWeekFocus, color: Color(0xFFF5F5DC)),
             label: 'Calendar',
               labelStyle: TextStyle(color: Color(0xFFF5F5DC))
           ),
           CurvedNavigationBarItem(
-            child: Icon(Icons.book, color: Color(0xFFF5F5DC)),
+            child: Icon(LineIcons.bookOpen, color: Color(0xFFF5F5DC)),
             label: 'Plant-Wiki',
               labelStyle: TextStyle(color: Color(0xFFF5F5DC))
           ),
           CurvedNavigationBarItem(
-            child: Icon(Icons.account_circle, color: Color(0xFFF5F5DC)),
+            child: Icon(FluentIcons.person_accounts_20_regular, color: Color(0xFFF5F5DC)),
             label: 'Account',
               labelStyle: TextStyle(color: Color(0xFFF5F5DC))
           ),

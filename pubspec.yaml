@@ -42,6 +42,8 @@ dependencies:
   image_picker: ^0.8.7
   http: ^1.2.2
   curved_labeled_navigation_bar: ^2.0.2
+  line_icons: ^2.0.3
+  fluentui_system_icons: ^1.1.257
 
 dev_dependencies:
   flutter_test:

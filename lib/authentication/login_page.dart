@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plant_friends/authentication/forgot_password_page.dart';
 import 'package:plant_friends/authentication/square_tile.dart';
 import 'package:plant_friends/themes/colors.dart';
@@ -160,9 +161,9 @@ class _LoginPageState extends State<LoginPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const SquareTile(
-                                  imagePath:
-                                      'lib/authentication/images/google_logo.png'),
+                              SquareTile(
+                                  onTap: loginWithGoogle,
+                                  imagePath: 'lib/authentication/images/google_logo.png'),
                               SquareTile(
                                   imagePath: isDarkMode
                                       ? 'lib/authentication/images/apple_logo_dark_mode.png'
@@ -261,6 +262,21 @@ class _LoginPageState extends State<LoginPage> {
             ],
           );
         });
+  }
+
+  loginWithGoogle() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+
+    if (gUser == null) return;
+
+    final GoogleSignInAuthentication gAuth = await gUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken
+    );
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class TestHomePage extends StatelessWidget {
   TestHomePage({super.key});
@@ -28,5 +29,6 @@ class TestHomePage extends StatelessWidget {
 
   void logout() {
     FirebaseAuth.instance.signOut();
+    GoogleSignIn().signOut();
   }
 }

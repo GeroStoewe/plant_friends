@@ -35,7 +35,7 @@ class QuizFunctions {
           child: Container(
             padding: EdgeInsets.all(20.0),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
@@ -54,8 +54,17 @@ class QuizFunctions {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 SizedBox(height: 20),
+
+                Image.asset(
+                  'lib/quiz/images/plantiesWallpaper.jpg',
+                  height: 130,
+                  width: 310,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 20),
+
                 Text(
-                  'Your group: ${groups['message']}',
+                  '${groups['message']}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 if (groups['petsWarning']!.isNotEmpty)
@@ -82,24 +91,22 @@ class QuizFunctions {
     overlayState.insert(overlayEntry!);
   }
 
-  // Funktion zur Überprüfung der Antwort und Punktzuweisung
   void checkAnswer(int carePoints, int environmentPoints, BuildContext context, OverlayState overlayState, int answerIndex) {
     careScore += carePoints;
     environmentScore += environmentPoints;
-    userAnswers.add(answerIndex); // Benutzerantwort speichern
+    userAnswers.add(answerIndex); // Antworten speichern
 
     // Schließe das aktuelle Overlay (Fragefenster), bevor die nächste Frage angezeigt wird
     closeQuiz();
 
     if (currentQuestionIndex < questions.length - 1) {
       currentQuestionIndex++;
-      showQuestion(context, overlayState); // Zeige die nächste Frage
+      showQuestion(context, overlayState); // Zeigt nächste Frage
     } else {
-      showResult(context, overlayState); // Zeige das Ergebnis, wenn alle Fragen beantwortet wurden
+      showResult(context, overlayState); // Zeigt Ergebnis, wenn alle Fragen beantwortet wurden
     }
   }
 
-  // Funktion zum Anzeigen der aktuellen Frage
   void showQuestion(BuildContext context, OverlayState overlayState) {
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
@@ -111,7 +118,7 @@ class QuizFunctions {
           child: Container(
             padding: EdgeInsets.all(20.0),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(

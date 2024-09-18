@@ -6,11 +6,13 @@ class QuizTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Test Page for Quiz'),
-      ),
       body: Center(
-        child: Text('This is the test page to display the Quiz Overlay'),
+        child: Image.asset(
+          'lib/quiz/images/ranken.jpg',
+          height: 1000,
+          width: 500,
+          fit: BoxFit.cover,
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

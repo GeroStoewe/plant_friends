@@ -1,17 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_friends/authentication/auth_page.dart';
-import 'package:plant_friends/authentication/login_page.dart';
-import 'package:plant_friends/authentication/square_tile.dart';
-
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
-  ForgotPasswordPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   // Variables
   final usernameController = TextEditingController();
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +70,7 @@ class ForgotPasswordPage extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.headlineMedium
                           ),
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 40),
                           CustomTextField(
                               controller: usernameController,
                               icon: Icons.alternate_email_rounded,
@@ -73,7 +82,7 @@ class ForgotPasswordPage extends StatelessWidget {
                               onTap: resetPassword,
                               text: "RESET PASSWORD"
                           ),
-                          const SizedBox(height: 250),
+                          const SizedBox(height: 260),
                           GestureDetector(
                             onTap: () {
                               Navigator.pushReplacement(
@@ -118,5 +127,63 @@ class ForgotPasswordPage extends StatelessWidget {
     );
   }
 
-  void resetPassword() {}
+  Future resetPassword() async {
+    final emailRegex = RegExp(
+      r'^[^@]+@[^@]+\.[^@]+$',
+      caseSensitive: false,
+    );
+
+    if (usernameController.text.isEmpty) {
+      showErrorMessage('Email address cannot be empty');
+      return;
+    } else if (!emailRegex.hasMatch(usernameController.text)) {
+      showErrorMessage('Invalid email address format');
+      return;
+    }
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ),
+          );
+        });
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+          email: usernameController.text.trim());
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthPage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      showErrorMessage(e.code);
+    }
+  }
+
+  void showErrorMessage(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: darkGreyGreen,
+            title: Center(
+                child: Text(message,
+                    style: Theme.of(context).textTheme.displayMedium)),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK",
+                      style: Theme.of(context).textTheme.displaySmall))
+            ],
+          );
+        });
+  }
 }

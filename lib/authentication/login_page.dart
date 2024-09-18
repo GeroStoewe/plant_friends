@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_friends/authentication/forgot_password_page.dart';
-import 'package:plant_friends/authentication/signup_page.dart';
 import 'package:plant_friends/authentication/square_tile.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
 import 'package:plant_friends/widgets/custom_text_field.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final Function()? onTap;
+
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -66,13 +67,12 @@ class _LoginPageState extends State<LoginPage> {
                               textAlign: TextAlign.center,
                               style:
                                   Theme.of(context).textTheme.headlineMedium),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 25),
                           CustomTextField(
                               controller: usernameController,
                               icon: Icons.alternate_email_rounded,
                               hintText: "Email Address",
-                              obscureText: false
-                          ),
+                              obscureText: false),
                           const SizedBox(height: 20),
                           CustomTextField(
                             controller: passwordController,
@@ -119,9 +119,9 @@ class _LoginPageState extends State<LoginPage> {
                                   ])),
                                 ]),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 20),
                           CustomButton(onTap: login, text: "LOGIN"),
-                          const SizedBox(height: 25),
+                          const SizedBox(height: 30),
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 25.0),
@@ -142,7 +142,8 @@ class _LoginPageState extends State<LoginPage> {
                                     style: TextStyle(
                                         color: isDarkMode
                                             ? dmLightGrey
-                                            : lmDarkGrey),
+                                            : lmDarkGrey,
+                                        fontSize: 18),
                                   ),
                                 ),
                                 Expanded(
@@ -155,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 25),
+                          const SizedBox(height: 30),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -172,14 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                                       : 'lib/authentication/images/x_logo_light_mode.png'),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 30),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignupPage()));
-                            },
+                            onTap: widget.onTap,
                             child: Center(
                               child: Text.rich(TextSpan(children: [
                                 TextSpan(
@@ -209,20 +205,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
-    if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text("Fields cannot be empty"),
-          );
-        },
-      );
+    final emailRegex = RegExp(
+      r'^[^@]+@[^@]+\.[^@]+$',
+      caseSensitive: false,
+    );
+
+    if (usernameController.text.isEmpty) {
+      showErrorMessage('Email address cannot be empty');
+      return;
+    } else if (!emailRegex.hasMatch(usernameController.text)) {
+      showErrorMessage('Invalid email address format');
+      return;
+    } else if (passwordController.text.isEmpty) {
+      showErrorMessage('Password cannot be empty');
       return;
     }
 
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return Center(
             child: CircularProgressIndicator(
@@ -237,30 +238,27 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == 'user-not-found') {
-        wrongEmailMessage();
-      } else if (e.code == 'wrong-password') {
-        wrongPasswordMessage();
-      }
+      showErrorMessage(e.code);
     }
   }
 
-  void wrongEmailMessage() {
+  void showErrorMessage(String message) {
     showDialog(
         context: context,
         builder: (context) {
-          return const AlertDialog(
-            title: Text("Incorrect Email"),
-          );
-        });
-  }
-
-  void wrongPasswordMessage() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text("Incorrect Password"),
+          return AlertDialog(
+            backgroundColor: darkGreyGreen,
+            title: Center(
+                child: Text(message,
+                    style: Theme.of(context).textTheme.displayMedium)),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK",
+                      style: Theme.of(context).textTheme.displaySmall))
+            ],
           );
         });
   }

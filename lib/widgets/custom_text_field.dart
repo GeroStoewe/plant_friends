@@ -7,13 +7,13 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
 
-  const CustomTextField({
+  CustomTextField({
     Key? key,
     required this.controller,
     required this.icon,
     required this.hintText,
     required this.obscureText,
-    this.suffixIcon
+    this.suffixIcon,
 });
 
   @override

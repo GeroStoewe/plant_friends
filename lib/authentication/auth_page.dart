@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:plant_friends/authentication/login_page.dart';
 import 'package:plant_friends/test_home_page.dart';
 
+import 'LoginOrSignupPage.dart';
+
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
 
@@ -15,7 +17,7 @@ class AuthPage extends StatelessWidget {
           if (snapshot.hasData) {
             return TestHomePage(); // TODO: Change with actual HomePage
           } else {
-            return LoginPage();
+            return const LoginOrSignupPage();
           }
         }
       ),

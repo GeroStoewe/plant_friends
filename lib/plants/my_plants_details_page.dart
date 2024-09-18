@@ -186,4 +186,4 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
 ///TODO: Plus Button mit Funktion (name, type, photo, maybe with dob or age:...)
 ///TODO: every listed plant item should be able to be removed with minus/trash icon
-///TODO: navigation bar (check if it can be combined with Gorouter or other alternatives)
+

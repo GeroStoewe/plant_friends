@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+            'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,9 +28,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+              'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+              'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -39,15 +48,6 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA8VFMEGbkgnPEzI6JCGuYIPr1dGmiPMs0',
-    appId: '1:545786364087:web:1812ffc47a91542cbbcd32',
-    messagingSenderId: '545786364087',
-    projectId: 'plant-friends-app',
-    authDomain: 'plant-friends-app.firebaseapp.com',
-    storageBucket: 'plant-friends-app.appspot.com',
-  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAx_EwH-Dc0oXBcaxPqtKncLtyf-WqWYx0',
@@ -64,23 +64,5 @@ class DefaultFirebaseOptions {
     projectId: 'plant-friends-app',
     storageBucket: 'plant-friends-app.appspot.com',
     iosBundleId: 'com.hwr.plantFriends',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDQtWGAPjE0cvINWp5lLB28oLU3rDJfW58',
-    appId: '1:545786364087:ios:19aba50c9e659936bbcd32',
-    messagingSenderId: '545786364087',
-    projectId: 'plant-friends-app',
-    storageBucket: 'plant-friends-app.appspot.com',
-    iosBundleId: 'com.hwr.plantFriends',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyA8VFMEGbkgnPEzI6JCGuYIPr1dGmiPMs0',
-    appId: '1:545786364087:web:1812ffc47a91542cbbcd32',
-    messagingSenderId: '545786364087',
-    projectId: 'plant-friends-app',
-    authDomain: 'plant-friends-app.firebaseapp.com',
-    storageBucket: 'plant-friends-app.appspot.com',
   );
 }

@@ -59,10 +59,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My Plants"),
+        title: Text(
+            "My Plants",
+            style: Theme.of(context).textTheme.headlineMedium,
+        ),
       ),
       body: plantList.isEmpty
-          ? const Center(child: Text('No plants available'))
+          ? const Center(child: Text("No plants available"))
           : ListView.builder(
         itemCount: plantList.length,
         itemBuilder: (context, index) {
@@ -122,13 +125,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       if (mounted) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Plant details updated successfully')),
+                          const SnackBar(content: Text("Plant details updated successfully")),
                         );
                       }
                     }).catchError((error) {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to update plant details: $error')),
+                          SnackBar(content: Text("Failed to update plant details: $error")),
                         );
                       }
                     });
@@ -191,7 +194,9 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.local_florist, size: 50, color: Colors.green),
+            const Icon(Icons.local_florist,
+                size: 50,
+                color: Colors.green ),
             const SizedBox(width: 15),
             Expanded(
               child: Column(

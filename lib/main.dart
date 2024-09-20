@@ -65,35 +65,49 @@ class NavigationBarState extends State<NavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.transparent,
-        color: const Color(0xFF388E3C),
+        color: const Color(0xFF5aa06f),
         buttonBackgroundColor: const Color(0xFF388E3C),
         height: 80,
         index: _selectedIndex,
         onTap: _onItemTapped,
-        items: const [
+        items: [
           CurvedNavigationBarItem(
-            child: Icon(FluentIcons.leaf_three_24_regular, color: Color(0xFFF5F5DC)),
+            child: Icon(FluentIcons.leaf_three_24_regular,
+                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
             label: 'My Plants',
-              labelStyle: TextStyle(color: Color(0xFFF5F5DC))
+              labelStyle: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
+              ),
           ),
           CurvedNavigationBarItem(
-            child: Icon(LineIcons.calendarWithWeekFocus, color: Color(0xFFF5F5DC)),
+            child: Icon(LineIcons.calendarWithWeekFocus,
+                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
             label: 'Calendar',
-              labelStyle: TextStyle(color: Color(0xFFF5F5DC))
+              labelStyle: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
+              ),
           ),
           CurvedNavigationBarItem(
-            child: Icon(LineIcons.bookOpen, color: Color(0xFFF5F5DC)),
+            child: Icon(LineIcons.bookOpen,
+                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
             label: 'Plant-Wiki',
-              labelStyle: TextStyle(color: Color(0xFFF5F5DC))
+              labelStyle: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
+              ),
           ),
           CurvedNavigationBarItem(
-            child: Icon(FluentIcons.person_accounts_20_regular, color: Color(0xFFF5F5DC)),
+            child: Icon(FluentIcons.person_accounts_20_regular,
+                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
             label: 'Account',
-              labelStyle: TextStyle(color: Color(0xFFF5F5DC))
+              labelStyle: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
+              ),
           ),
         ],
         animationDuration: const Duration(milliseconds: 300),

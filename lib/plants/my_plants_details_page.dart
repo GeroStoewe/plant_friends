@@ -214,6 +214,9 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
     }
   }
 }
-
-///TODO: every listed plant item should be able to be removed with minus/trash icon
+/// TODO: Add a photo to solve dark background color in dark mode.
+/// TODO: add photo function when you call onTap function. Use icon button or elevated button
+/// TODO: add search bar to find the saved plants using API
+/// TODO: add edit symbol to the plant widget
+/// TODO: change the structure of delete and edit functions.
 

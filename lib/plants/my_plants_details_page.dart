@@ -48,7 +48,31 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              deletePlant();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Confirm Deletion'),
+                    content: const Text(
+                        'Are you sure you want to delete this plant?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Delete'),
+                        onPressed: () {
+                          deletePlant();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
@@ -191,6 +215,5 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
   }
 }
 
-///TODO: Plus Button mit Function (name, type, photo, maybe with dob or age:...)
 ///TODO: every listed plant item should be able to be removed with minus/trash icon
 

@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:line_icons/line_icons.dart';
+
 import 'my_plants_details_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -18,11 +21,13 @@ class MyPlantsPage extends StatefulWidget {
 class _MyPlantsPageState extends State<MyPlantsPage> {
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
-    databaseURL: 'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+    databaseURL:
+        'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
   ).ref();
 
   final TextEditingController _edtNameController = TextEditingController();
-  final TextEditingController _edtScienceNameController = TextEditingController();
+  final TextEditingController _edtScienceNameController =
+      TextEditingController();
   final TextEditingController _edtDateController = TextEditingController();
 
   late StreamSubscription<DatabaseEvent> _plantSubscription;
@@ -38,7 +43,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
       if (data != null) {
         data.forEach((key, value) {
-          PlantData plantData = PlantData.fromJSON(value as Map<dynamic, dynamic>);
+          PlantData plantData =
+              PlantData.fromJSON(value as Map<dynamic, dynamic>);
           updatedPlantList.add(Plant(key: key, plantData: plantData));
         });
       }
@@ -51,27 +57,49 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
   @override
   void dispose() {
-    _plantSubscription.cancel(); // Cancel the stream subscription when disposing the widget
+    _plantSubscription
+        .cancel(); // Cancel the stream subscription when disposing the widget
     super.dispose();
   }
+/*
+  void deletePlant(Plant plant) {
+    dbRef.child("Plants").child(plant.key!).remove().then((value) {
+      if (mounted) {
+        Navigator.pop(context, true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Plant deleted successfully')),
+        );
+        setState(() {
+          plantList.remove(plant);
+        });
+      }
+    }).catchError((error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete plant: $error')),
+        );
+      }
+    });
+  }
+*/
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "My Plants",
-            style: Theme.of(context).textTheme.headlineMedium,
+          "My Plants",
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
       body: plantList.isEmpty
           ? const Center(child: Text("No plants available"))
           : ListView.builder(
-        itemCount: plantList.length,
-        itemBuilder: (context, index) {
-          return plantWidget(plantList[index]);
-        },
-      ),
+              itemCount: plantList.length,
+              itemBuilder: (context, index) {
+                return plantWidget(plantList[index]);
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           plantDialog();
@@ -98,7 +126,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 ),
                 TextField(
                   controller: _edtScienceNameController,
-                  decoration: const InputDecoration(labelText: "Scientific Name"),
+                  decoration:
+                      const InputDecoration(labelText: "Scientific Name"),
                 ),
                 GestureDetector(
                   onTap: () => _selectDate(context),
@@ -125,13 +154,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       if (mounted) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Plant details updated successfully")),
+                          const SnackBar(
+                              content:
+                                  Text("Plant details updated successfully")),
                         );
                       }
                     }).catchError((error) {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Failed to update plant details: $error")),
+                          SnackBar(
+                              content: Text(
+                                  "Failed to update plant details: $error")),
                         );
                       }
                     });
@@ -167,7 +200,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MyPlantsDetailsPage(plant: plant, dbRef: dbRef),
+            builder: (context) =>
+                MyPlantsDetailsPage(plant: plant, dbRef: dbRef),
           ),
         );
 
@@ -192,11 +226,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Icon(Icons.local_florist,
+            const Icon(FluentIcons.camera_24_regular,
                 size: 50,
-                color: Colors.green ),
+                color: Colors.green,
+                semanticLabel: "photo",
+            ),
             const SizedBox(width: 15),
             Expanded(
               child: Column(
@@ -205,22 +241,24 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   Text(
                     plant.plantData!.name!,
                     style: const TextStyle(
+                      color: Colors.grey,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   Text(
                     plant.plantData!.scienceName!,
                     style: const TextStyle(
-                      fontStyle: FontStyle.italic,
                       color: Colors.grey,
+                      fontStyle: FontStyle.italic,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                      const Icon(LineIcons.calendarWithWeekFocus,
+                          size: 16, color: Colors.grey),
                       const SizedBox(width: 5),
                       Text(
                         plant.plantData!.date!,
@@ -232,6 +270,12 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   ),
                 ],
               ),
+            ),
+            IconButton(icon: const Icon(
+              Icons.delete,
+              color: Colors.grey,
+            ),
+            onPressed: () {},
             ),
           ],
         ),

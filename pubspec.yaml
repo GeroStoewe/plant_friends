@@ -39,7 +39,8 @@ dependencies:
   firebase_database: ^10.5.7
   intl: ^0.18.1
   table_calendar: ^3.0.2
-  image_picker: ^0.8.7
+  image_picker: ^0.8.7+3
+  permission_handler: ^10.2.0
   http: ^1.2.2
   curved_labeled_navigation_bar: ^2.0.2
   line_icons: ^2.0.3

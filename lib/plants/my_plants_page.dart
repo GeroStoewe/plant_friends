@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:io';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:line_icons/line_icons.dart';
-
-import 'my_plants_details_page.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import 'my_plants_details_page.dart';
 import 'plant.dart';
 
 class MyPlantsPage extends StatefulWidget {
@@ -34,13 +36,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   late StreamSubscription<DatabaseEvent> _plantSubscription;
   List<Plant> plantList = [];
   List<Plant> filteredPlantList = [];
+  File? _plantImage;
 
   @override
   void initState() {
     super.initState();
 
     _searchController.addListener(_onSearchChanged);
-
     _plantSubscription = dbRef.child("Plants").onValue.listen((event) {
       final List<Plant> updatedPlantList = [];
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
@@ -74,7 +76,49 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           plant.plantData!.scienceName!.toLowerCase().contains(_searchController.text.toLowerCase())).toList();
     });
   }
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
 
+    final cameraStatus = await Permission.camera.request();
+    final galleryStatus = await Permission.photos.request();
+    
+    if (mounted && cameraStatus.isGranted && galleryStatus.isGranted) {
+      final selectedSource = await showModalBottomSheet<ImageSource>(
+          context: context,
+          builder: (BuildContext context) {
+            return Wrap(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.camera_alt_rounded),
+                  title: const Text("Take a photo of your plant"),
+                  onTap: () => Navigator.of(context).pop(ImageSource.camera),
+            ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library_rounded),
+                  title: const Text("Choose a picture from your gallery"),
+                  onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+                ),
+              ],
+            );
+          },
+      );
+      if (mounted && selectedSource != null) {
+        final pickedFile = await picker.pickImage(source: selectedSource);
+        if (pickedFile != null) {
+          setState(() {
+            _plantImage = File(pickedFile.path);
+          });
+        }
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text(
+              "Permissions are required to access camera and gallery")),
+        );
+      }
+    }
+  }
 /*
   void deletePlant(Plant plant) {
     dbRef.child("Plants").child(plant.key!).remove().then((value) {
@@ -153,7 +197,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           width: 60,
             height: 60,
             decoration: const BoxDecoration(
-              color: Colors.green,
+              color: Color(0xFF388E3C),
               shape: BoxShape.circle,
             ),
         child: const Center(
@@ -203,6 +247,18 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   ),
                 ),
                 const SizedBox(height: 10),
+
+                _plantImage != null ? Image.file(
+                  _plantImage!,
+                  height: 200,
+                )
+                : const Text("No image selected yet"),
+
+                TextButton.icon(
+                  onPressed: _pickImage,
+                  icon: const Icon(Icons.camera_alt_rounded),
+                  label: const Text("Add a plant image"),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     Map<String, dynamic> data = {
@@ -291,7 +347,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           children: [
             const Icon(FluentIcons.camera_24_regular,
                 size: 50,
-                color: Colors.green,
+                color: Color(0xFF388E3C),
                 semanticLabel: "photo",
             ),
             const SizedBox(width: 15),
@@ -302,7 +358,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   Text(
                     plant.plantData!.name!,
                     style: const TextStyle(
-                      color: Colors.grey,
+                      color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

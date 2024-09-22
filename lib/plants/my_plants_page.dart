@@ -29,13 +29,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   final TextEditingController _edtScienceNameController =
       TextEditingController();
   final TextEditingController _edtDateController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   late StreamSubscription<DatabaseEvent> _plantSubscription;
   List<Plant> plantList = [];
+  List<Plant> filteredPlantList = [];
 
   @override
   void initState() {
     super.initState();
+
+    _searchController.addListener(_onSearchChanged);
 
     _plantSubscription = dbRef.child("Plants").onValue.listen((event) {
       final List<Plant> updatedPlantList = [];
@@ -51,16 +55,26 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
       setState(() {
         plantList = updatedPlantList;
+        filteredPlantList = updatedPlantList;
       });
     });
   }
 
   @override
   void dispose() {
-    _plantSubscription
-        .cancel(); // Cancel the stream subscription when disposing the widget
+    _plantSubscription.cancel();
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
     super.dispose();
   }
+
+  void _onSearchChanged(){
+    setState(() {
+      filteredPlantList = plantList.where((plant) => plant.plantData!.name!.toLowerCase().contains(_searchController.text.toLowerCase()) ||
+          plant.plantData!.scienceName!.toLowerCase().contains(_searchController.text.toLowerCase())).toList();
+    });
+  }
+
 /*
   void deletePlant(Plant plant) {
     dbRef.child("Plants").child(plant.key!).remove().then((value) {
@@ -92,21 +106,68 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
-      body: plantList.isEmpty
-          ? const Center(child: Text("No plants available"))
-          : ListView.builder(
-              itemCount: plantList.length,
-              itemBuilder: (context, index) {
-                return plantWidget(plantList[index]);
-              },
+      body: Column(
+        children: [
+          Padding(padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              labelText: "Search your plants",
+              labelStyle: const TextStyle(color: Colors.black),
+              prefixIcon: const Icon(Icons.search),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                    color: Colors.green,
+                    width: 2.0
+                ),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              // Change the border color when the search bar is focused
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                    color: Colors.green,
+                    width: 2.0
+                ),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+          ),
+        ),
+          Expanded(
+            child: filteredPlantList.isEmpty
+                ? const Center(child:Text("No plants available to be searched"))
+                : ListView.builder(
+                itemCount: filteredPlantList.length,
+                itemBuilder: (context, index) {
+                  return plantWidget(filteredPlantList[index]);
+                },
+              ),
+          )
+        ],
+      ),
+      floatingActionButton: GestureDetector(
+        onTap: () {
           plantDialog();
         },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.add),
+        child: Container(
+          width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+        child: const Center(
+              child: Text(
+                '+',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w200,
+              color: Colors.black,
+            ),
+          ),
+        ),
       ),
+    ),
     );
   }
 
@@ -283,3 +344,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     );
   }
 }
+/// TODO: Add a photo to solve dark background color in dark mode.
+/// TODO: add photo function when you call onTap function. Use icon button or elevated button
+/// TODO: add edit symbol to the plant widget
+/// TODO: change the structure of delete and edit functions.

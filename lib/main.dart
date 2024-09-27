@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:plant_friends/plantWiki/wiki_filter_pages/wiki_page_filter_difficulty.dart';
 import 'package:plant_friends/plants/firebase_options.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:plant_friends/plantwiki/wiki_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
 
@@ -53,7 +55,7 @@ class NavigationBarState extends State<NavigationBar> {
   final List<Widget> _pages = [
     const MyPlantsPage(),
     const CalendarPage(),
-    const PlantWikiPage(),
+    const WikiPage(),
     const AccountPage(),
   ];
 

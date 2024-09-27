@@ -1,0 +1,303 @@
+import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../widgets/custom_text_field.dart';
+import 'plant.dart';
+
+class MyPlantsDetailsEditPage extends StatefulWidget {
+  final Plant plant;
+
+  const MyPlantsDetailsEditPage({Key? key, required this.plant}) : super(key: key);
+
+  @override
+  State<MyPlantsDetailsEditPage> createState() => _MyPlantsDetailsEditPageState();
+}
+
+class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
+  final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL: 'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+  ).ref();
+
+  final TextEditingController _edtNameController = TextEditingController();
+  final TextEditingController _edtScienceNameController = TextEditingController();
+  final TextEditingController _edtDateController = TextEditingController();
+
+  String _selectedDifficulty = "Easy"; // Default value for difficulty
+  String _selectedLight = "Direct Light"; // Default value for light
+  String _selectedWater = "Low"; // Default value for water
+  String _selectedPlantType = "Cacti/Succulents"; // Default value for plant type
+
+  @override
+  void initState() {
+    super.initState();
+    _edtNameController.text = widget.plant.plantData!.name!;
+    _edtScienceNameController.text = widget.plant.plantData!.scienceName!;
+    _edtDateController.text = widget.plant.plantData!.date!;
+    _selectedDifficulty = widget.plant.plantData!.difficulty ?? "Easy";
+    _selectedLight = widget.plant.plantData!.light ?? "Direct Light";
+    _selectedWater = widget.plant.plantData!.water ?? "Low";
+    _selectedPlantType = widget.plant.plantData!.type ?? "Cacti/Succulents";
+  }
+
+  Future<void> _deletePlant() async {
+    try {
+      await dbRef.child("Plants").child(widget.plant.key!).remove();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Plant deleted successfully')),
+        );
+        Navigator.pop(context, true);
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete plant: $error')),
+        );
+      }
+    }
+  }
+
+  Future<void> _updatePlant() async {
+    Map<String, dynamic> data = {
+      "name": _edtNameController.text,
+      "science_name": _edtScienceNameController.text,
+      "date": _edtDateController.text,
+      "difficulty": _selectedDifficulty,
+      "light": _selectedLight,
+      "water": _selectedWater,
+      "type": _selectedPlantType,
+    };
+
+    try {
+      await dbRef.child("Plants").child(widget.plant.key!).update(data);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Plant details updated successfully")),
+        );
+        Navigator.pop(context, true);
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to update plant details: $error")),
+        );
+      }
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null) {
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formattedDate = formatter.format(selectedDate);
+      _edtDateController.text = formattedDate;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Edit Plant Details"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Verwende das CustomTextField für den Namen
+              CustomTextField(
+                controller: _edtNameController,
+                icon: Icons.local_florist,
+                hintText: "Name",
+                obscureText: false,
+              ),
+              const SizedBox(height: 10),
+
+              // Verwende das CustomTextField für den wissenschaftlichen Namen
+              CustomTextField(
+                controller: _edtScienceNameController,
+                icon: Icons.science,
+                hintText: "Scientific Name",
+                obscureText: false,
+              ),
+              const SizedBox(height: 10),
+
+              // Verwende ein TextField mit einem Kalender-Icon für das Datum
+              GestureDetector(
+                onTap: () => _selectDate(context),
+                child: AbsorbPointer(
+                  child: CustomTextField(
+                    controller: _edtDateController,
+                    icon: Icons.calendar_today,
+                    hintText: "Date",
+                    obscureText: false,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Dropdown für die Schwierigkeit
+              DropdownButtonFormField<String>(
+                value: _selectedDifficulty,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1),
+                  prefixIcon: Icon(
+                    Icons.star,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.black.withOpacity(0.5),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                items: const [
+                  DropdownMenuItem(value: "Easy", child: Text("Easy")),
+                  DropdownMenuItem(value: "Medium", child: Text("Medium")),
+                  DropdownMenuItem(value: "Hard", child: Text("Hard")),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedDifficulty = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+
+              // Dropdown für Light
+              DropdownButtonFormField<String>(
+                value: _selectedLight,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1),
+                  prefixIcon: Icon(
+                    Icons.wb_sunny_outlined,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.black.withOpacity(0.5),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                items: const [
+                  DropdownMenuItem(value: "Direct Light", child: Text("Direct Light")),
+                  DropdownMenuItem(value: "Indirect Light", child: Text("Indirect Light")),
+                  DropdownMenuItem(value: "Partial Shade", child: Text("Partial Shade")),
+                  DropdownMenuItem(value: "Low Light", child: Text("Low Light")),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedLight = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+
+              // Dropdown für Water
+              DropdownButtonFormField<String>(
+                value: _selectedWater,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1),
+                  prefixIcon: Icon(
+                    Icons.water_drop_outlined,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.black.withOpacity(0.5),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                items: const [
+                  DropdownMenuItem(value: "Low", child: Text("Low")),
+                  DropdownMenuItem(value: "Medium", child: Text("Medium")),
+                  DropdownMenuItem(value: "High", child: Text("High")),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedWater = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+
+              // Dropdown für Plant Type
+              DropdownButtonFormField<String>(
+                value: _selectedPlantType,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1),
+                  prefixIcon: Icon(
+                    Icons.eco_sharp,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.black.withOpacity(0.5),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                items: const [
+                  DropdownMenuItem(value: "Cacti/Succulents", child: Text("Cacti/Succulents")),
+                  DropdownMenuItem(value: "Tropical Plants", child: Text("Tropical Plants")),
+                  DropdownMenuItem(value: "Climbing Plants", child: Text("Climbing Plants")),
+                  DropdownMenuItem(value: "Flowering Plants", child: Text("Flowering Plants")),
+                  DropdownMenuItem(value: "Trees/Palms", child: Text("Trees/Palms")),
+                  DropdownMenuItem(value: "Herbs", child: Text("Herbs")),
+                  DropdownMenuItem(value: "Others", child: Text("Others")),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedPlantType = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: _updatePlant,
+                    child: const Text("Save Changes"),
+                  ),
+                  ElevatedButton(
+                    onPressed: _deletePlant,
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: const Text("Delete Plant"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

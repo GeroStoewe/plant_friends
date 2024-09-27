@@ -1,8 +1,13 @@
 import 'dart:async';
+import 'package:intl/intl.dart';
 import 'package:plant_friends/plants/plant.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../../themes/colors.dart'; // Assuming you have custom theme colors
+import '../../widgets/custom_info_card.dart';
+import '../calendar/calendar_functions.dart';
+import '../calendar/calendar_next_event_card.dart';
+import 'my_plants_detail_page_edit.dart'; // Custom Info Card for displaying plant details
 
 class MyPlantsDetailsPage extends StatefulWidget {
   final Plant plant;
@@ -15,204 +20,265 @@ class MyPlantsDetailsPage extends StatefulWidget {
 }
 
 class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
-  bool isEditing = false;
-  late TextEditingController _nameController;
-  late TextEditingController _scienceNameController;
-  late TextEditingController _dateController;
+  final CalenderFunctions _calendarFunctions = CalenderFunctions();
+  late Future<Map<String, DateTime?>> _nextEventsFuture;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.plant.plantData!.name);
-    _scienceNameController = TextEditingController(text: widget.plant.plantData!.scienceName);
-    _dateController = TextEditingController(text: widget.plant.plantData!.date);
+    _nextEventsFuture = _fetchNextEventDates();
+  }
+
+  Future<Map<String, DateTime?>> _fetchNextEventDates() async {
+    DateTime? nextWateringDate = await _calendarFunctions.getNextWateringDate(widget.plant.key);
+    DateTime? nextFertilizingDate = await _calendarFunctions.getNextFertilizingDate(widget.plant.key);
+
+    return {
+      'watering': nextWateringDate,
+      'fertilizing': nextFertilizingDate,
+    };
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.plant.plantData!.name!),
-        actions: [
-          IconButton(
-            icon: Icon(isEditing ? Icons.save : Icons.edit),
-            onPressed: () {
-              if (isEditing) {
-                saveChanges();
-              }
-              setState(() {
-                isEditing = !isEditing;
-              });
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Confirm Deletion'),
-                    content: const Text(
-                        'Are you sure you want to delete this plant?'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Delete'),
-                        onPressed: () {
-                          deletePlant();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: isEditing ? buildEditView() : buildDetailView(),
-      ),
-    );
-  }
+    Size size = MediaQuery.of(context).size;
 
-  Widget buildEditView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        TextField(
-          controller: _nameController,
-          enabled: isEditing,
-          decoration: const InputDecoration(
-            labelText: "Name",
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 20),
-        TextField(
-          controller: _scienceNameController,
-          enabled: isEditing,
-          decoration: const InputDecoration(
-            labelText: "Scientific Name",
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 20),
-        GestureDetector(
-          onTap: () => _selectDate(context),
-          child: AbsorbPointer(
-            child: TextField(
-              controller: _dateController,
-              enabled: isEditing,
-              decoration: const InputDecoration(
-                labelText: "Date",
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.calendar_today),
+    return Scaffold(
+      body: SizedBox(
+        height: size.height,
+        child: Stack(
+          children: [
+            backgroundImageAndHeader(size, context),
+            backButton(size, context),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                height: size.height * 0.55,
+                width: size.width,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        nameAndScientificName(),
+                        const SizedBox(height: 30),
+                        plantInfo(),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
-        const SizedBox(height: 20),
-        if (isEditing)
-          ElevatedButton(
-            onPressed: () {
-              saveChanges();
-            },
-            child: const Text("Save changes"),
-          ),
-      ],
+      ),
     );
   }
 
-  Widget buildDetailView() {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formattedDate = formatter.format(DateTime.parse(widget.plant.plantData!.date!));
+  Container backgroundImageAndHeader(Size size, BuildContext context) {
+    String imageUrl = widget.plant.plantData!.image ?? '';
+    String defaultImageUrl = 'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      height: size.height * 0.50,
+      width: size.width,
+      child: GestureDetector(
+        onTap: () {},
+        child: ClipRRect(
+          child: Image.network(
+            imageUrl.isNotEmpty ? imageUrl : defaultImageUrl,
+            height: size.height * 0.50,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned backButton(Size size, BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return Positioned(
+      top: MediaQuery.of(context).padding.top,
+      left: 20,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: isDarkMode ? dmLightGrey : lmDarkGrey,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget nameAndScientificName() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const SizedBox(height: 20),
-        Text(
-          "Name: ${widget.plant.plantData!.name}",
-          style: const TextStyle(fontSize: 18),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.plant.plantData!.name ?? 'No name',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '${widget.plant.plantData!.scienceName ?? 'N/A'}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.cake, // Geburtstagstorte Icon
+                    size: 16,   // Kleine Größe für das Icon
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    widget.plant.plantData!.date != null
+                        ? widget.plant.plantData!.date!
+                        : 'N/A',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 20),
-        Text(
-          "Scientific Name: ${widget.plant.plantData!.scienceName}",
-          style: const TextStyle(fontSize: 18),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          "Date: $formattedDate",
-          style: const TextStyle(fontSize: 18),
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () async {
+            // Navigiere zur Edit-Seite und warte auf das Ergebnis
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyPlantsDetailsEditPage(plant: widget.plant),
+              ),
+            );
+
+            // Wenn das Ergebnis true ist, aktualisiere die Seite
+            if (result == true) {
+              setState(() {
+                _nextEventsFuture = _fetchNextEventDates(); // Update next events
+              });
+            }
+          },
         ),
       ],
     );
   }
 
-  void saveChanges() {
-    Map<String, dynamic> updatedData = {
-      "name": _nameController.text,
-      "science_name": _scienceNameController.text,
-      "date": _dateController.text,
-    };
+  Column plantInfo() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.wb_sunny,
+                title: 'Light',
+                value: widget.plant.plantData!.light ?? 'N/A',
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.water_drop,
+                title: 'Water',
+                value: widget.plant.plantData!.water ?? 'N/A',
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.star,
+                title: 'Difficulty',
+                value: widget.plant.plantData!.difficulty ?? 'N/A',
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: CustomInfoCard(
+                icon: Icons.eco_sharp,
+                title: 'Plant Type',
+                value: widget.plant.plantData!.type ?? 'N/A',
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        FutureBuilder<Map<String, DateTime?>>(
+          future: _nextEventsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              DateTime? nextWateringDate = snapshot.data?['watering'];
+              DateTime? nextFertilizingDate = snapshot.data?['fertilizing'];
 
-    widget.dbRef.child("Plants").child(widget.plant.key!).update(updatedData).then((value) {
-      if (mounted) {
-        Navigator.pop(context, true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Plant details updated successfully')),
-        );
-      }
-    }).catchError((error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update plant details: $error')),
-        );
-      }
-    });
-  }
-
-  void deletePlant() {
-    widget.dbRef.child("Plants").child(widget.plant.key!).remove().then((value) {
-      if (mounted) {
-        Navigator.pop(context, true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Plant deleted successfully')),
-        );
-      }
-    }).catchError((error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete plant: $error')),
-        ); // Return to HomeScreen with result
-      }
-    });
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: EventCardNextDate(
+                      icon: Icons.calendar_month_outlined,
+                      title: 'Next Watering',
+                      date: nextWateringDate,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: EventCardNextDate(
+                      icon: Icons.calendar_month_outlined,
+                      title: 'Next Fertilizing',
+                      date: nextFertilizingDate,
+                    ),
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      ],
     );
-
-    if (selectedDate != null) {
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      final String formattedDate = formatter.format(selectedDate);
-      _dateController.text = formattedDate;
-    }
   }
 }
-
-

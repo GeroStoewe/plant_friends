@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/calendar/next_Event_widget.dart';
+import 'package:plant_friends/pages/test_my_plants_wiki_autofil.dart';
 import 'calendar/calendar_functions.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomeScreenState extends State<HomePage> {
   final CalenderFunctions _calendarFunctions = CalenderFunctions();
-  final String plantID = "plant123"; // Example plantID
+  final String plantID = "test_plant"; // Example plantID
 
   // Future to fetch the next event dates
   late Future<Map<String, DateTime?>> _nextEventsFuture;
@@ -77,10 +78,10 @@ class _HomeScreenState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 String plantName = "Aloe Vera";
-                int dayInterval = 7; // Water every 7 days
+                String wateringNeeds = "High";
 
                 // Call the watering function
-                await _calendarFunctions.createNewEventsWatering(plantID, plantName, dayInterval);
+                await _calendarFunctions.createNewEventsWatering(plantID, plantName, wateringNeeds);
 
                 // Refresh the dates after creating new events
                 setState(() {
@@ -117,6 +118,20 @@ class _HomeScreenState extends State<HomePage> {
                 });
               },
               child: const Text("Delete All Events for Plant"),
+            ),
+            const SizedBox(height: 20), // Space between buttons
+
+            // New button to navigate to the Wiki search page
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WikiSearchPage(),
+                  ),
+                );
+              },
+              child: const Text("Go to Wiki Search"),
             ),
           ],
         ),

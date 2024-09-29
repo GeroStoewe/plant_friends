@@ -5,6 +5,8 @@ import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
 import 'firebase_options.dart';
+import 'package:plant_friends/welcomePages/welcome_page_2.dart';
+import 'package:plant_friends/welcomePages/welcome_page_1.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const AuthPage(),
+      home: const WelcomePage1(),
     );
   }
 }

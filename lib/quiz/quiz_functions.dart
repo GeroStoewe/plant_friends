@@ -136,7 +136,7 @@ class QuizFunctions {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Frage ${currentQuestionIndex + 1} von ${questions.length}',
+                      'Question ${currentQuestionIndex + 1} of ${questions.length}',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     IconButton(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/authentication/login_page.dart';
-import 'package:plant_friends/authentication/signup_page.dart';
+import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
 
@@ -69,27 +68,7 @@ class WelcomePage2 extends StatelessWidget {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginPage(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SignupPage(
-                                        onTap: () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const LoginPage(
-                                                onTap: null, // oder eine Funktion hier
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                              builder: (context) => const AuthPage(),
                             ),
                           );
                         },
@@ -103,18 +82,7 @@ class WelcomePage2 extends StatelessWidget {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SignupPage(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginPage(
-                                        onTap: null, // oder eine Funktion hier
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                              builder: (context) => const AuthPage(),
                             ),
                           );
                         },

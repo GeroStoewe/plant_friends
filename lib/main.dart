@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const WelcomePageToggle(),
+      home: const AuthPage(),
     );
   }
 }

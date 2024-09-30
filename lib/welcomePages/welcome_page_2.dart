@@ -3,6 +3,7 @@ import 'package:plant_friends/authentication/login_page.dart';
 import 'package:plant_friends/authentication/signup_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
+import 'package:plant_friends/welcomePages/welcome_page_1.dart';
 
 class WelcomePage2 extends StatelessWidget {
   const WelcomePage2({Key? key}) : super(key: key);
@@ -109,7 +110,7 @@ class WelcomePage2 extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => const LoginPage(
-                                        onTap: null, // oder eine Funktion hier
+                                        onTap: null,
                                       ),
                                     ),
                                   );
@@ -119,6 +120,21 @@ class WelcomePage2 extends StatelessWidget {
                           );
                         },
                         text: "Sign Up",
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Back to WelcomePage1 Button
+                      CustomButton(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WelcomePage1(),
+                            ),
+                          );
+                        },
+                        text: "Back",
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.grey : Colors.black87,
                       ),
                     ],
                   ),

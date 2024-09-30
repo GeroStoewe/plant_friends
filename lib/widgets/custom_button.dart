@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final Function()? onTap;
   final String text;
+  final Color? color;  // Neue Eigenschaft für die Farbe
 
   const CustomButton({
     super.key,
     required this.onTap,
-    required this.text
+    required this.text,
+    this.color,  // Optionale Farbe
   });
 
   @override
@@ -17,13 +19,13 @@ class CustomButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(22.0),
         decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(18)
+          color: color ?? Theme.of(context).primaryColor,  // Standardfarbe, falls keine angegeben
+          borderRadius: BorderRadius.circular(18),
         ),
         child: Center(
           child: Text(
-              text,
-              style: Theme.of(context).textTheme.labelMedium
+            text,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
         ),
       ),

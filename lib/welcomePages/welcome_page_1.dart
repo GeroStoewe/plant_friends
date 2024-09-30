@@ -1,4 +1,3 @@
-// welcomePages/welcome_page_1.dart
 import 'package:flutter/material.dart';
 import 'package:plant_friends/welcomePages/welcome_page_2.dart';
 import 'package:plant_friends/themes/colors.dart';
@@ -55,7 +54,7 @@ class WelcomePage1 extends StatelessWidget {
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Hello plant lover! ❤️ \n\nWhether you're a green thumb or just starting out, Plant Friends is your ultimate companion. With customized plant care, timely reminders, and helpful information, you'll keep your houseplants happy and healthy. \n\nLet’s make your indoor jungle thrive together! 🌿",
+                        "Hello plant lover! ❤️ \n\nWhether you're a green thumb or just starting out, Plant Friends is your ultimate companion. \nWith customized plant care, timely reminders, and helpful information, you'll keep your houseplants happy and healthy. \n\nLet’s make your indoor jungle thrive together! 🌿",
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: isDarkMode ? dmLightGrey : lmDarkGrey,

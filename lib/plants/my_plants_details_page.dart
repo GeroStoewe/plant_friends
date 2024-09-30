@@ -100,11 +100,29 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             height: size.height * 0.50,
             width: double.infinity,
             fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(seaGreen),
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                        : null,
+                  ),
+                );
+              }
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.error, size: 100, color: Colors.red);
+            },
           ),
         ),
       ),
     );
   }
+
 
   Positioned backButton(Size size, BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -248,7 +266,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           future: _nextEventsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),);
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {

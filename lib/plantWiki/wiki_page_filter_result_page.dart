@@ -96,7 +96,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),))
           : Column(
         children: [
           Padding(
@@ -153,6 +153,27 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                       width: 65,
                       height: 65,
                       fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return SizedBox(
+                            width: 65,
+                            height: 65,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                                    : null,
+                                valueColor: const AlwaysStoppedAnimation<Color>(seaGreen),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.error, color: Colors.red);
+                      },
                     )
                         : const Icon(Icons.image_not_supported),
                   ),

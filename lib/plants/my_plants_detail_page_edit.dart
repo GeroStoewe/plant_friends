@@ -3,7 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../calendar/calendar_functions.dart';
+import '../themes/colors.dart';
 import '../widgets/custom_text_field.dart';
+import 'my_plants_page.dart';
 import 'plant.dart';
 
 class MyPlantsDetailsEditPage extends StatefulWidget {
@@ -43,24 +46,73 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   }
 
   Future<void> _deletePlant() async {
-    try {
-      await dbRef.child("Plants").child(widget.plant.key!).remove();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Plant deleted successfully')),
+    bool? confirmDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Plant'),
+        content: const Text('Are you sure you want to delete this plant? This will also remove all associated watering and fertilizing events.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmDelete == true) {
+      try {
+        // Show loading indicator during deletion process
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return const Center(
+              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),),
+            );
+          },
         );
-        Navigator.pop(context, true);
-      }
-    } catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete plant: $error')),
-        );
+
+        // Delete plant from database
+        await dbRef.child("Plants").child(widget.plant.key!).remove();
+
+        // Delete associated calendar events
+        await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
+
+        // Hide the loading indicator
+        if (mounted) {
+          Navigator.pop(context); // Dismiss the loading dialog
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Plant deleted successfully')),
+          );
+
+          // Navigate to MyPlantsPage after deletion
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MyPlantsPage()),
+          );
+        }
+      } catch (error) {
+        // Hide the loading indicator in case of an error
+        if (mounted) {
+          Navigator.pop(context); // Dismiss the loading dialog
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to delete plant: $error')),
+          );
+        }
       }
     }
   }
 
+
   Future<void> _updatePlant() async {
+    String originalWaterNeeds = widget.plant.plantData!.water ?? "Low"; // Original water needs
+    bool waterNeedsChanged = originalWaterNeeds != _selectedWater;
+
     Map<String, dynamic> data = {
       "name": _edtNameController.text,
       "science_name": _edtScienceNameController.text,
@@ -72,12 +124,78 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
     };
 
     try {
+      // Update the plant data in the database
       await dbRef.child("Plants").child(widget.plant.key!).update(data);
+
+      if (waterNeedsChanged) {
+        // Show a dialog that informs the user about the event changes
+        bool? shouldProceed = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Watering and Fertilizing Events Update'),
+            content: const Text(
+                'You changed the water needs. All existing watering and fertilizing events will be deleted and new ones will be created. Do you want to proceed?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Proceed'),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldProceed == true) {
+          // Show loading indicator during event deletion and creation
+          showDialog(
+            context: context,
+            barrierDismissible: false, // Prevent closing the dialog by tapping outside
+            builder: (BuildContext context) {
+              return const Center(
+                child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),),
+              );
+            },
+          );
+
+          // Delete existing events
+          await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
+
+          // Create new watering events
+          await CalenderFunctions().createNewEventsWatering(
+            widget.plant.key!,
+            _edtNameController.text,
+            _selectedWater,
+          );
+
+          // Create new fertilizing events
+          await CalenderFunctions().createNewEventsFertilizing(
+              widget.plant.key!, _edtNameController.text, 30
+          );
+
+          // Hide the loading indicator
+          if (mounted) {
+            Navigator.pop(context); // Dismiss the loading dialog
+          }
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Watering and fertilizing events updated successfully')),
+          );
+        }
+      }
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Plant details updated successfully")),
         );
-        Navigator.pop(context, true);
+
+        // Navigate to MyPlantsPage after saving changes
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyPlantsPage()),
+        );
       }
     } catch (error) {
       if (mounted) {
@@ -87,6 +205,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       }
     }
   }
+
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selectedDate = await showDatePicker(

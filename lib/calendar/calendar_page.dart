@@ -8,7 +8,6 @@ import 'package:table_calendar/table_calendar.dart';
 import 'calendar_event.dart';
 import 'calendar_event_item.dart';
 
-
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
 
@@ -59,8 +58,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
     for (var doc in snap.docs) {
       final event = doc.data();
-      final day =
-      DateTime.utc(event.date.year, event.date.month, event.date.day);
+      final day = DateTime.utc(event.date.year, event.date.month, event.date.day);
       if (_events[day] == null) {
         _events[day] = [];
       }
@@ -68,7 +66,6 @@ class _CalendarPageState extends State<CalendarPage> {
     }
     setState(() {});
   }
-
 
   List<CalendarEvent> _getEventsForTheDay(DateTime day) {
     return _events[day] ?? [];
@@ -78,7 +75,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Calendar App')),
-      body: ListView(
+      body: Column(
         children: [
           TableCalendar(
             eventLoader: _getEventsForTheDay,
@@ -94,7 +91,6 @@ class _CalendarPageState extends State<CalendarPage> {
             focusedDay: _focusedDay,
             firstDay: _firstDay,
             lastDay: _lastDay,
-
             onPageChanged: (focusedDay) {
               setState(() {
                 _focusedDay = focusedDay;
@@ -113,23 +109,23 @@ class _CalendarPageState extends State<CalendarPage> {
                 color: darkSeaGreen,
               ),
               selectedDecoration: BoxDecoration(
-                color: seaGreen, // Hintergrundfarbe für den ausgewählten Tag
-                shape: BoxShape.circle, // Die Form des Hintergrunds
+                color: seaGreen,
+                shape: BoxShape.circle,
               ),
               selectedTextStyle: TextStyle(
-                color: Colors.white, // Textfarbe für den ausgewählten Tag
+                color: Colors.white,
               ),
               todayDecoration: BoxDecoration(
-                color: darkSeaGreen, // Hintergrundfarbe für den heutigen Tag
-                shape: BoxShape.circle, // Die Form des Hintergrunds
+                color: darkSeaGreen,
+                shape: BoxShape.circle,
               ),
               todayTextStyle: TextStyle(
-                color: Colors.white, // Textfarbe für den heutigen Tag
+                color: Colors.white,
               ),
             ),
             calendarBuilders: CalendarBuilders(
               headerTitleBuilder: (context, day) {
-                final headerDateFormat = DateFormat('MMMM yyyy'); // Format für den Monat und das Jahr
+                final headerDateFormat = DateFormat('MMMM yyyy');
                 return Container(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -140,38 +136,40 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
           ),
-          _getEventsForTheDay(_selectedDay).isEmpty
-              ? const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "All your plants are happy. \nThere is nothing for you to do on this day.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
-                ),
-                SizedBox(height: 16), // Space between text and icon
-                Icon(
-                  Icons.sunny,
-                  size: 40,
-                  color: Colors.yellow, // Color for the icon
-                ),
-              ],
+          Expanded( // Ensures this section expands to fill available space
+            child: _getEventsForTheDay(_selectedDay).isEmpty
+                ? const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "All your plants are happy. \nThere is nothing for you to do on this day.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                  ),
+                  SizedBox(height: 16),
+                  Icon(
+                    Icons.sunny,
+                    size: 40,
+                    color: Colors.yellow,
+                  ),
+                ],
+              ),
+            )
+                : SingleChildScrollView(
+              child: Column(
+                children: _getEventsForTheDay(_selectedDay)
+                    .map((event) => EventItem(
+                  event: event,
+                  onStatusChanged: _loadFirestoreEvents,
+                ))
+                    .toList(),
+              ),
             ),
-          )
-              : Column(
-            children: _getEventsForTheDay(_selectedDay)
-                .map((event) => EventItem(
-              event: event,
-              onStatusChanged: _loadFirestoreEvents, // Pass the refresh callback
-            ))
-                .toList(),
           ),
-
         ],
       ),
     );
   }
-
 }

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
+import 'package:plant_friends/welcomePages/toggle_welcome_page.dart';
 import 'firebase_options.dart';
 import 'package:plant_friends/welcomePages/welcome_page_2.dart';
 import 'package:plant_friends/welcomePages/welcome_page_1.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const WelcomePage1(),
+      home: const WelcomePageToggle(),
     );
   }
 }

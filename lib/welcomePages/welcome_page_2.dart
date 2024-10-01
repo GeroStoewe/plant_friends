@@ -66,30 +66,10 @@ class WelcomePage2 extends StatelessWidget {
                       // Login Button
                       CustomButton(
                         onTap: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginPage(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SignupPage(
-                                        onTap: () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const LoginPage(
-                                                onTap: null, // oder eine Funktion hier
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                              builder: (context) => LoginPage(onTap: () {  },), // Direct navigation to LoginPage
                             ),
                           );
                         },
@@ -100,21 +80,10 @@ class WelcomePage2 extends StatelessWidget {
                       // Sign Up Button
                       CustomButton(
                         onTap: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SignupPage(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginPage(
-                                        onTap: null, // oder eine Funktion hier
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                              builder: (context) => const SignupPage(), // Direct navigation to SignupPage
                             ),
                           );
                         },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/authentication/LoginOrSignupPage.dart';
+import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/authentication/login_page.dart';
 import 'package:plant_friends/authentication/signup_page.dart';
 import 'package:plant_friends/themes/colors.dart';
@@ -66,55 +67,29 @@ class WelcomePage2 extends StatelessWidget {
 
                       // Login Button
                       CustomButton(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SignupPage(
                                         onTap: () {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => const LoginOrSignupPage(),
+                                              builder: (context) => const AuthPage(),
                                             ),
                                           );
                                         },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                        },
                         text: "Login",
                       ),
                       const SizedBox(height: 20),
 
                       // Sign Up Button
                       CustomButton(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignupPage(
                                 onTap: () {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const LoginOrSignupPage(),
+                                      builder: (context) => const AuthPage(),
                                     ),
                                   );
                                 },
-                              ),
-                            ),
-                          );
-                        },
+
                         text: "Sign Up",
                       ),
                     ],

@@ -21,10 +21,10 @@ class _LoginOrSignupPageState extends State<LoginOrSignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: showLoginPage
-          ? LoginPage(onTap: togglePages) // Übergabe der onTap-Funktion an LoginPage
-          : SignupPage(onTap: togglePages), // Übergabe der onTap-Funktion an SignupPage
-    );
+    if(showLoginPage) {
+      return LoginPage(onTap: togglePages);
+    } else {
+      return SignupPage(onTap: togglePages);
+    }
   }
 }

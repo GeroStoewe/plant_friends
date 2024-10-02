@@ -22,6 +22,7 @@ class _SignupPageState extends State<SignupPage> {
   final passwordController = TextEditingController();
 
   bool isPasswordVisible = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +179,15 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   ),
                 )),
+            if (isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.7),
+                child: Center(
+                  child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor)),
+                ),
+              )
           ],
         ),
       ),
@@ -204,24 +214,19 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
 
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
-            ),
-          );
-        });
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: usernameController.text, password: passwordController.text);
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       showErrorMessage(e.code);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

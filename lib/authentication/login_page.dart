@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   bool isPasswordVisible = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +164,8 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               SquareTile(
                                   onTap: loginWithGoogle,
-                                  imagePath: 'lib/authentication/images/google_logo.png'),
+                                  imagePath:
+                                      'lib/authentication/images/google_logo.png'),
                               SquareTile(
                                   imagePath: isDarkMode
                                       ? 'lib/authentication/images/apple_logo_dark_mode.png'
@@ -199,6 +201,15 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 )),
+            if (isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.7),
+                child: Center(
+                  child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor)),
+                ),
+              )
           ],
         ),
       ),
@@ -222,24 +233,19 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
-            ),
-          );
-        });
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: usernameController.text, password: passwordController.text);
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       showErrorMessage(e.code);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -272,9 +278,7 @@ class _LoginPageState extends State<LoginPage> {
     final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
     final credential = GoogleAuthProvider.credential(
-      accessToken: gAuth.accessToken,
-      idToken: gAuth.idToken
-    );
+        accessToken: gAuth.accessToken, idToken: gAuth.idToken);
 
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plant_friends/authentication/LoginOrSignupPage.dart';
 import 'package:plant_friends/authentication/login_page.dart';
 import 'package:plant_friends/authentication/signup_page.dart';
 import 'package:plant_friends/themes/colors.dart';
@@ -79,9 +80,7 @@ class WelcomePage2 extends StatelessWidget {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => const LoginPage(
-                                                onTap: null, // oder eine Funktion hier
-                                              ),
+                                              builder: (context) => const LoginOrSignupPage(),
                                             ),
                                           );
                                         },
@@ -108,9 +107,7 @@ class WelcomePage2 extends StatelessWidget {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const LoginPage(
-                                        onTap: null, // oder eine Funktion hier
-                                      ),
+                                      builder: (context) => const LoginOrSignupPage(),
                                     ),
                                   );
                                 },

@@ -19,7 +19,7 @@ class AuthPage extends StatelessWidget {
           if (snapshot.hasData) {
             return TestHomePage(); // TODO: Change with actual HomePage
           } else {
-            return const WelcomePageToggle();
+            return const WelcomePage1();
           }
         }
       ),

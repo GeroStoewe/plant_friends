@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/authentication/LoginOrSignupPage.dart';
 import 'package:plant_friends/authentication/auth_page.dart';
-import 'package:plant_friends/authentication/login_page.dart';
-import 'package:plant_friends/authentication/signup_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
 

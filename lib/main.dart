@@ -1,14 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
 import 'package:plant_friends/welcomePages/test_auth_page.dart';
-import 'package:plant_friends/welcomePages/toggle_welcome_page.dart';
 import 'firebase_options.dart';
-import 'package:plant_friends/welcomePages/welcome_page_2.dart';
-import 'package:plant_friends/welcomePages/welcome_page_1.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

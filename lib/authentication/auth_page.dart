@@ -1,10 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:plant_friends/authentication/login_page.dart';
 import 'package:plant_friends/test_home_page.dart';
-import 'package:plant_friends/welcomePages/toggle_welcome_page.dart';
-import 'package:plant_friends/welcomePages/welcome_page_1.dart';
-
 import 'LoginOrSignupPage.dart';
 
 class AuthPage extends StatelessWidget {

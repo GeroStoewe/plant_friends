@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import 'package:intl/intl.dart';
+// import 'package:permission_handler/permission_handler.dart'; //optional
 import 'my_plants_details_page.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+
+import 'package:line_icons/line_icons.dart';
 import 'plant.dart';
 
 class MyPlantsPage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     databaseURL:
         'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
   ).ref();
+  final FirebaseStorage storage = FirebaseStorage.instance;
 
   final TextEditingController _edtNameController = TextEditingController();
   final TextEditingController _edtScienceNameController =
@@ -79,67 +81,48 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
 
-    final cameraStatus = await Permission.camera.request();
-    final galleryStatus = await Permission.photos.request();
-    
-    if (mounted && cameraStatus.isGranted && galleryStatus.isGranted) {
-      final selectedSource = await showModalBottomSheet<ImageSource>(
-          context: context,
-          builder: (BuildContext context) {
-            return Wrap(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.camera_alt_rounded),
-                  title: const Text("Take a photo of your plant"),
-                  onTap: () => Navigator.of(context).pop(ImageSource.camera),
-            ),
-                ListTile(
-                  leading: const Icon(Icons.photo_library_rounded),
-                  title: const Text("Choose a picture from your gallery"),
-                  onTap: () => Navigator.of(context).pop(ImageSource.gallery),
-                ),
-              ],
-            );
-          },
-      );
-      if (mounted && selectedSource != null) {
-        final pickedFile = await picker.pickImage(source: selectedSource);
-        if (pickedFile != null) {
-          setState(() {
-            _plantImage = File(pickedFile.path);
-          });
+    final selectedSource = await showModalBottomSheet<ImageSource>(
+        context: context,
+        builder: (BuildContext context) {
+          return Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt_rounded),
+                title: const Text("Take a photo of your plant"),
+                onTap: () => Navigator.of(context).pop(ImageSource.camera),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_rounded),
+                title: const Text("Choose a picture from your gallery"),
+                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+              ),
+            ],
+          );
         }
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(
-              "Permissions are required to access camera and gallery")),
-        );
+    );
+
+    if (mounted && selectedSource != null) {
+      final pickedFile = await picker.pickImage(source: selectedSource);
+      if (pickedFile != null) {
+        setState(() {
+          _plantImage = File(pickedFile.path); // Save the selected image
+        });
       }
     }
   }
-/*
-  void deletePlant(Plant plant) {
-    dbRef.child("Plants").child(plant.key!).remove().then((value) {
-      if (mounted) {
-        Navigator.pop(context, true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Plant deleted successfully')),
-        );
-        setState(() {
-          plantList.remove(plant);
-        });
-      }
-    }).catchError((error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete plant: $error')),
-        );
-      }
-    });
+
+  Future<String> _uploadImageToFirebase(File imageFile) async {
+    // Create a unique filename for the image
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference ref = storage.ref().child('plants/$fileName');
+
+    // Upload the file to Firebase Storage
+    await ref.putFile(imageFile);
+    // Retrieve and return the download URL
+    String downloadUrl = await ref.getDownloadURL();
+
+    return downloadUrl; // Return the URL for saving to the database
   }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -247,41 +230,41 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-
+                // show the selected image
                 _plantImage != null ? Image.file(
                   _plantImage!,
                   height: 200,
                 )
                 : const Text("No image selected yet"),
-
                 TextButton.icon(
                   onPressed: _pickImage,
                   icon: const Icon(Icons.camera_alt_rounded),
                   label: const Text("Add a plant image"),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // Upload the image to Firebase and get the URL
+                    String imageUrl = await _uploadImageToFirebase(_plantImage!);
+
+                    // Save plant details to Firebase Realtime Database
                     Map<String, dynamic> data = {
                       "name": _edtNameController.text,
                       "science_name": _edtScienceNameController.text,
                       "date": _edtDateController.text,
+                      "image_url": imageUrl // Include the image URL
                     };
 
                     dbRef.child("Plants").push().set(data).then((value) {
                       if (mounted) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content:
-                                  Text("Plant details updated successfully")),
+                          const SnackBar(content: Text("Plant details updated successfully")),
                         );
                       }
                     }).catchError((error) {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(
-                                  "Failed to update plant details: $error")),
+                          SnackBar(content: Text("Failed to update plant details: $error")),
                         );
                       }
                     });
@@ -385,6 +368,10 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 10),
+                  // Display the plant image if available
+                  if (plant.plantData!.imageUrl != null)
+                    Image.network(plant.plantData!.imageUrl!, height: 100),
                 ],
               ),
             ),
@@ -392,7 +379,9 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
               Icons.delete,
               color: Colors.grey,
             ),
-            onPressed: () {},
+            onPressed: () {
+              // implement delete functionality here
+            },
             ),
           ],
         ),

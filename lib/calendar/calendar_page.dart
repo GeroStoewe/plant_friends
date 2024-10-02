@@ -71,10 +71,22 @@ class _CalendarPageState extends State<CalendarPage> {
     return _events[day] ?? [];
   }
 
+  void pushNotification() {
+    // Leere Funktion, kann später implementiert werden
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Calendar App')),
+      appBar: AppBar(
+        title: const Text('Calendar App'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: pushNotification,
+          ),
+        ],
+      ),
       body: Column(
         children: [
           TableCalendar(
@@ -136,7 +148,7 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
           ),
-          Expanded( // Ensures this section expands to fill available space
+          Expanded(
             child: _getEventsForTheDay(_selectedDay).isEmpty
                 ? const Padding(
               padding: EdgeInsets.all(16.0),

@@ -46,6 +46,7 @@ dependencies:
   line_icons: ^2.0.3
   fluentui_system_icons: ^1.1.257
   cloud_firestore: ^4.17.5
+  flutter_local_notifications: ^13.0.0
 
 dev_dependencies:
   flutter_test:

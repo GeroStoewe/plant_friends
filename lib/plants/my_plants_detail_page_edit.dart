@@ -91,10 +91,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           );
 
           // Navigate to MyPlantsPage after deletion
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MyPlantsPage()),
-          );
+          Navigator.pop(context);
+          Navigator.pop(context);
         }
       } catch (error) {
         // Hide the loading indicator in case of an error
@@ -134,32 +132,44 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           builder: (context) => AlertDialog(
             title: const Text('Watering and Fertilizing Events Update'),
             content: const Text(
-                'You changed the water needs. All existing watering and fertilizing events will be deleted and new ones will be created. Do you want to proceed?'),
+              'You changed the water needs. All existing watering and fertilizing events will be deleted and new ones will be created. Do you want to proceed?',
+            ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context, false),
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Close only the dialog
+                },
                 child: const Text('Cancel'),
               ),
               TextButton(
-                onPressed: () => Navigator.pop(context, true),
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Proceed with updating events
+                },
                 child: const Text('Proceed'),
               ),
             ],
           ),
         );
 
-        if (shouldProceed == true) {
-          // Show loading indicator during event deletion and creation
-          showDialog(
-            context: context,
-            barrierDismissible: false, // Prevent closing the dialog by tapping outside
-            builder: (BuildContext context) {
-              return const Center(
-                child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),),
-              );
-            },
-          );
+        // If user cancels, stop further actions
+        if (shouldProceed != true) {
+          return; // Only closes the dialog, not the whole page
+        }
 
+        // Show loading indicator during event deletion and creation
+        showDialog(
+          context: context,
+          barrierDismissible: false, // Prevent closing the dialog by tapping outside
+          builder: (BuildContext context) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(seaGreen),
+              ),
+            );
+          },
+        );
+
+        try {
           // Delete existing events
           await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
 
@@ -172,19 +182,36 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
           // Create new fertilizing events
           await CalenderFunctions().createNewEventsFertilizing(
-              widget.plant.key!, _edtNameController.text, 30
+            widget.plant.key!,
+            _edtNameController.text,
+            30,
           );
 
+          // Show success message
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Watering and fertilizing events updated successfully'),
+              ),
+            );
+          }
+        } catch (e) {
+          // Handle error and show error message
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error updating events: $e'),
+              ),
+            );
+          }
+        } finally {
           // Hide the loading indicator
           if (mounted) {
             Navigator.pop(context); // Dismiss the loading dialog
           }
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Watering and fertilizing events updated successfully')),
-          );
         }
       }
+
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -192,10 +219,10 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         );
 
         // Navigate to MyPlantsPage after saving changes
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MyPlantsPage()),
-        );
+        Navigator.pop(context);
+        Navigator.pop(context);
+
+        // This pops back to the previous page
       }
     } catch (error) {
       if (mounted) {
@@ -205,6 +232,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       }
     }
   }
+
 
 
 

@@ -174,6 +174,8 @@ class PlantWikiDetailPage extends StatelessWidget {
   }
 
   void _showFullImageDialog(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     final imageUrl = plant['image_url'] ?? '';
 
     showDialog(
@@ -211,7 +213,7 @@ class PlantWikiDetailPage extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          backgroundColor: Colors.black,
+                          backgroundColor: isDarkMode ? dmCardBG : lmCardBG,
                           title:  Text(
                             'Image URL',
                             style: Theme.of(context).textTheme.headlineSmall,

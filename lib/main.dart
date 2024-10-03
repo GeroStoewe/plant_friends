@@ -12,6 +12,7 @@ import 'package:plant_friends/themes/light_theme.dart';
 
 import 'package:plant_friends/plants/my_plants_page.dart';
 
+import 'Services/firebase_api.dart';
 import 'calendar/calendar_page.dart';
 import 'plantwiki/plant_wiki_page.dart';
 import 'account/account_page.dart';
@@ -22,6 +23,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 

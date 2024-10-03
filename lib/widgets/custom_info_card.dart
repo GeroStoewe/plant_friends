@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/themes/colors.dart'; // Assuming lmCardBG and dmCardBG are defined here
 
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:plant_friends/themes/colors.dart'; // Assuming lmCardBG and dmCardBG are defined here
+
 class CustomInfoCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -30,24 +34,32 @@ class CustomInfoCard extends StatelessWidget {
             color: seaGreen,
           ),
           const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: seaGreen,
-                  fontWeight: FontWeight.bold,
+          Expanded( // Use Expanded to avoid overflow
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AutoSizeText(
+                  title,
+                  style: TextStyle(
+                    color: seaGreen,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1, // Limit to one line and shrink if needed
+                  minFontSize: 12, // Minimum font size
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: TextStyle(
-                  color: seaGreen,
+                const SizedBox(height: 4),
+                AutoSizeText(
+                  value,
+                  style: TextStyle(
+                    color: seaGreen,
+                  ),
+                  maxLines: 1, // Limit to one line and shrink if needed
+                  minFontSize: 12, // Minimum font size
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

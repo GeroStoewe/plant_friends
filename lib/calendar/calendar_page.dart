@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:plant_friends/Services/notifi_service.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -72,20 +73,20 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void pushNotification() {
-    // Leere Funktion, kann später implementiert werden
+    //NotificationService().showNotification(title: 'Sample title', body: 'It works!');
+    print("Notification");
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar App'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: pushNotification,
-          ),
-        ],
+        title: const Text(
+          'Calendar',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Column(
         children: [

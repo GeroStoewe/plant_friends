@@ -14,6 +14,11 @@ ThemeData lightTheme() {
           fontSize: 16,
           fontFamily: 'Poppins',
       ),
+        bodyLarge: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+        ),
       headlineMedium: TextStyle(
           color: Colors.black,
           fontSize: 28,
@@ -22,6 +27,12 @@ ThemeData lightTheme() {
       ),
       labelMedium: TextStyle(
           color: Colors.white,
+          fontSize: 24,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w500
+      ),
+      labelLarge: TextStyle(
+          color: Colors.black,
           fontSize: 24,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500

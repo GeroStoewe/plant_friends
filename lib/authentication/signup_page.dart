@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plant_friends/authentication/square_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
@@ -219,8 +220,21 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: usernameController.text, password: passwordController.text);
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        await user.updateDisplayName(fullnameController.text);
+
+        final prefs = await SharedPreferences.getInstance();
+        final now = DateTime.now().toIso8601String();
+        await prefs.setString('joinDate', now);
+
+        await user.reload();
+        user = FirebaseAuth.instance.currentUser;
+      }
     } on FirebaseAuthException catch (e) {
       showErrorMessage(e.code);
     } finally {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/themes/colors.dart';
+import 'package:plant_friends/welcomePages/welcome_page_1.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
+
+import '../widgets/custom_back_icon_button.dart';
 
 class WelcomePage2 extends StatelessWidget {
   const WelcomePage2({Key? key}) : super(key: key);
@@ -64,30 +67,51 @@ class WelcomePage2 extends StatelessWidget {
 
                       // Login Button
                       CustomButton(
-                                        onTap: () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const AuthPage(),
-                                            ),
-                                          );
-                                        },
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AuthPage(),
+                            ),
+                          );
+                        },
                         text: "Login",
                       ),
                       const SizedBox(height: 20),
 
                       // Sign Up Button
                       CustomButton(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const AuthPage(),
-                                    ),
-                                  );
-                                },
-
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AuthPage(),
+                            ),
+                          );
+                        },
                         text: "Sign Up",
+                      ),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 20),
+
+                      // Go back icon in a Row, left-aligned
+                      Row(
+                        children: [
+                          CustomBackIconButton(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const WelcomePage1(),
+                                ),
+                              );
+                            },
+                          ),
+                          // Spacer to fill the remaining space in the Row
+                          const Spacer(),
+                        ],
                       ),
                     ],
                   ),

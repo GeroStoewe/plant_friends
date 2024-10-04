@@ -1,6 +1,7 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
+    id "com.google.gms.google-services"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -37,6 +38,16 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+}
+
+dependencies {
+    // Kotlin Standard Library using the Kotlin version specified in the root build.gradle file.
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Firebase dependencies
+    implementation 'com.google.firebase:firebase-core:21.1.0' // Firebase Core
+    implementation 'com.google.firebase:firebase-database:20.1.0' // Firebase Database
+    implementation 'com.google.firebase:firebase-storage:21.0.0' // Firebase Storage
 }
 
 flutter {

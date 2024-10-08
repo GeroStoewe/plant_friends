@@ -28,6 +28,6 @@ class PlantData {
     light = json["light"];
     difficulty = json["difficulty"];
     type = json["type"];
-    image = json["image"];
+    image = json["image_url"];
   }
 }

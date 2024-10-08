@@ -7,7 +7,10 @@ import '../../themes/colors.dart'; // Assuming you have custom theme colors
 import '../../widgets/custom_info_card.dart';
 import '../calendar/calendar_functions.dart';
 import '../calendar/calendar_next_event_card.dart';
-import 'my_plants_detail_page_edit.dart'; // Custom Info Card for displaying plant details
+import '../widgets/custom_button.dart';
+import '../widgets/custom_button_outlined_small.dart';
+import 'my_plants_detail_page_edit.dart';
+import 'my_plants_photo_journal_page.dart'; // Custom Info Card for displaying plant details
 
 class MyPlantsDetailsPage extends StatefulWidget {
   final Plant plant;
@@ -22,6 +25,8 @@ class MyPlantsDetailsPage extends StatefulWidget {
 class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
   final CalenderFunctions _calendarFunctions = CalenderFunctions();
   late Future<Map<String, DateTime?>> _nextEventsFuture;
+  List<Map<String, String>> photoJournal = []; // Photo journal list
+
 
   @override
   void initState() {
@@ -37,6 +42,19 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
       'watering': nextWateringDate,
       'fertilizing': nextFertilizingDate,
     };
+  }
+  Widget photoJournalButton() {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PhotoJournalPage(photoJournal: photoJournal),
+          ),
+        );
+      },
+      child: const Text('View Photo Journal'),
+    );
   }
 
   @override
@@ -296,7 +314,22 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             }
           },
         ),
+        const SizedBox(height: 15),
+        Center(
+          child: CustomButtonOutlinedSmall(
+            text: 'Show photo journal',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PhotoJournalPage(photoJournal: photoJournal),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
+
 }

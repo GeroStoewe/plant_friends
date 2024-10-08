@@ -3,7 +3,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:plant_friends/themes/colors.dart';
 
 class ProfileMenuButton extends StatelessWidget {
-  final VoidCallback onTap;
+  final Function()? onTap;
   final String text;
   final IconData icon;
   final bool endIcon;

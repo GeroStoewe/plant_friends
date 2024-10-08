@@ -49,7 +49,13 @@ ThemeData darkTheme() {
         fontSize: 16,
         fontFamily: 'Poppins',
         fontStyle: FontStyle.italic
-      )
+      ),
+      displayLarge: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w300
+      ),
     ),
     appBarTheme: const AppBarTheme(
       color: darkSeaGreen,

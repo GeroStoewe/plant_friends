@@ -328,10 +328,37 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Icon(FluentIcons.camera_24_regular,
-                size: 50,
-                color: Color(0xFF388E3C),
-                semanticLabel: "photo",
+            GestureDetector(
+              onTap: () async {
+                await _pickImage(); 
+                if (_plantImage != null) {
+                  String imageUrl = await _uploadImageToFirebase(_plantImage!);
+                  setState(() {
+                    plant.plantData!.imageUrl = imageUrl;
+                  });
+                }
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: plant.plantData!.imageUrl != null ? ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Image.network(
+                        plant.plantData!.imageUrl!,
+                        fit: BoxFit.cover,
+                      ),
+                    ) : const Icon(FluentIcons.camera_24_regular,
+                      size: 50,
+                      color: Color(0xFF388E3C),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(width: 15),
             Expanded(
@@ -368,10 +395,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  // Display the plant image if available
-                  if (plant.plantData!.imageUrl != null)
-                    Image.network(plant.plantData!.imageUrl!, height: 100),
                 ],
               ),
             ),
@@ -390,6 +413,5 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 }
 /// TODO: Add a photo to solve dark background color in dark mode.
-/// TODO: add photo function when you call onTap function. Use icon button or elevated button
 /// TODO: add edit symbol to the plant widget
 /// TODO: change the structure of delete and edit functions.

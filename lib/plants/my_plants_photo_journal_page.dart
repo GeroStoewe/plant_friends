@@ -12,12 +12,9 @@ class PhotoJournalPage extends StatefulWidget {
 }
 
 class _PhotoJournalPageState extends State<PhotoJournalPage> {
-  // URL des Standardfotos, das immer hinzugefügt wird
   final String fixedPhotoUrl = 'https://media.istockphoto.com/id/1063250818/de/foto/bunte-tropische-bl%C3%A4tter-muster-der-schlange-pflanze-oder-mutter-in-law-zunge-und-sukkulente.jpg?s=2048x2048&w=is&k=20&c=RM4nv73VrNnTdXVR7kKtJSlonxRSee4wj78GtSJYf-4=';
 
-  // Function to add a new photo with date
   Future<void> _addPhoto() async {
-    // Formatierung des Datums in dd MMM yyyy (z. B. 08 Oct 2024)
     String formattedDate = DateFormat('dd MMM yyyy').format(DateTime.now());
 
     setState(() {
@@ -28,16 +25,24 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     });
   }
 
-
+  // Function to delete a photo entry
+  void _deletePhoto(int index) {
+    setState(() {
+      widget.photoJournal.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Check if the current theme is dark mode
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Photo Journal'),
+        title: const Text(
+          'Photo Journal',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -54,7 +59,8 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
               isFirst: index == 0,
               isLast: index == widget.photoJournal.length - 1,
               onTap: () => _showPhotoOverlay(widget.photoJournal[index]['url']!),
-              isDarkMode: isDarkMode, // Pass the isDarkMode variable to the tile builder
+              isDarkMode: isDarkMode,
+              onDelete: () => _confirmDelete(index), // Pass delete function
             );
           },
         ),
@@ -67,15 +73,14 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     );
   }
 
-  // Widget to build a timeline tile for each photo entry
-  // Update the signature of _buildTimelineTile to accept isDarkMode
   Widget _buildTimelineTile({
     required String date,
     required String imageUrl,
     required bool isFirst,
     required bool isLast,
     required VoidCallback onTap,
-    required bool isDarkMode, // Added parameter
+    required bool isDarkMode,
+    required VoidCallback onDelete, // Added parameter for delete callback
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,37 +88,50 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
         Column(
           children: [
             _buildTimelineDot(isFirst, isLast),
-            if (!isLast) _buildDashedLine(), // Custom dotted line
+            if (!isLast) _buildDashedLine(),
           ],
         ),
         const SizedBox(width: 8),
         Expanded(
           child: GestureDetector(
-            onTap: onTap, // Show overlay on image tap
+            onTap: onTap,
             child: Card(
               elevation: 3,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              color: isDarkMode ? dmCardBG : lmCardBG, // Set card background based on theme
+              color: isDarkMode ? dmCardBG : lmCardBG,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
                   children: [
-                    Text(
-                      'Photo taken on $date',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        imageUrl,
-                        width: double.infinity,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Photo taken on $date',
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              onPressed: onDelete, // Trigger the delete function
+                              icon: const Icon(Icons.delete, color: Colors.grey), // Gray color
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            imageUrl,
+                            width: double.infinity,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -125,7 +143,6 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     );
   }
 
-  // Widget to build a timeline dot
   Widget _buildTimelineDot(bool isFirst, bool isLast) {
     return Container(
       margin: const EdgeInsets.only(top: 4),
@@ -139,7 +156,6 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     );
   }
 
-  // Custom Widget für eine gepunktete Linie
   Widget _buildDashedLine() {
     return SizedBox(
       height: 180,
@@ -156,7 +172,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
               return Container(
                 width: 2,
                 height: dashHeight,
-                color: Colors.lightGreen.shade900, // Farbe der gepunkteten Linie
+                color: Colors.lightGreen.shade900,
               );
             }),
           );
@@ -165,18 +181,16 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     );
   }
 
-
   void _showPhotoOverlay(String imageUrl) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return GestureDetector(
-          onTap: () => Navigator.of(context).pop(), // Schließt das Overlay bei einem Klick irgendwo auf den Bildschirm
+          onTap: () => Navigator.of(context).pop(),
           child: Stack(
             children: [
-              // Dunkler Hintergrund
               Container(
-                color: Colors.black.withOpacity(0.7), // 70% Transparenz für den Hintergrund
+                color: Colors.black.withOpacity(0.7),
               ),
               Dialog(
                 backgroundColor: Colors.transparent,
@@ -197,5 +211,31 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     );
   }
 
-
+  // Confirm deletion of photo
+  void _confirmDelete(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure?'),
+          content: const Text('Do you really want to delete this photo entry?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _deletePhoto(index); // Delete the photo if confirmed
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

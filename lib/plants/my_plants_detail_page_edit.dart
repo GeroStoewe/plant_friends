@@ -54,11 +54,11 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: seaGreen)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: const Text('Delete', style: TextStyle(color: seaGreen)),
           ),
         ],
       ),
@@ -139,13 +139,13 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 onPressed: () {
                   Navigator.of(context).pop(false); // Close only the dialog
                 },
-                child: const Text('Cancel'),
+                child: const Text('Cancel', style: TextStyle(color: seaGreen)),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true); // Proceed with updating events
                 },
-                child: const Text('Proceed'),
+                child: const Text('Proceed', style: TextStyle(color: seaGreen)),
               ),
             ],
           ),

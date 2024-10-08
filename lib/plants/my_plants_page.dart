@@ -25,13 +25,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL:
-        'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+    'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
   ).ref();
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   final TextEditingController _edtNameController = TextEditingController();
   final TextEditingController _edtScienceNameController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _edtDateController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
@@ -45,14 +45,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     super.initState();
 
     _searchController.addListener(_onSearchChanged);
-    _plantSubscription = dbRef.child("Plants").onValue.listen((event) {
+    _plantSubscription = dbRef
+        .child("Plants")
+        .onValue
+        .listen((event) {
       final List<Plant> updatedPlantList = [];
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
 
       if (data != null) {
         data.forEach((key, value) {
           PlantData plantData =
-              PlantData.fromJSON(value as Map<dynamic, dynamic>);
+          PlantData.fromJSON(value as Map<dynamic, dynamic>);
           updatedPlantList.add(Plant(key: key, plantData: plantData));
         });
       }
@@ -72,12 +75,16 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     super.dispose();
   }
 
-  void _onSearchChanged(){
+  void _onSearchChanged() {
     setState(() {
-      filteredPlantList = plantList.where((plant) => plant.plantData!.name!.toLowerCase().contains(_searchController.text.toLowerCase()) ||
-          plant.plantData!.scienceName!.toLowerCase().contains(_searchController.text.toLowerCase())).toList();
+      filteredPlantList = plantList.where((plant) =>
+      plant.plantData!.name!.toLowerCase().contains(
+          _searchController.text.toLowerCase()) ||
+          plant.plantData!.scienceName!.toLowerCase().contains(
+              _searchController.text.toLowerCase())).toList();
     });
   }
+
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
 
@@ -113,7 +120,10 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
   Future<String> _uploadImageToFirebase(File imageFile) async {
     // Create a unique filename for the image
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String fileName = DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
     Reference ref = storage.ref().child('plants/$fileName');
 
     // Upload the file to Firebase Storage
@@ -126,49 +136,56 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "My Plants",
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: Theme
+              .of(context)
+              .textTheme
+              .headlineMedium,
         ),
       ),
       body: Column(
         children: [
           Padding(padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              labelText: "Search your plants",
-              labelStyle: const TextStyle(color: Colors.black),
-              prefixIcon: const Icon(Icons.search),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    color: Colors.green,
-                    width: 2.0
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: "Find your plants",
+                labelStyle: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black),
+                prefixIcon: const Icon(Icons.search),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      color: Colors.green,
+                      width: 2.0
+                  ),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              // Change the border color when the search bar is focused
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    color: Colors.green,
-                    width: 2.0
+                // Change the border color when the search bar is focused
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      color: Colors.green,
+                      width: 2.0
+                  ),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                borderRadius: BorderRadius.circular(12.0),
               ),
             ),
           ),
-        ),
           Expanded(
             child: filteredPlantList.isEmpty
-                ? const Center(child:Text("No plants available to be searched"))
+                ? const Center(
+                child: Text("No plants available to be searched"))
                 : ListView.builder(
-                itemCount: filteredPlantList.length,
-                itemBuilder: (context, index) {
-                  return plantWidget(filteredPlantList[index]);
-                },
-              ),
+              itemCount: filteredPlantList.length,
+              itemBuilder: (context, index) {
+                return plantWidget(filteredPlantList[index]);
+              },
+            ),
           )
         ],
       ),
@@ -178,23 +195,23 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         },
         child: Container(
           width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              color: Color(0xFF388E3C),
-              shape: BoxShape.circle,
-            ),
-        child: const Center(
-              child: Text(
-                '+',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w200,
-              color: Colors.black,
+          height: 60,
+          decoration: const BoxDecoration(
+            color: Color(0xFF388E3C),
+            shape: BoxShape.circle,
+          ),
+          child: const Center(
+            child: Text(
+              '+',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w200,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
       ),
-    ),
     );
   }
 
@@ -215,7 +232,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 TextField(
                   controller: _edtScienceNameController,
                   decoration:
-                      const InputDecoration(labelText: "Scientific Name"),
+                  const InputDecoration(labelText: "Scientific Name"),
                 ),
                 GestureDetector(
                   onTap: () => _selectDate(context),
@@ -235,16 +252,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   _plantImage!,
                   height: 200,
                 )
-                : const Text("No image selected yet"),
+                    : const Text("No photo selected yet"),
                 TextButton.icon(
                   onPressed: _pickImage,
                   icon: const Icon(Icons.camera_alt_rounded),
-                  label: const Text("Add a plant image"),
+                  label: const Text("Add a plant photo"),
                 ),
                 ElevatedButton(
                   onPressed: () async {
                     // Upload the image to Firebase and get the URL
-                    String imageUrl = await _uploadImageToFirebase(_plantImage!);
+                    String imageUrl = await _uploadImageToFirebase(
+                        _plantImage!);
 
                     // Save plant details to Firebase Realtime Database
                     Map<String, dynamic> data = {
@@ -258,13 +276,15 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       if (mounted) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Plant details updated successfully")),
+                          const SnackBar(content: Text(
+                              "Plant details updated successfully")),
                         );
                       }
                     }).catchError((error) {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Failed to update plant details: $error")),
+                          SnackBar(content: Text(
+                              "Failed to update plant details: $error")),
                         );
                       }
                     });
@@ -295,13 +315,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 
   Widget plantWidget(Plant plant) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () async {
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
-                MyPlantsDetailsPage(plant: plant, dbRef: dbRef),
+                MyPlantsDetailsPage(
+                  plant: plant, dbRef: dbRef),
           ),
         );
 
@@ -310,19 +334,32 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkMode ? Colors.black.withOpacity(0.5) : Colors.white,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
+            if (!isDarkMode) ...[
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 3,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ] else
+              ...[
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
           ],
         ),
         child: Row(
@@ -330,7 +367,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           children: [
             GestureDetector(
               onTap: () async {
-                await _pickImage(); 
+                await _pickImage();
                 if (_plantImage != null) {
                   String imageUrl = await _uploadImageToFirebase(_plantImage!);
                   setState(() {
@@ -367,8 +404,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 children: [
                   Text(
                     plant.plantData!.name!,
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.white : Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -376,21 +413,25 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   const SizedBox(height: 10),
                   Text(
                     plant.plantData!.scienceName!,
-                    style: const TextStyle(
-                      color: Colors.grey,
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.grey.shade400 : Colors.grey,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(LineIcons.calendarWithWeekFocus,
-                          size: 16, color: Colors.grey),
+                      Icon(
+                          LineIcons.calendarWithWeekFocus,
+                          size: 16,
+                          color: isDarkMode ? Colors.grey.shade400 : Colors
+                              .grey),
                       const SizedBox(width: 5),
                       Text(
                         plant.plantData!.date!,
-                        style: const TextStyle(
-                          color: Colors.grey,
+                        style: TextStyle(
+                          color: isDarkMode ? Colors.grey.shade400 : Colors
+                              .grey,
                         ),
                       ),
                     ],
@@ -398,20 +439,10 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 ],
               ),
             ),
-            IconButton(icon: const Icon(
-              Icons.delete,
-              color: Colors.grey,
-            ),
-            onPressed: () {
-              // implement delete functionality here
-            },
-            ),
           ],
         ),
       ),
     );
   }
 }
-/// TODO: Add a photo to solve dark background color in dark mode.
-/// TODO: add edit symbol to the plant widget
-/// TODO: change the structure of delete and edit functions.
+/// TODO: change the structure of code according to OOP

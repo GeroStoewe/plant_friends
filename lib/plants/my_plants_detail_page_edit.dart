@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../calendar/calendar_functions.dart';
 import '../themes/colors.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
-import 'my_plants_page.dart';
 import 'plant.dart';
 
 class MyPlantsDetailsEditPage extends StatefulWidget {
@@ -107,7 +107,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   }
 
 
-  Future<void> _updatePlant() async {
+  Future<void> _updatePlant(BuildContext context) async {
     String originalWaterNeeds = widget.plant.plantData!.water ?? "Low"; // Original water needs
     bool waterNeedsChanged = originalWaterNeeds != _selectedWater;
 
@@ -255,7 +255,14 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Plant Details"),
+        title: const Text("Edit Plant Details"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: _deletePlant,
+            tooltip: 'Delete Plant',
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -270,7 +277,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 hintText: "Name",
                 obscureText: false,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               // Verwende das CustomTextField für den wissenschaftlichen Namen
               CustomTextField(
@@ -279,7 +286,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 hintText: "Scientific Name",
                 obscureText: false,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               // Verwende ein TextField mit einem Kalender-Icon für das Datum
               GestureDetector(
@@ -293,7 +300,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
 
               // Dropdown für die Schwierigkeit
               DropdownButtonFormField<String>(
@@ -325,7 +332,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
 
               // Dropdown für Light
               DropdownButtonFormField<String>(
@@ -358,7 +365,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
 
               // Dropdown für Water
               DropdownButtonFormField<String>(
@@ -390,7 +397,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
 
               // Dropdown für Plant Type
               DropdownButtonFormField<String>(
@@ -426,21 +433,12 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: _updatePlant,
-                    child: const Text("Save Changes"),
-                  ),
-                  ElevatedButton(
-                    onPressed: _deletePlant,
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                    child: const Text("Delete Plant"),
-                  ),
-                ],
+              const SizedBox(height: 15),
+              Center(
+                child: CustomButton(
+                  text: 'Save Changes',
+                  onTap: () => _updatePlant(context),
+                ),
               ),
             ],
           ),

@@ -255,7 +255,11 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Plant Details"),
+        title: const Text(
+          'Edit Plant',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),

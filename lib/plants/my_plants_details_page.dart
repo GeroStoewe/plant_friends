@@ -588,5 +588,6 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 /// Done beautify edit the container
 /// Done color of container for plant details is changed for dark mode and light mode
 /// Done calender when you want to add new plant
-/// TODO: Fix Android gradle, copy paste Lauras gradle- ANDROID EMULATOR
-/// TODO: upgrade apple to 13, as it is currently using 12
+/// Done Fix Android gradle, copy paste Lauras gradle- ANDROID EMULATOR
+/// Done upgrade apple to 13, as it is currently using 12
+/// TODO save function should not work unless name, scientific name, data are not fully registered as there is an error to see the plant detailspage (red screen!!)

@@ -4,7 +4,9 @@ import 'package:plant_friends/test_home_page.dart';
 import 'LoginOrSignupPage.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  final bool showSignupPage;
+
+  const AuthPage({super.key, this.showSignupPage = false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +17,9 @@ class AuthPage extends StatelessWidget {
           if (snapshot.hasData) {
             return TestHomePage(); // TODO: Change with actual HomePage
           } else {
-            return const LoginOrSignupPage();
+            return LoginOrSignupPage(showSignupPage: showSignupPage);
           }
-        }
+        },
       ),
     );
   }

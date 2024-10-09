@@ -3,14 +3,24 @@ import 'package:plant_friends/authentication/login_page.dart';
 import 'package:plant_friends/authentication/signup_page.dart';
 
 class LoginOrSignupPage extends StatefulWidget {
-  const LoginOrSignupPage({super.key});
+
+  final bool showSignupPage;
+
+  const LoginOrSignupPage({super.key, this.showSignupPage = false});
 
   @override
   State<LoginOrSignupPage> createState() => _LoginOrSignupPageState();
 }
 
 class _LoginOrSignupPageState extends State<LoginOrSignupPage> {
-  bool showLoginPage = true;
+  late bool showLoginPage;
+
+  @override
+  void initState() {
+    super.initState();
+    showLoginPage = !widget.showSignupPage; // Initialisiere basierend auf dem übergebenen Parameter
+  }
+
 
   // Funktion, um zwischen Login und Signup hin- und herzuschalten
   void togglePages() {

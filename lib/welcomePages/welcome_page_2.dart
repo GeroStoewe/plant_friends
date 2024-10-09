@@ -85,7 +85,7 @@ class WelcomePage2 extends StatelessWidget {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const AuthPage(),
+                              builder: (context) => const AuthPage(showSignupPage: true),
                             ),
                           );
                         },

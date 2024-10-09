@@ -462,5 +462,5 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
     );
   }
 }
-//TODO: plant widget color for dark and light mode
+
 //TODO: solve edit page bug issue

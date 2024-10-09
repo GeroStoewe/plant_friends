@@ -101,7 +101,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Chose Image Source",
+                  "Choose Image Source",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -212,7 +212,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 labelText: "Find your plants",
                 labelStyle: TextStyle(
                     color: isDarkMode ? Colors.white : Colors.black),
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search, color: Colors.green),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                       color: Colors.green,
@@ -271,6 +271,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 
   void plantDialog() {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -307,11 +309,22 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   _plantImage!,
                   height: 200,
                 )
-                    : const Text("No photo selected yet"),
+                    : Text("No photo selected yet",
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: isDarkMode ? Colors.grey : Colors.black),
+                  ),
                   TextButton.icon(
                     onPressed: _pickImage,
                     icon: const Icon(Icons.camera_alt_rounded),
-                    label: const Text("Add a plant photo"),
+                    label: Text("Add a new plant photo",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: isDarkMode ? Colors.grey : Colors.black),
+                    ),
+                    style: TextButton.styleFrom(
+                      foregroundColor: isDarkMode ? Colors.grey : Colors.green,
+                    ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -347,7 +360,12 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       });
                     }
                   },
-                  child: const Text("Save new plant"),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: isDarkMode ? Colors.grey.shade600 : Colors.green ,
+                  ),
+                  child: const Text("Save new plant",
+                  style: TextStyle(fontSize: 16.0),),
                 ),
               ],
             ),
@@ -399,7 +417,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         decoration: BoxDecoration(
-          color: isDarkMode ? Colors.black.withOpacity(0.5) : Colors.white,
+          color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             if (!isDarkMode) ...[
@@ -412,7 +430,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             ] else
               ...[
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withOpacity(0.2),
                   spreadRadius: 3,
                   blurRadius: 5,
                   offset: const Offset(0, 3),
@@ -482,13 +500,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       Icon(
                           LineIcons.calendarWithWeekFocus,
                           size: 16,
-                          color: isDarkMode ? Colors.grey.shade400 : Colors
+                          color: isDarkMode ? const Color(0xFFB0BEC5) : Colors
                               .grey),
                       const SizedBox(width: 5),
                       Text(
                         plant.plantData!.date!,
                         style: TextStyle(
-                          color: isDarkMode ? Colors.grey.shade400 : Colors
+                          color: isDarkMode ? const Color(0xFFB0BEC5) : Colors
                               .grey,
                         ),
                       ),
@@ -504,3 +522,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 }
 /// TODO: change the structure of code according to OOP
+/// TODO: photo upload should be optional
+/// DONE TODO: color of plant widget for dark mode
+/// Done TODO: color of plant dialog modified for dark mode and light mode

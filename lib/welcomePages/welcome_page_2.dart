@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/themes/colors.dart';
-import 'package:plant_friends/welcomePages/welcome_page_1.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
 
-import '../widgets/custom_back_icon_button.dart';
 
 class WelcomePage2 extends StatelessWidget {
   const WelcomePage2({Key? key}) : super(key: key);

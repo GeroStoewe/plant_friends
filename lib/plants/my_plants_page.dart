@@ -92,12 +92,12 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25)),
+              top: Radius.circular(25)),
         ),
         builder: (BuildContext context) {
           return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
@@ -112,20 +112,20 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildOptionCard(
-                    icon: Icons.camera_alt_rounded,
-                    label: "Camera",
-                    onTap: () => Navigator.of(context).pop(ImageSource.camera),
-                  ),
-                  _buildOptionCard(
-                  icon: Icons.photo_library_rounded,
-                  label: "Gallery",
-                  onTap: () => Navigator.of(context).pop(ImageSource.gallery),
-                  ),
-                ],
-              ),
+                      icon: Icons.camera_alt_rounded,
+                      label: "Camera",
+                      onTap: () => Navigator.of(context).pop(ImageSource.camera),
+                    ),
+                    _buildOptionCard(
+                      icon: Icons.photo_library_rounded,
+                      label: "Gallery",
+                      onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 20),
-            ],
-           ),
+              ],
+            ),
           );
         }
     );
@@ -173,20 +173,41 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     );
   }
 
-  Future<String> _uploadImageToFirebase(File imageFile) async {
-    // Create a unique filename for the image
-    String fileName = DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString();
-    Reference ref = storage.ref().child('plants/$fileName');
+  Future<String?> _uploadImageToFirebase(File imageFile) async {
+    try {
+      print("Upload started...");
 
-    // Upload the file to Firebase Storage
-    await ref.putFile(imageFile);
-    // Retrieve and return the download URL
-    String downloadUrl = await ref.getDownloadURL();
+      // Create a unique filename for the image
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref = FirebaseStorage.instance.ref().child('plants/$fileName');
 
-    return downloadUrl; // Return the URL for saving to the database
+      // Set metadata (optional, but recommended)
+      final SettableMetadata metadata = SettableMetadata(
+        contentType: 'image/jpeg', // Make sure to specify the correct content type
+      );
+
+      // Upload the file to Firebase Storage with metadata
+      UploadTask uploadTask = ref.putFile(imageFile, metadata);
+
+      // Monitor upload progress (optional)
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        double progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        print("Upload progress: $progress%");
+      });
+
+      // Wait until the upload is complete
+      await uploadTask;
+
+      // Retrieve and return the download URL
+      String downloadUrl = await ref.getDownloadURL();
+
+      print("Upload completed! Download URL: $downloadUrl");
+      return downloadUrl;
+
+    } catch (e) {
+      print("Error uploading image: $e");
+      return null; // Return null if an error occurs
+    }
   }
 
   @override
@@ -273,107 +294,127 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   void plantDialog() {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return Dialog(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: _edtNameController,
-                  decoration: const InputDecoration(labelText: "Name"),
-                ),
-                TextField(
-                  controller: _edtScienceNameController,
-                  decoration:
-                  const InputDecoration(labelText: "Scientific Name"),
-                ),
-                GestureDetector(
-                  onTap: () => _selectDate(context),
-                  child: AbsorbPointer(
-                    child: TextField(
-                      controller: _edtDateController,
-                      decoration: const InputDecoration(
-                        labelText: "Date",
-                        suffixIcon: Icon(Icons.calendar_today),
+        return StatefulBuilder(
+          builder: (context, setState) {  // Use StatefulBuilder to allow setState within the dialog
+            return Dialog(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: _edtNameController,
+                      decoration: const InputDecoration(labelText: "Name"),
+                    ),
+                    TextField(
+                      controller: _edtScienceNameController,
+                      decoration:
+                      const InputDecoration(labelText: "Scientific Name"),
+                    ),
+                    GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: AbsorbPointer(
+                        child: TextField(
+                          controller: _edtDateController,
+                          decoration: const InputDecoration(
+                            labelText: "Date",
+                            suffixIcon: Icon(Icons.calendar_today),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                // show the selected image
-                _plantImage != null ? Image.file(
-                  _plantImage!,
-                  height: 200,
-                )
-                    : Text("No photo selected yet",
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      color: isDarkMode ? Colors.grey : Colors.black),
-                  ),
-                  TextButton.icon(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.camera_alt_rounded),
-                    label: Text("Add a new plant photo",
+                    const SizedBox(height: 10),
+                    // Show the selected image immediately after selection
+                    _plantImage != null
+                        ? Image.file(
+                      _plantImage!,
+                      height: 200,
+                    )
+                        : Text(
+                      "No photo selected yet",
                       style: TextStyle(
+                        fontSize: 16.0,
+                        color: isDarkMode ? Colors.grey : Colors.black,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: () async {
+                        await _pickImage();
+                        setState(() {});  // Rebuild the dialog when the image is selected
+                      },
+                      icon: const Icon(Icons.camera_alt_rounded),
+                      label: Text(
+                        "Add a new plant photo",
+                        style: TextStyle(
                           fontSize: 16.0,
-                          color: isDarkMode ? Colors.grey : Colors.black),
+                          color: isDarkMode ? Colors.grey : Colors.black,
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor:
+                        isDarkMode ? Colors.grey : Colors.green,
+                      ),
                     ),
-                    style: TextButton.styleFrom(
-                      foregroundColor: isDarkMode ? Colors.grey : Colors.green,
+                    ElevatedButton(
+                      onPressed: () async {
+                        // Upload the image to Firebase and get the URL
+                        String? imageUrl = "";
+                        if (_plantImage != null) {
+                          imageUrl = await _uploadImageToFirebase(_plantImage!);
+
+                          // Save plant details to Firebase Realtime Database
+                          Map<String, dynamic> data = {
+                            "name": _edtNameController.text,
+                            "science_name": _edtScienceNameController.text,
+                            "date": _edtDateController.text,
+                            "image_url": imageUrl, // Include the image URL
+                          };
+
+                          dbRef.child("Plants").push().set(data).then((value) {
+                            if (mounted) {
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "Plant details updated successfully")),
+                              );
+                            }
+                          }).catchError((error) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        "Failed to update plant details: $error")),
+                              );
+                            }
+                          });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: isDarkMode
+                            ? Colors.grey.shade600
+                            : Colors.green,
+                      ),
+                      child: const Text(
+                        "Save new plant",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
                     ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    // Upload the image to Firebase and get the URL
-                    String imageUrl = "";
-                    if (_plantImage != null) {
-                      imageUrl = await _uploadImageToFirebase(
-                          _plantImage!);
-
-                      // Save plant details to Firebase Realtime Database
-                      Map<String, dynamic> data = {
-                        "name": _edtNameController.text,
-                        "science_name": _edtScienceNameController.text,
-                        "date": _edtDateController.text,
-                        "image_url": imageUrl,// Include the image URL
-                      };
-
-                      dbRef.child("Plants").push().set(data).then((value) {
-                        if (mounted) {
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text(
-                                "Plant details updated successfully")),
-                          );
-                        }
-                      }).catchError((error) {
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(
-                                "Failed to update plant details: $error")),
-                          );
-                        }
-                      });
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: isDarkMode ? Colors.grey.shade600 : Colors.green ,
-                  ),
-                  child: const Text("Save new plant",
-                  style: TextStyle(fontSize: 16.0),),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selectedDate = await showDatePicker(
@@ -401,7 +442,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           MaterialPageRoute(
             builder: (context) =>
                 MyPlantsDetailsPage(
-                  plant: plant, dbRef: dbRef),
+                    plant: plant, dbRef: dbRef),
           ),
         );
 
@@ -445,7 +486,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
               onTap: () async {
                 await _pickImage();
                 if (_plantImage != null) {
-                  String imageUrl = await _uploadImageToFirebase(_plantImage!);
+                  String? imageUrl = await _uploadImageToFirebase(_plantImage!);
                   setState(() {
                     plant.plantData!.imageUrl = imageUrl;
                   });

@@ -25,7 +25,6 @@ class MyPlantsDetailsPage extends StatefulWidget {
 class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
   final CalenderFunctions _calendarFunctions = CalenderFunctions();
   late Future<Map<String, DateTime?>> _nextEventsFuture;
-  List<Map<String, String>> photoJournal = []; // Photo journal list
 
 
   @override
@@ -42,19 +41,6 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
       'watering': nextWateringDate,
       'fertilizing': nextFertilizingDate,
     };
-  }
-  Widget photoJournalButton() {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PhotoJournalPage(photoJournal: photoJournal),
-          ),
-        );
-      },
-      child: const Text('View Photo Journal'),
-    );
   }
 
   @override
@@ -322,7 +308,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PhotoJournalPage(photoJournal: photoJournal),
+                  builder: (context) => PhotoJournalPage(plantID: widget.plant.key),
                 ),
               );
             },

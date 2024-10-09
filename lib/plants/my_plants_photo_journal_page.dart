@@ -1,11 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:plant_friends/themes/colors.dart';
 
 class PhotoJournalPage extends StatefulWidget {
-  final List<Map<String, String>> photoJournal;
+  List<Map<String, String>> photoJournal = [];
+  final String? plantID;
 
-  const PhotoJournalPage({super.key, required this.photoJournal});
+  PhotoJournalPage({super.key, required this.plantID});
 
   @override
   State<PhotoJournalPage> createState() => _PhotoJournalPageState();
@@ -14,23 +18,138 @@ class PhotoJournalPage extends StatefulWidget {
 class _PhotoJournalPageState extends State<PhotoJournalPage> {
   final String fixedPhotoUrl = 'https://media.istockphoto.com/id/1063250818/de/foto/bunte-tropische-bl%C3%A4tter-muster-der-schlange-pflanze-oder-mutter-in-law-zunge-und-sukkulente.jpg?s=2048x2048&w=is&k=20&c=RM4nv73VrNnTdXVR7kKtJSlonxRSee4wj78GtSJYf-4=';
 
-  Future<void> _addPhoto() async {
-    String formattedDate = DateFormat('dd MMM yyyy').format(DateTime.now());
+  final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL: 'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+  ).ref();
+  final FirebaseStorage storage = FirebaseStorage.instance;
 
-    setState(() {
-      widget.photoJournal.insert(0, {
-        'url': fixedPhotoUrl,
-        'date': formattedDate,
+  @override
+  void initState() {
+    super.initState();
+    _fetchPhotoJournalEntries();
+  }
+  Future<void> _fetchPhotoJournalEntries() async {
+    dbRef.child('PhotoJournal').orderByChild('plantID').equalTo(widget.plantID).once().then((snapshot) {
+      Map<dynamic, dynamic> entries = snapshot.snapshot.value as Map<dynamic, dynamic>;
+      setState(() {
+        widget.photoJournal = entries.entries.map((entry) {
+          Map<String, String> newEntry = Map<String, String>.from(entry.value);
+          newEntry['key'] = entry.key;  // Save the key for deletion
+          return newEntry;
+        }).toList();
       });
-    });
+        });
   }
 
-  // Function to delete a photo entry
-  void _deletePhoto(int index) {
-    setState(() {
-      widget.photoJournal.removeAt(index);
-    });
+  Future<void> _addPhoto() async {
+    TextEditingController urlController = TextEditingController();
+    DateTime? selectedDate;
+
+    // Öffnet einen Dialog für URL und Datumseingabe
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Add New Photo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: urlController,
+                decoration: const InputDecoration(
+                  labelText: 'Photo URL',
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  final pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime.now(),
+                  );
+                  if (pickedDate != null) {
+                    selectedDate = pickedDate;
+                  }
+                },
+                child: const Text('Pick Date'),
+              ),
+              if (selectedDate != null)
+                Text('Selected Date: ${DateFormat('dd MMM yyyy').format(selectedDate!)}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Abbrechen
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (urlController.text.isNotEmpty && selectedDate != null) {
+                  Navigator.of(context).pop(); // Dialog schließen
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please enter a URL and select a date.')),
+                  );
+                }
+              },
+              child: const Text('Add Photo'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (urlController.text.isNotEmpty && selectedDate != null) {
+      String formattedDate = DateFormat('dd MMM yyyy').format(selectedDate!);
+
+      // Neuen Eintrag erstellen
+      Map<String, String> newEntry = {
+        'url': urlController.text,
+        'date': formattedDate,
+        'plantID': widget.plantID ?? 'Unknown Plant ID',
+      };
+
+      // Eintrag zur Firebase-Datenbank hinzufügen
+      DatabaseReference newEntryRef = dbRef.child("PhotoJournal").push();
+      newEntryRef.set(newEntry).then((_) {
+        setState(() {
+          newEntry['key'] = newEntryRef.key!;
+          widget.photoJournal.insert(0, newEntry);
+        });
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error adding photo: $error')),
+        );
+      });
+    }
   }
+
+
+  void _deletePhoto(int index) {
+    String? entryKey = widget.photoJournal[index]['key'];
+
+    if (entryKey != null) {
+      dbRef.child('PhotoJournal').child(entryKey).remove().then((_) {
+        setState(() {
+          widget.photoJournal.removeAt(index);
+        });
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting photo: $error')),
+        );
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error: Missing key for this photo entry.')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +167,25 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
         padding: const EdgeInsets.all(8.0),
         child: widget.photoJournal.isEmpty
             ? const Center(
-          child: Text('No photos yet. Add some photos to document your plant\'s progress.'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.local_florist, // Pflanzen-Icon
+                size: 60,
+                color: Colors.grey,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'No photos yet. \nAdd some photos to document \nyour plant\'s progress.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
         )
             : ListView.builder(
           itemCount: widget.photoJournal.length,
@@ -60,7 +197,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
               isLast: index == widget.photoJournal.length - 1,
               onTap: () => _showPhotoOverlay(widget.photoJournal[index]['url']!),
               isDarkMode: isDarkMode,
-              onDelete: () => _confirmDelete(index), // Pass delete function
+              onDelete: () => _confirmDelete(index), // Löschfunktion übergeben
             );
           },
         ),
@@ -71,6 +208,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
         backgroundColor: seaGreen,
       ),
     );
+
   }
 
   Widget _buildTimelineTile({
@@ -80,7 +218,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     required bool isLast,
     required VoidCallback onTap,
     required bool isDarkMode,
-    required VoidCallback onDelete, // Added parameter for delete callback
+    required VoidCallback onDelete,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +255,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                             ),
                             IconButton(
                               onPressed: onDelete, // Trigger the delete function
-                              icon: const Icon(Icons.delete, color: Colors.grey), // Gray color
+                              icon: const Icon(Icons.delete, color: Colors.grey),
                             ),
                           ],
                         ),

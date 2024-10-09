@@ -100,23 +100,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 10),
                     GestureDetector(
                       onTap: isLoading
                           ? null
                           : () async {
-                        final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfilePage()));
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProfilePage()));
 
-                        if (result != null) {
-                          setState(() {
-                            // Update the profile data with the values returned from the EditProfilePage
-                            displayName = result['displayName'] ?? displayName;
-                            email = result['email'] ?? email;
-                          });
-                        }
+                              loadUserData();
                       },
                       child: Stack(children: [
                         SizedBox(
@@ -153,29 +147,22 @@ class _ProfilePageState extends State<ProfilePage> {
                         )
                       ]),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     Text("$displayName",
                         style: Theme.of(context).textTheme.headlineMedium),
                     const SizedBox(height: 5),
                     Text("$email", style: Theme.of(context).textTheme.bodyLarge),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 40),
                     CustomProfileButton(
                         onPressed: isLoading
                             ? null
                             : () async {
-                              final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfilePage()));
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EditProfilePage()));
 
-                          if (result != null) {
-                            setState(() {
-                              // Update the profile data with the values returned from the EditProfilePage
-                              displayName =
-                                  result['displayName'] ?? displayName;
-                              email = result['email'] ?? email;
-                            });
-                          }
+                                  loadUserData();
                         },
                         width: 180,
                         height: 60,
@@ -195,14 +182,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 5),
                     ProfileMenuButton(
                       onTap: isLoading ? null : () {},
-                      text: "Plant Details",
-                      icon: Icons.account_circle,
+                      text: "Plant Wishlist",
+                      icon: Icons.local_florist_rounded,
                     ),
                     const SizedBox(height: 5),
                     ProfileMenuButton(
                       onTap: isLoading ? null : () {},
-                      text: "User Management",
-                      icon: LineAwesomeIcons.user_circle,
+                      text: "Plant Quiz",
+                      icon: LineAwesomeIcons.question_circle,
                     ),
                     const SizedBox(height: 10),
                     Divider(

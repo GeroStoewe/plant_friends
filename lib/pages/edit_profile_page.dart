@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:plant_friends/pages/profile_page.dart';
-import 'package:plant_friends/widgets/custom_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../themes/colors.dart';
 import '../widgets/custom_profile_button.dart';
 import '../widgets/custom_text_field.dart';
+
+enum MessageType { success, error, info }
 
 class EditProfilePage extends StatefulWidget {
   EditProfilePage({Key? key}) : super(key: key);
@@ -53,8 +53,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Size size = MediaQuery
+        .of(context)
+        .size;
+    bool isDarkMode = Theme
+        .of(context)
+        .brightness == Brightness.dark;
 
     return Scaffold(
         appBar: AppBar(
@@ -66,229 +70,266 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 color: Colors.white70),
           ),
           title: Text("Edit Profile",
-              style: Theme.of(context).textTheme.labelMedium),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .labelMedium),
         ),
         body: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
           },
           child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Container(
-                    padding: EdgeInsets.all(size.width * 0.05),
-                    child: Column(
-                        children: [
-                      const SizedBox(height: 25),
-                      Stack(children: [
-                        SizedBox(
-                          width: 160,
-                          height: 160,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    width: 8,
-                                    color:
-                                    isDarkMode ? darkSeaGreen : darkGreyGreen)),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100.0),
-                                child: Image.asset(
-                                    "lib/profileImages/1_plant_profile.jpg")),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 5,
-                          right: 5,
-                          child: Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30.0),
-                                color: isDarkMode ? darkSeaGreen : darkGreyGreen),
-                            child: Icon(
-                              LineAwesomeIcons.camera_solid,
-                              size: 28.0,
-                              color: isDarkMode ? Colors.black87 : Colors.white70,
-                            ),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 40),
-                      Form(
-                        child: Column(
+              children: [
+                SingleChildScrollView(
+                  child: Container(
+                      padding: EdgeInsets.all(size.width * 0.05),
+                      child: Column(
                           children: [
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: RichText(
-                                text: TextSpan(
-                                  text: "Change Your ",
-                                  style: Theme.of(context).textTheme.displayLarge,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: "Full Name",
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
+                            const SizedBox(height: 25),
+                            Stack(children: [
+                              SizedBox(
+                                width: 160,
+                                height: 160,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          width: 8,
+                                          color:
+                                          isDarkMode
+                                              ? darkSeaGreen
+                                              : darkGreyGreen)),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          100.0),
+                                      child: Image.asset(
+                                          "lib/profileImages/1_plant_profile.jpg")),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 5,
+                                right: 5,
+                                child: Container(
+                                  width: 45,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                      color: isDarkMode
+                                          ? darkSeaGreen
+                                          : darkGreyGreen),
+                                  child: Icon(
+                                    LineAwesomeIcons.camera_solid,
+                                    size: 28.0,
+                                    color: isDarkMode ? Colors.black87 : Colors
+                                        .white70,
+                                  ),
+                                ),
+                              )
+                            ]),
+                            const SizedBox(height: 40),
+                            Form(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: "Change Your ",
+                                        style: Theme
+                                            .of(context)
+                                            .textTheme
+                                            .displayLarge,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: "Full Name",
+                                            style: TextStyle(
+                                              color: Theme
+                                                  .of(context)
+                                                  .primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            CustomTextField(
-                                controller: fullnameController,
-                                icon: Icons.person_outline_rounded,
-                                hintText: "New Full Name",
-                                obscureText: false),
-                            const SizedBox(height: 30),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: RichText(
-                                text: TextSpan(
-                                  text: "Change Your ",
-                                  style: Theme.of(context).textTheme.displayLarge,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: "Email Address",
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  CustomTextField(
+                                      controller: fullnameController,
+                                      icon: Icons.person_outline_rounded,
+                                      hintText: "New Full Name",
+                                      obscureText: false),
+                                  const SizedBox(height: 30),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: "Change Your ",
+                                        style: Theme
+                                            .of(context)
+                                            .textTheme
+                                            .displayLarge,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: "Email Address",
+                                            style: TextStyle(
+                                              color: Theme
+                                                  .of(context)
+                                                  .primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            CustomTextField(
-                                controller: usernameController,
-                                icon: Icons.alternate_email_rounded,
-                                hintText: "New Email Address",
-                                obscureText: false),
-                            const SizedBox(height: 15),
-                            CustomTextField(
-                              controller: currPasswordController,
-                              icon: Icons.lock_outline_rounded,
-                              hintText: "Current Password",
-                              obscureText: !isPasswordVisible,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    isPasswordVisible = !isPasswordVisible;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 30),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: RichText(
-                                text: TextSpan(
-                                  text: "Change Your ",
-                                  style: Theme.of(context).textTheme.displayLarge,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: "Password",
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  CustomTextField(
+                                      controller: usernameController,
+                                      icon: Icons.alternate_email_rounded,
+                                      hintText: "New Email Address",
+                                      obscureText: false),
+                                  const SizedBox(height: 15),
+                                  CustomTextField(
+                                    controller: currPasswordController,
+                                    icon: Icons.lock_outline_rounded,
+                                    hintText: "Current Password",
+                                    obscureText: !isPasswordVisible,
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        isPasswordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Theme
+                                            .of(context)
+                                            .hintColor,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isPasswordVisible =
+                                          !isPasswordVisible;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: "Change Your ",
+                                        style: Theme
+                                            .of(context)
+                                            .textTheme
+                                            .displayLarge,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: "Password",
+                                            style: TextStyle(
+                                              color: Theme
+                                                  .of(context)
+                                                  .primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            CustomTextField(
-                              controller: currPasswordController,
-                              icon: Icons.lock_outline_rounded,
-                              hintText: "Current Password",
-                              obscureText: !isPasswordVisible,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    isPasswordVisible = !isPasswordVisible;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            CustomTextField(
-                              controller: newPasswordController,
-                              icon: Icons.lock_outline_rounded,
-                              hintText: "New Password",
-                              obscureText: !isPasswordVisible,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    isPasswordVisible = !isPasswordVisible;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 35),
-                            CustomProfileButton(
-                                onPressed: saveChanges,
-                                width: 180,
-                                height: 80,
-                                text: "SAVE"
-                            ),
-                            const SizedBox(height: 30),
-                            Text.rich(
-                                TextSpan(
-                                    text: "Joined: ",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: isDarkMode
-                                            ? dmLightGrey
-                                            : lmDarkGrey
+                                  ),
+                                  const SizedBox(height: 10),
+                                  CustomTextField(
+                                    controller: currPasswordController,
+                                    icon: Icons.lock_outline_rounded,
+                                    hintText: "Current Password",
+                                    obscureText: !isPasswordVisible,
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        isPasswordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Theme
+                                            .of(context)
+                                            .hintColor,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isPasswordVisible =
+                                          !isPasswordVisible;
+                                        });
+                                      },
                                     ),
-                                    children: [
+                                  ),
+                                  const SizedBox(height: 15),
+                                  CustomTextField(
+                                    controller: newPasswordController,
+                                    icon: Icons.lock_outline_rounded,
+                                    hintText: "New Password",
+                                    obscureText: !isPasswordVisible,
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        isPasswordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Theme
+                                            .of(context)
+                                            .hintColor,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isPasswordVisible =
+                                          !isPasswordVisible;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 35),
+                                  CustomProfileButton(
+                                      onPressed: saveChanges,
+                                      width: 180,
+                                      height: 80,
+                                      text: "SAVE"
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Text.rich(
                                       TextSpan(
-                                          text: joinDate,
+                                          text: "Joined: ",
                                           style: TextStyle(
-                                              fontSize: 22,
-                                              color: Theme.of(context).hintColor
-                                          )
-                                      ),
-                                    ]
-                                )
+                                              fontSize: 20,
+                                              color: isDarkMode
+                                                  ? dmLightGrey
+                                                  : lmDarkGrey
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: joinDate,
+                                                style: TextStyle(
+                                                    fontSize: 22,
+                                                    color: Theme
+                                                        .of(context)
+                                                        .hintColor
+                                                )
+                                            ),
+                                          ]
+                                      )
+                                  )
+                                ],
+                              ),
                             )
-                          ],
-                        ),
-                      )
-                    ])),
-              ),
-              if (isLoading)
-                Container(
-                  color: Colors.black.withOpacity(0.7),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).primaryColor)),
-                  ),
-                )
-            ]
+                          ])),
+                ),
+                if (isLoading)
+                  Container(
+                    color: Colors.black.withOpacity(0.7),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme
+                                  .of(context)
+                                  .primaryColor)),
+                    ),
+                  )
+              ]
           ),
         ));
   }
@@ -297,7 +338,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String email = user.email!;
     String password = currPasswordController.text;
 
-    AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+    AuthCredential credential = EmailAuthProvider.credential(
+        email: email, password: password);
 
     await user.reauthenticateWithCredential(credential);
   }
@@ -314,13 +356,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
         // Check if the full name field is not empty and update display name
         if (fullnameController.text.isNotEmpty) {
           await user.updateDisplayName(fullnameController.text);
+          showMessage(
+            "Your full name was changed successfully.",
+            MessageType.success,
+          );
         }
 
         // Check if the email field is not empty and has changed
-        if (usernameController.text.isNotEmpty && usernameController.text != user.email) {
+        if (usernameController.text.isNotEmpty &&
+            usernameController.text != user.email) {
           // Ensure that the current password field is filled
           if (currPasswordController.text.isEmpty) {
-            showMessage("Please enter your current password to change your email.");
+            showMessage(
+              "Please enter your password to change your email.",
+              MessageType.error,
+            );
+            setState(() {
+              isLoading = false;
+            });
             return;
           }
 
@@ -334,50 +387,134 @@ class _EditProfilePageState extends State<EditProfilePage> {
           await user.verifyBeforeUpdateEmail(updatedEmail!);
 
           // Notify the user to verify their email
-          showMessage("A verification email has been sent to $updatedEmail. Please verify the email to complete the update.");
+          showMessage(
+            "A verification email has been sent to $updatedEmail. Please verify the email to complete the update.",
+            MessageType.info,
+          );
         }
 
         // Check if the current password is filled for password change
         if (newPasswordController.text.isNotEmpty) {
           // Validate new password
           if (currPasswordController.text.isEmpty) {
-            showMessage("Please enter a new password.");
+            showMessage(
+              "Please enter a new password to change your current password.",
+              MessageType.error,
+            );
+            setState(() {
+              isLoading = false;
+            });
             return;
           }
 
           if (currPasswordController.text == newPasswordController.text) {
-            showMessage("The new password must be different from the current password.");
+            showMessage(
+              "You entered the same password!? The new password must be different from the current password.",
+              MessageType.error,
+            );
+            setState(() {
+              isLoading = false;
+            });
             return;
           }
 
           // Re-authenticate the user before changing password
           await reAuthenticateUser(user);
           await user.updatePassword(newPasswordController.text);
+
+          showMessage(
+            "Your password was changed successfully.",
+            MessageType.success,
+          );
         }
 
         // Show success message if at least one field was updated
-        if (fullnameController.text.isNotEmpty || usernameController.text.isNotEmpty || currPasswordController.text.isNotEmpty || newPasswordController.text.isNotEmpty) {
-          showMessage("Profile updated successfully");
+        if (fullnameController.text.isNotEmpty ||
+            usernameController.text.isNotEmpty ||
+            currPasswordController.text.isNotEmpty ||
+            newPasswordController.text.isNotEmpty) {
 
           // Return updated values to the previous screen
           Navigator.pop(context, {
-            'displayName': fullnameController.text.isNotEmpty ? fullnameController.text : user.displayName,
+            'displayName': fullnameController.text.isNotEmpty
+                ? fullnameController.text
+                : user.displayName,
             'email': updatedEmail ?? user.email,
           });
         } else {
-          showMessage("No changes made");
+          showMessage(
+            "No changes made...",
+            MessageType.info,
+          );
+          setState(() {
+            isLoading = false;
+          });
         }
       } on FirebaseAuthException catch (e) {
-        showMessage(e.message ?? "An error occurred");
+        showMessage(
+          e.message ?? "An error occurred!",
+          MessageType.error,
+        );
+        setState(() {
+          isLoading = false;
+        });
       } catch (e) {
-        showMessage("An error occurred while updating profile");
+        showMessage(
+          "An error occurred while updating profile! Please contact the support for help.",
+          MessageType.error);
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }
 
-  void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+  void showMessage(String message, MessageType type) {
+    // Determine the background color and icon based on the message type
+    Color backgroundColor;
+    IconData icon;
+
+    switch (type) {
+      case MessageType.error:
+        backgroundColor = Colors.redAccent;
+        icon = Icons.error_outline_rounded;
+        break;
+      case MessageType.info:
+        backgroundColor = Colors.blueAccent; // Color for info messages
+        icon = Icons.info_outline_rounded; // Icon for info messages
+        break;
+      case MessageType.success:
+      default:
+        backgroundColor = Theme.of(context).primaryColor;
+        icon = Icons.check_circle_outline_rounded;
+        break;
+    }
+
+    // Show the Snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                icon,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 7.5),
+              Expanded(
+                child: Text(
+                  message,
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: backgroundColor,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          duration: const Duration(seconds: 3),
+        ),
+      );
   }
 }

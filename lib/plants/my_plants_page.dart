@@ -90,20 +90,42 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
     final selectedSource = await showModalBottomSheet<ImageSource>(
         context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25)),
+        ),
         builder: (BuildContext context) {
-          return Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera_alt_rounded),
-                title: const Text("Take a photo of your plant"),
-                onTap: () => Navigator.of(context).pop(ImageSource.camera),
+          return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Chose Image Source",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildOptionCard(
+                    icon: Icons.camera_alt_rounded,
+                    label: "Camera",
+                    onTap: () => Navigator.of(context).pop(ImageSource.camera),
+                  ),
+                  _buildOptionCard(
+                  icon: Icons.photo_library_rounded,
+                  label: "Gallery",
+                  onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+                  ),
+                ],
               ),
-              ListTile(
-                leading: const Icon(Icons.photo_library_rounded),
-                title: const Text("Choose a picture from your gallery"),
-                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
-              ),
+                const SizedBox(height: 20),
             ],
+           ),
           );
         }
     );
@@ -116,6 +138,39 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         });
       }
     }
+  }
+
+  Widget _buildOptionCard({required IconData icon, required String label, required Function() onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Rounded edges
+        ),
+        elevation: 4, // Shadow to make it stand out
+        child: Padding(
+          padding: const EdgeInsets.all(16.0), // Padding inside the card
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Ensure the icon and text are compact
+            children: [
+              Icon(
+                icon,
+                size: 50,
+                color: const Color(0xFF388E3C), // Use accent color for the icons
+              ),
+              const SizedBox(height: 10), // Space between icon and text
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<String> _uploadImageToFirebase(File imageFile) async {

@@ -253,41 +253,44 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   height: 200,
                 )
                     : const Text("No photo selected yet"),
-                TextButton.icon(
-                  onPressed: _pickImage,
-                  icon: const Icon(Icons.camera_alt_rounded),
-                  label: const Text("Add a plant photo"),
+                  TextButton.icon(
+                    onPressed: _pickImage,
+                    icon: const Icon(Icons.camera_alt_rounded),
+                    label: const Text("Add a plant photo"),
                 ),
                 ElevatedButton(
                   onPressed: () async {
                     // Upload the image to Firebase and get the URL
-                    String imageUrl = await _uploadImageToFirebase(
-                        _plantImage!);
+                    String imageUrl = "";
+                    if (_plantImage != null) {
+                      imageUrl = await _uploadImageToFirebase(
+                          _plantImage!);
 
-                    // Save plant details to Firebase Realtime Database
-                    Map<String, dynamic> data = {
-                      "name": _edtNameController.text,
-                      "science_name": _edtScienceNameController.text,
-                      "date": _edtDateController.text,
-                      "image_url": imageUrl // Include the image URL
-                    };
+                      // Save plant details to Firebase Realtime Database
+                      Map<String, dynamic> data = {
+                        "name": _edtNameController.text,
+                        "science_name": _edtScienceNameController.text,
+                        "date": _edtDateController.text,
+                        "image_url": imageUrl,// Include the image URL
+                      };
 
-                    dbRef.child("Plants").push().set(data).then((value) {
-                      if (mounted) {
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text(
-                              "Plant details updated successfully")),
-                        );
-                      }
-                    }).catchError((error) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(
-                              "Failed to update plant details: $error")),
-                        );
-                      }
-                    });
+                      dbRef.child("Plants").push().set(data).then((value) {
+                        if (mounted) {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text(
+                                "Plant details updated successfully")),
+                          );
+                        }
+                      }).catchError((error) {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(
+                                "Failed to update plant details: $error")),
+                          );
+                        }
+                      });
+                    }
                   },
                   child: const Text("Save new plant"),
                 ),

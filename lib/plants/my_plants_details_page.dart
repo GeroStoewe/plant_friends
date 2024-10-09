@@ -587,6 +587,6 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 /// Done icon colors(edit, trash, save)
 /// Done beautify edit the container
 /// Done color of container for plant details is changed for dark mode and light mode
+/// Done calender when you want to add new plant
 /// TODO: Fix Android gradle, copy paste Lauras gradle- ANDROID EMULATOR
 /// TODO: upgrade apple to 13, as it is currently using 12
-/// TODO: calender when you want to add new plant

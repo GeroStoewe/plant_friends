@@ -69,7 +69,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                           Navigator.of(context).pop(); // Close the dialog
                         },
                         style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey.shade400,
+                          backgroundColor: Colors.grey.shade600,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
                           shape: RoundedRectangleBorder(

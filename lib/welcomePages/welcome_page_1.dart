@@ -53,25 +53,13 @@ class WelcomePage1 extends StatelessWidget {
                         "Welcome to Plant Friends!",
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 30),
                       Text(
                         "Hello plant lover! ❤️ \n\nWhether you're a green thumb or just starting out, Plant Friends is your ultimate companion. With customized plant care, timely reminders, and helpful information, you'll keep your houseplants happy and healthy. \n\nLet’s make your indoor jungle thrive together! 🌿",
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: isDarkMode ? dmLightGrey : lmDarkGrey,
                         ),
-                      ),
-                      const SizedBox(height: 40),
-                      CustomButton(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const WelcomePage2(),
-                            ),
-                          );
-                        },
-                        text: "Next",
                       ),
                     ],
                   ),

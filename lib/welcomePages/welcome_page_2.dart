@@ -91,28 +91,10 @@ class WelcomePage2 extends StatelessWidget {
                         },
                         text: "Sign Up",
                       ),
-                      const SizedBox(height: 20),
-                      const SizedBox(height: 20),
-                      const SizedBox(height: 20),
-                      const SizedBox(height: 20),
 
                       // Go back icon in a Row, left-aligned
-                      Row(
-                        children: [
-                          CustomBackIconButton(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const WelcomePage1(),
-                                ),
-                              );
-                            },
-                          ),
-                          // Spacer to fill the remaining space in the Row
-                          const Spacer(),
-                        ],
-                      ),
+
+
                     ],
                   ),
                 ),

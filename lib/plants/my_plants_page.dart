@@ -522,6 +522,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 }
 /// TODO: change the structure of code according to OOP
-/// TODO: photo upload should be optional
+/// TODO: photo upload should be optional ?
 /// DONE TODO: color of plant widget for dark mode
 /// Done TODO: color of plant dialog modified for dark mode and light mode

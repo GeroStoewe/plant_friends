@@ -1,4 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter/services.dart';
+import 'package:plant_friends/authentication/auth_page.dart';
+import 'package:plant_friends/pages/profile_page.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +14,10 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:plant_friends/plantwiki/wiki_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
-
+import 'package:plant_friends/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 import 'package:plant_friends/plants/my_plants_page.dart';
 
 import 'Services/firebase_api.dart';
@@ -19,28 +27,33 @@ import 'account/account_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+    await FirebaseApi().initNotifications();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+  runApp(ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp()
+  )
   );
 
-  await FirebaseApi().initNotifications();
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightTheme(),
       darkTheme: darkTheme(),
-      themeMode: ThemeMode.system,
+      themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
-      home: const NavigationBar(),
+
+      home: AuthPage(),
+
     );
   }
 }

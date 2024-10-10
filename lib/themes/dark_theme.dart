@@ -13,6 +13,12 @@ ThemeData darkTheme() {
           color: Colors.white,
           fontSize: 16,
           fontFamily: 'Poppins',
+          fontWeight: FontWeight.w200
+      ),
+      bodyLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontFamily: 'Poppins',
       ),
       headlineMedium: TextStyle(
           color: Colors.white,
@@ -25,6 +31,30 @@ ThemeData darkTheme() {
           fontSize: 24,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500
+      ),
+        labelLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400
+        ),
+      displayMedium: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400
+      ),
+      displaySmall: TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        fontStyle: FontStyle.italic
+      ),
+      displayLarge: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w300
       ),
     ),
     appBarTheme: const AppBarTheme(

@@ -35,9 +35,15 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  firebase_core: ^2.32.0
-  firebase_database: ^10.5.7
-  intl: ^0.18.1
+  firebase_core: ^3.4.1
+  firebase_database: ^11.1.2
+  firebase_storage: ^12.3.0
+  firebase_auth: ^5.2.1
+  google_sign_in: ^6.2.1
+  line_awesome_flutter: ^3.0.1
+  shared_preferences: ^2.3.2
+  provider: ^6.1.2
+  intl: ^0.19.0
   table_calendar: ^3.0.2
   image_picker: ^0.8.7+3
   permission_handler: ^10.2.0
@@ -49,7 +55,6 @@ dependencies:
   firebase_messaging: ^14.7.10
   firebase_analytics: ^10.10.7
   auto_size_text: ^3.0.0
-  firebase_storage: ^11.0.16
 
 
 dev_dependencies:
@@ -76,14 +81,15 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/authentication/login/images/
+
+    - lib/authentication/images/
+    - lib/profileImages/
     - lib/plantWiki/wiki_images/category/
     - lib/plantWiki/wiki_images/light/
     - lib/plantWiki/wiki_images/difficulty/
     - lib/plantWiki/wiki_images/water/
     - lib/plantWiki/wiki_images/type/
     - lib/plantWiki/wiki_images/corner plant/
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

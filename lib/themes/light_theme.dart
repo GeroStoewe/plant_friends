@@ -14,6 +14,11 @@ ThemeData lightTheme() {
           fontSize: 16,
           fontFamily: 'Poppins',
       ),
+        bodyLarge: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+        ),
       headlineMedium: TextStyle(
           color: Colors.black,
           fontSize: 28,
@@ -25,6 +30,30 @@ ThemeData lightTheme() {
           fontSize: 24,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500
+      ),
+      labelLarge: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w500
+      ),
+      displayMedium: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w300
+      ),
+        displaySmall: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontFamily: 'Poppins',
+            fontStyle: FontStyle.italic
+        ),
+      displayLarge: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w300
       ),
     ),
     appBarTheme: const AppBarTheme(

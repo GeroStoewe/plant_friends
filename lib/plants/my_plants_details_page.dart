@@ -1,8 +1,11 @@
 import 'dart:async';
+
 import 'package:intl/intl.dart';
 import 'package:plant_friends/plants/plant.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 import '../../themes/colors.dart'; // Assuming you have custom theme colors
 import '../../widgets/custom_info_card.dart';
 import '../calendar/calendar_functions.dart';
@@ -15,7 +18,6 @@ import 'my_plants_photo_journal_page.dart'; // Custom Info Card for displaying p
 class MyPlantsDetailsPage extends StatefulWidget {
   final Plant plant;
   final DatabaseReference dbRef;
-
   const MyPlantsDetailsPage({super.key, required this.plant, required this.dbRef});
 
   @override
@@ -23,13 +25,16 @@ class MyPlantsDetailsPage extends StatefulWidget {
 }
 
 class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
+
   final CalenderFunctions _calendarFunctions = CalenderFunctions();
   late Future<Map<String, DateTime?>> _nextEventsFuture;
+
 
 
   @override
   void initState() {
     super.initState();
+
     _nextEventsFuture = _fetchNextEventDates();
   }
 
@@ -45,6 +50,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -118,6 +124,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                 );
               }
             },
+
             errorBuilder: (context, error, stackTrace) {
               return const Icon(Icons.error, size: 100, color: Colors.red);
             },
@@ -218,8 +225,11 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           },
         ),
       ],
+    ),
+      ),
     );
   }
+
 
   Column plantInfo() {
     return Column(
@@ -315,6 +325,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           ),
         ),
       ],
+     ),
     );
   }
 

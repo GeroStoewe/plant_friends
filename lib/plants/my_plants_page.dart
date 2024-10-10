@@ -229,6 +229,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         ),
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         elevation: 2,
+
       ),
       body: Column(
         children: [
@@ -238,6 +239,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
               decoration: InputDecoration(
                 labelText: "Find your plants",
                 labelStyle: TextStyle(
+
                   color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700,
                   fontSize: 16,
                 ),
@@ -266,18 +268,19 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           Expanded(
             child: filteredPlantList.isEmpty
                 ? Center(
+
               child: Text(
                 "No plants available to be searched",
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 16,
                 ),
-              ),
-            )
+              ),            )
                 : ListView.builder(
               itemCount: filteredPlantList.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               itemBuilder: (context, index) {
+
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: plantWidget(filteredPlantList[index]),
@@ -341,6 +344,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       _plantImage != null
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Rounded corners for image
+
                         child: Image.file(
                           _plantImage!,
                           height: 200,
@@ -349,6 +353,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                         ),
                       )
                           : Text(
+
                         "No photo selected yet. Tap the camera icon to upload.",
                         style: TextStyle(
                           fontSize: 16.0,

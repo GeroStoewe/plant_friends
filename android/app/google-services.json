@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "545786364087",
+
     "firebase_url": "https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app",
+
     "project_id": "plant-friends-app",
     "storage_bucket": "plant-friends-app.appspot.com"
   },
@@ -13,6 +15,7 @@
           "package_name": "com.hwr.plant_friends"
         }
       },
+
       "oauth_client": [
         {
           "client_id": "545786364087-mibgfd0nu010focnr50ei55qpi9osdd8.apps.googleusercontent.com",
@@ -27,6 +30,7 @@
           "client_type": 3
         }
       ],
+
       "api_key": [
         {
           "current_key": "AIzaSyAx_EwH-Dc0oXBcaxPqtKncLtyf-WqWYx0"
@@ -34,6 +38,7 @@
       ],
       "services": {
         "appinvite_service": {
+
           "other_platform_oauth_client": [
             {
               "client_id": "545786364087-94cdafnfhgb3bp98b758cd8u8crgdj2k.apps.googleusercontent.com",

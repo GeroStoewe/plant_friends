@@ -8,6 +8,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:plant_friends/firebase_options.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:plant_friends/pages/profile_page.dart';
 import 'package:plant_friends/plantwiki/wiki_page.dart';
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
@@ -41,33 +42,33 @@ class MyApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Plant Friends',
       theme: lightTheme(),
       darkTheme: darkTheme(),
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
 
-      home: AuthPage(),
+      home: const AuthPage(),
 
     );
   }
 }
 
-class NavigationBar extends StatefulWidget {
-  const NavigationBar({super.key});
+class CustomNavigationBar extends StatefulWidget {
+  const CustomNavigationBar({super.key});
 
   @override
-  NavigationBarState createState() => NavigationBarState();
+  CustomNavigationBarState createState() => CustomNavigationBarState();
 }
 
-class NavigationBarState extends State<NavigationBar> {
+class CustomNavigationBarState extends State<CustomNavigationBar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
     const MyPlantsPage(),
     const CalendarPage(),
     const WikiPage(),
-    const AccountPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {

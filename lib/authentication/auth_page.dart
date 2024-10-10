@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_friends/authentication/login_page.dart';
+import 'package:plant_friends/main.dart';
 import 'package:plant_friends/pages/profile_page.dart';
 import 'package:plant_friends/test_home_page.dart';
 
@@ -16,7 +17,7 @@ class AuthPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ProfilePage(); // TODO: Change with actual HomePage
+            return CustomNavigationBar(); // TODO: Change with actual HomePage
           } else {
             return const LoginOrSignupPage();
           }

@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 
-import 'package:plant_friends/quiz/quiz_test_page.dart';
 
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
 import 'package:plant_friends/welcomePages/test_auth_page.dart';
 
-import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:plant_friends/firebase_options.dart';
@@ -17,16 +15,13 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:plant_friends/pages/profile_page.dart';
 import 'package:plant_friends/plantwiki/wiki_page.dart';
-import 'package:plant_friends/themes/dark_theme.dart';
-import 'package:plant_friends/themes/light_theme.dart';
+
 import 'package:plant_friends/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
 import 'package:plant_friends/plants/my_plants_page.dart';
 
 import 'Services/firebase_api.dart';
 import 'calendar/calendar_page.dart';
-import 'account/account_page.dart';
 
 
 Future<void> main() async {

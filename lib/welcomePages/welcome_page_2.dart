@@ -3,7 +3,6 @@ import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
 
-
 class WelcomePage2 extends StatelessWidget {
   const WelcomePage2({Key? key}) : super(key: key);
 
@@ -43,57 +42,87 @@ class WelcomePage2 extends StatelessWidget {
                     topRight: Radius.circular(30.0),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 10),
-                      Text(
-                        "Ready to get started?",
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "Create an account or log in to manage your plants today.",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: isDarkMode ? dmLightGrey : lmDarkGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        double textScaleFactor = 1.0;
+                        double buttonWidthScaleFactor = 1.0;
 
-                      // Login Button
-                      CustomButton(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AuthPage(),
-                            ),
-                          );
-                        },
-                        text: "Login",
-                      ),
-                      const SizedBox(height: 20),
+                        // Passe den Text und die Button-Größe je nach Höhe an
+                        if (constraints.maxHeight < 400) {
+                          textScaleFactor = 0.85;
+                          buttonWidthScaleFactor = 0.9;
+                        } else if (constraints.maxHeight < 300) {
+                          textScaleFactor = 0.75;
+                          buttonWidthScaleFactor = 0.8;
+                        }
 
-                      // Sign Up Button
-                      CustomButton(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AuthPage(showSignupPage: true),
-                            ),
-                          );
-                        },
-                        text: "Sign Up",
-                      ),
+                        return Padding(
+                          padding: EdgeInsets.all(size.width * 0.05), // Dynamisches Padding
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                "Ready to get started?",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.copyWith(fontSize: 24 * textScaleFactor),
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                "Create an account or log in to manage your plants today.",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  fontSize: 16 * textScaleFactor,
+                                  color: isDarkMode ? dmLightGrey : lmDarkGrey,
+                                ),
+                              ),
+                              const SizedBox(height: 40),
 
-                      // Go back icon in a Row, left-aligned
+                              // Login Button
+                              SizedBox(
+                                width: size.width * buttonWidthScaleFactor, // Dynamische Button-Breite
+                                child: CustomButton(
+                                  onTap: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const AuthPage(),
+                                      ),
+                                    );
+                                  },
+                                  text: "Login",
+                                ),
+                              ),
+                              const SizedBox(height: 20),
 
+                              // Sign Up Button
+                              SizedBox(
+                                width: size.width * buttonWidthScaleFactor, // Dynamische Button-Breite
+                                child: CustomButton(
+                                  onTap: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                        const AuthPage(showSignupPage: true),
+                                      ),
+                                    );
+                                  },
+                                  text: "Sign Up",
+                                ),
+                              ),
 
-                    ],
+                              // Optional: Zurück-Icon oder weitere Widgets
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

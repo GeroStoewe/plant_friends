@@ -323,7 +323,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     String? _selectedDifficulty;
     String? _selectedType;
 
-    // Example options for the dropdowns
+    // options for the dropdowns
     List<String> waterOptions = ['Low', 'Medium', 'High'];
     List<String> lightOptions = ['Direct Light', 'Indirect Light', 'Partial Shade', 'Low Light'];
     List<String> difficultyOptions = ['Easy', 'Medium', 'Hard'];
@@ -352,14 +352,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       // Show the selected image immediately after selection
                       _plantImage != null
                           ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10), // Rounded corners for image
-
+                          borderRadius: BorderRadius.circular(10), // Rounded corners for image
                             child: Image.file(
                           _plantImage!,
                           height: 200,
                           width: double.infinity, // Make image responsive
                           fit: BoxFit.cover,
-                        ),
+                          ),
                       )
                           : Text(
                         "No photo selected yet. Tap the camera icon to upload.",
@@ -565,7 +564,9 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                               onPressed: () async {
                                 String? imageUrl = "";
                                 if (_plantImage != null) {
-                                  imageUrl = await _uploadImageToFirebase(_plantImage!);
+                                imageUrl = await _uploadImageToFirebase(_plantImage!);
+                                } else {
+                                  imageUrl = null;
 
                                   Map<String, dynamic> data = {
                                     "name": _edtNameController.text,

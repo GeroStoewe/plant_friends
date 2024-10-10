@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import '../calendar/calendar_functions.dart';
 import '../themes/colors.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/custom_text_field.dart';
 import 'plant.dart';
 
@@ -28,6 +32,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   final TextEditingController _edtNameController = TextEditingController();
   final TextEditingController _edtScienceNameController = TextEditingController();
   final TextEditingController _edtDateController = TextEditingController();
+  File? _plantImage;
 
   String _selectedDifficulty = "Easy"; // Default value for difficulty
   String _selectedLight = "Direct Light"; // Default value for light
@@ -85,12 +90,9 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         if (imageUrl != null && imageUrl.isNotEmpty) {
           try {
             await FirebaseStorage.instance.refFromURL(imageUrl).delete();
-            print("Image at $imageUrl deleted from Firebase Storage.");
           } catch (e) {
-            print("Error deleting image from Firebase Storage: $e");
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error deleting image from storage: $e')),
-            );
+            CustomSnackbar snackbar = CustomSnackbar(context);
+            snackbar.showMessage('Error deleting image from storage: $e', MessageType.error);
           }
         }
 
@@ -106,9 +108,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         // Hide the loading indicator
         if (mounted) {
           Navigator.pop(context); // Dismiss the loading dialog
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Plant deleted successfully')),
-          );
+          CustomSnackbar snackbar = CustomSnackbar(context);
+          snackbar.showMessage('Plant deleted successfully', MessageType.success);
 
           // Navigate to MyPlantsPage after deletion
           Navigator.pop(context);
@@ -118,9 +119,9 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         // Hide the loading indicator in case of an error
         if (mounted) {
           Navigator.pop(context); // Dismiss the loading dialog
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to delete plant: $error')),
-          );
+          CustomSnackbar snackbar = CustomSnackbar(context);
+          snackbar.showMessage('Failed to delete plant: $error', MessageType.error);
+
         }
       }
     }
@@ -128,7 +129,6 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
   Future<void> _deleteAllEntriesForPlantAndImages(String plantID) async {
     try {
-      // Abfrage der PhotoJournal-Einträge, die der plantID entsprechen
       final snapshot = await dbRef
           .child('PhotoJournal')
           .orderByChild('plantID')
@@ -138,51 +138,38 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       if (snapshot.snapshot.value != null) {
         Map<dynamic, dynamic> entries = snapshot.snapshot.value as Map<dynamic, dynamic>;
 
-        // Durch alle Einträge iterieren und löschen
         for (var entryKey in entries.keys) {
           Map<dynamic, dynamic> entry = entries[entryKey];
-          String? imageUrl = entry['url'];  // URL des Bildes aus dem Eintrag extrahieren
-          print("Image URL: $imageUrl");
+          String? imageUrl = entry['url'];
 
           if (imageUrl != null && imageUrl.isNotEmpty) {
             try {
-              // Extrahiere nur den relativen Pfad
-              final filePath = Uri.parse(imageUrl).pathSegments.last;  // Extrahiere den letzten Teil des Pfades
+              final filePath = Uri.parse(imageUrl).pathSegments.last;
 
-              // Überprüfe, ob das Bild noch existiert
               final ref = FirebaseStorage.instance.ref(filePath);
-              await ref.getMetadata();  // Wenn dies erfolgreich ist, existiert die Datei
+              await ref.getMetadata();
 
-              // Lösche das Bild aus Firebase Storage
               await ref.delete();
-              print("Image at $filePath deleted from Firebase Storage.");
             } catch (e) {
-              print("Error deleting image from Firebase Storage: $e");
             }
           }
 
-          // Lösche den Eintrag aus der Realtime Database
           await dbRef.child('PhotoJournal').child(entryKey).remove();
-          print("Entry with key $entryKey deleted from Realtime Database.");
         }
       } else {
-        print("No entries found for plantID: $plantID");
       }
     } catch (e) {
-      print("Error deleting entries and images for plantID $plantID: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting entries and images: $e')),
-      );
+      CustomSnackbar snackbar = CustomSnackbar(context);
+      snackbar.showMessage('Error deleting entries and images: $e', MessageType.error);
+
     }
   }
 
 
-// Hilfsfunktion zum Extrahieren des Pfades aus der Bild-URL
   String _extractImagePathFromUrl(String imageUrl) {
-    // Beispiel: https://firebasestorage.googleapis.com/v0/b/YOUR_PROJECT_ID.appspot.com/o/images%2Fyour_image.jpg?alt=media
     Uri uri = Uri.parse(imageUrl);
-    String path = uri.path;  // Der Pfad sollte nach '/o/' kommen und bis zum Ende reichen
-    path = path.replaceFirst('/o/', '').replaceAll('%2F', '/');  // Entschlüssele URL-kodierte Zeichen
+    String path = uri.path;
+    path = path.replaceFirst('/o/', '').replaceAll('%2F', '/');
     return path;
   }
 
@@ -192,15 +179,59 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
     String originalWaterNeeds = widget.plant.plantData!.water ?? "Low"; // Original water needs
     bool waterNeedsChanged = originalWaterNeeds != _selectedWater;
 
-    Map<String, dynamic> data = {
-      "name": _edtNameController.text,
-      "science_name": _edtScienceNameController.text,
-      "date": _edtDateController.text,
-      "difficulty": _selectedDifficulty,
-      "light": _selectedLight,
-      "water": _selectedWater,
-      "type": _selectedPlantType,
-    };
+    Map<String, dynamic> data = {};
+
+    // Show loading indicator while saving the data
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent closing the dialog by tapping outside
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)), // Green color for loading
+          ),
+        );
+      },
+    );
+
+    // Check if a new image has been selected
+    if (_plantImage != null) {
+      String? imageUrl = widget.plant.plantData?.imageUrl;
+
+      // If there is an image URL, delete the image from Firebase Storage
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        try {
+          await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+        } catch (e) {
+          CustomSnackbar snackbar = CustomSnackbar(context);
+          snackbar.showMessage('Error deleting image from storage: $e', MessageType.error);
+        }
+      }
+
+      // Upload the new image and get its URL
+      String? newImageUrl = await _uploadImageToFirebase(_plantImage!);
+      data = {
+        "name": _edtNameController.text,
+        "science_name": _edtScienceNameController.text,
+        "date": _edtDateController.text,
+        "difficulty": _selectedDifficulty,
+        "light": _selectedLight,
+        "water": _selectedWater,
+        "type": _selectedPlantType,
+        "image_url": newImageUrl, // Set the new image URL in the data
+      };
+    } else {
+      // If no new image was selected, retain the existing data
+      data = {
+        "name": _edtNameController.text,
+        "science_name": _edtScienceNameController.text,
+        "date": _edtDateController.text,
+        "difficulty": _selectedDifficulty,
+        "light": _selectedLight,
+        "water": _selectedWater,
+        "type": _selectedPlantType,
+      };
+    }
 
     try {
       // Update the plant data in the database
@@ -220,13 +251,13 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 onPressed: () {
                   Navigator.of(context).pop(false); // Close only the dialog
                 },
-                child: const Text('Cancel', style: TextStyle(color: seaGreen)),
+                child: const Text('Cancel', style: TextStyle(color: Color(0xFF388E3C))),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true); // Proceed with updating events
                 },
-                child: const Text('Proceed', style: TextStyle(color: seaGreen)),
+                child: const Text('Proceed', style: TextStyle(color: Color(0xFF388E3C))),
               ),
             ],
           ),
@@ -234,6 +265,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
         // If user cancels, stop further actions
         if (shouldProceed != true) {
+          Navigator.pop(context); // Dismiss the loading dialog
           return; // Only closes the dialog, not the whole page
         }
 
@@ -244,7 +276,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           builder: (BuildContext context) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(seaGreen),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)),
               ),
             );
           },
@@ -270,50 +302,76 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
           // Show success message
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Watering and fertilizing events updated successfully'),
-              ),
-            );
+            CustomSnackbar snackbar = CustomSnackbar(context);
+            snackbar.showMessage('Watering and fertilizing events updated successfully', MessageType.success);
           }
         } catch (e) {
           // Handle error and show error message
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error updating events: $e'),
-              ),
-            );
+            CustomSnackbar snackbar = CustomSnackbar(context);
+            snackbar.showMessage('Error updating events: $e', MessageType.error);
           }
         } finally {
-          // Hide the loading indicator
           if (mounted) {
-            Navigator.pop(context); // Dismiss the loading dialog
+            Navigator.pop(context); // Dismiss the event loading dialog
           }
         }
       }
 
-
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Plant details updated successfully")),
-        );
+        CustomSnackbar snackbar = CustomSnackbar(context);
+        snackbar.showMessage('Plant details updated successfully', MessageType.success);
 
         // Navigate to MyPlantsPage after saving changes
-        Navigator.pop(context);
-        Navigator.pop(context);
-
-        // This pops back to the previous page
+        Navigator.pop(context); // Pop to MyPlantsDetailsEditPage
+        Navigator.pop(context); // Pop to previous page
       }
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to update plant details: $error")),
-        );
+        CustomSnackbar snackbar = CustomSnackbar(context);
+        snackbar.showMessage('Failed to update plant details: $error', MessageType.error);
+      }
+    } finally {
+      if (mounted) {
+        Navigator.pop(context); // Dismiss the initial loading dialog
       }
     }
   }
 
+
+
+  Future<String?> _uploadImageToFirebase(File imageFile) async {
+    try {
+
+      // Create a unique filename for the image
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref = FirebaseStorage.instance.ref().child('plants/$fileName');
+
+      // Set metadata (optional, but recommended)
+      final SettableMetadata metadata = SettableMetadata(
+        contentType: 'image/jpeg', // Make sure to specify the correct content type
+      );
+
+      // Upload the file to Firebase Storage with metadata
+      UploadTask uploadTask = ref.putFile(imageFile, metadata);
+
+      // Monitor upload progress (optional)
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        double progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      });
+
+      // Wait until the upload is complete
+      await uploadTask;
+
+      // Retrieve and return the download URL
+      String downloadUrl = await ref.getDownloadURL();
+
+      return downloadUrl;
+
+    } catch (e) {
+      return null; // Return null if an error occurs
+    }
+  }
 
 
 
@@ -334,6 +392,10 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    String imageUrl = widget.plant.plantData!.imageUrl ?? '';
+    String defaultImageUrl = 'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -355,7 +417,86 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Verwende das CustomTextField für den Namen
+              GestureDetector(
+                onTap: _pickImage,
+                child: Center(
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: 160,
+                        height: 160,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 8,
+                              color: isDarkMode ? darkSeaGreen : darkGreyGreen,
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: _plantImage != null
+                                ? Image.file(
+                              _plantImage!,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            )
+                                : Image.network(
+                              imageUrl.isNotEmpty ? imageUrl : defaultImageUrl,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.error,
+                                  size: 60,
+                                  color: Colors.red,
+                                );
+                              },
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const SizedBox(
+                                    width: 120,
+                                    height: 120,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 5,
+                        right: 5,
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            color: isDarkMode
+                                ? darkSeaGreen
+                                : darkGreyGreen,
+                          ),
+                          child: Icon(
+                            LineAwesomeIcons.pencil_alt_solid,
+                            size: 28.0,
+                            color: isDarkMode
+                                ? Colors.black87
+                                : Colors.white70,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
               CustomTextField(
                 controller: _edtNameController,
                 icon: Icons.local_florist,
@@ -364,7 +505,6 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
               ),
               const SizedBox(height: 15),
 
-              // Verwende das CustomTextField für den wissenschaftlichen Namen
               CustomTextField(
                 controller: _edtScienceNameController,
                 icon: Icons.science,
@@ -373,7 +513,6 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
               ),
               const SizedBox(height: 15),
 
-              // Verwende ein TextField mit einem Kalender-Icon für das Datum
               GestureDetector(
                 onTap: () => _selectDate(context),
                 child: AbsorbPointer(
@@ -387,7 +526,6 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
               ),
               const SizedBox(height: 15),
 
-              // Dropdown für die Schwierigkeit
               DropdownButtonFormField<String>(
                 value: _selectedDifficulty,
                 decoration: InputDecoration(
@@ -530,5 +668,93 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         ),
       ),
     );
+  }
+  Widget _buildOptionCard({required IconData icon, required String label, required Function() onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Rounded edges
+        ),
+        elevation: 4, // Shadow to make it stand out
+        child: Padding(
+          padding: const EdgeInsets.all(16.0), // Padding inside the card
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Ensure the icon and text are compact
+            children: [
+              Icon(
+                icon,
+                size: 50,
+                color: const Color(0xFF388E3C), // Use accent color for the icons
+              ),
+              const SizedBox(height: 10), // Space between icon and text
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+
+    final selectedSource = await showModalBottomSheet<ImageSource>(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(25)),
+        ),
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Choose image source",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildOptionCard(
+                      icon: Icons.camera_alt_rounded,
+                      label: "Camera",
+                      onTap: () => Navigator.of(context).pop(ImageSource.camera),
+                    ),
+                    _buildOptionCard(
+                      icon: Icons.photo_library_rounded,
+                      label: "Gallery",
+                      onTap: () =>
+                        Navigator.of(context).pop(ImageSource.gallery)
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        }
+    );
+
+    if (mounted && selectedSource != null) {
+      final pickedFile = await picker.pickImage(source: selectedSource);
+      if (pickedFile != null) {
+        setState(() {
+          _plantImage = File(pickedFile.path);
+        });
+      }
+    }
   }
 }

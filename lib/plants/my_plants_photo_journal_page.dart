@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:plant_friends/themes/colors.dart';
 
+import '../widgets/custom_snackbar.dart';
+
 class PhotoJournalPage extends StatefulWidget {
   List<Map<String, String?>> photoJournal = [];
   final String? plantID;
@@ -25,6 +27,8 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
   ).ref();
   final FirebaseStorage storage = FirebaseStorage.instance;
   File? _plantImage;
+  final TextEditingController _edtDateController = TextEditingController();
+
 
   @override
   void initState() {
@@ -38,17 +42,65 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
 
         setState(() {
           widget.photoJournal = entries.entries.map((entry) {
-            // Konvertierung der Map in Map<String, String?>, um optionale Strings zu unterstützen
             Map<String, String?> newEntry = Map<String, String?>.from(entry.value as Map);
-            newEntry['key'] = entry.key;  // Speichere den Schlüssel für das Löschen
+            newEntry['key'] = entry.key;
             return newEntry;
           }).toList();
+
+          widget.photoJournal.sort((a, b) {
+            final dateFormat = DateFormat('dd MMM yyyy');
+            DateTime dateA = dateFormat.parse(a['date']!);
+            DateTime dateB = dateFormat.parse(b['date']!);
+
+
+            return dateB.compareTo(dateA);
+          });
         });
       }
     }).catchError((error) {
-      print('Error fetching photo journal entries: $error');
     });
   }
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget? child) {
+        // Check if the current theme is dark or light
+        final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+        return Theme(
+          data: isDarkMode
+              ? ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Colors.green, // Header background color
+              onPrimary: Colors.white, // Header text color
+              surface: Colors.black,  // Background color
+              onSurface: Colors.white, // Date text color
+            ),
+            dialogBackgroundColor: Colors.black, // Background color of the dialog
+          )
+              : ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.green, // Header background color
+              onPrimary: Colors.white, // Header text color
+              surface: Colors.white,  // Background color
+              onSurface: Colors.black, // Date text color
+            ),
+          ),
+          child: child ?? Container(),
+        );
+      },
+    );
+
+    if (selectedDate != null) {
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formattedDate = formatter.format(selectedDate);
+      _edtDateController.text = formattedDate;
+    }
+  }
+
 
   Future<void> _addPhoto() async {
     DateTime? selectedDate;
@@ -61,7 +113,6 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setDialogState) {
             return AlertDialog(
-              title: const Text('Add New Photo'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -75,53 +126,100 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                       color: isDarkMode ? Colors.grey : Colors.black,
                     ),
                   ),
-                  TextButton.icon(
+                  const SizedBox(height: 16),
+
+                  // Date Field
+                  GestureDetector(
+                    onTap: () => _selectDate(context),
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: _edtDateController,
+                        decoration: InputDecoration(
+                          labelText: "Date",
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                          suffixIcon: Icon(
+                            Icons.calendar_today,
+                            color: isDarkMode ? Colors.grey : Colors.green,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // "Add a new plant photo" Button with Camera Icon
+                  OutlinedButton.icon(
                     onPressed: () async {
                       await _pickImage();
                       setDialogState(() {}); // Update Dialog UI
                     },
-                    icon: const Icon(Icons.camera_alt_rounded),
-                    label: Text(
+                    icon: const Icon(Icons.camera_alt_rounded, color: Colors.green),
+                    label: const Text(
                       "Add a new plant photo",
                       style: TextStyle(
                         fontSize: 16.0,
-                        color: isDarkMode ? Colors.grey : Colors.black,
+                        color: Colors.green, // Ensures color visibility
                       ),
                     ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.green),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                      );
-                      if (pickedDate != null) {
-                        setDialogState(() {
-                          selectedDate = pickedDate;
-                        });
-                      }
-                    },
-                    child: const Text('Pick Date'),
-                  ),
+
+                  const SizedBox(height: 20),
                 ],
               ),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
                   onPressed: () async {
-                    Navigator.of(context).pop(); // Dialog schließen
-                    if (selectedDate != null && _plantImage != null) {
-                      imageUrl = await _uploadImageToFirebase(_plantImage!);
-                      if (imageUrl != null) {
-                        await _saveEntryToFirebase(imageUrl!, selectedDate!);
-                      }
+                    if (_plantImage == null) {
+                      // Show error if no image is selected
+                      CustomSnackbar snackbar = CustomSnackbar(context);
+                      snackbar.showMessage('Please select an image before adding.', MessageType.info);
+                      return; // Prevent further execution
                     }
+
+                    if (_edtDateController.text.isEmpty) {
+                      // Show error if no date is selected
+                      CustomSnackbar snackbar = CustomSnackbar(context);
+                      snackbar.showMessage('Please select a date before adding.', MessageType.info);
+
+                      return; // Prevent further execution
+                    }
+
+                    // Show loading dialog
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false, // Prevent closing the dialog by tapping outside
+                      builder: (BuildContext context) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)), // Green color for loading
+                          ),
+                        );
+                      },
+                    );
+
+                    // At this point, both image and date should be selected
+                    imageUrl = await _uploadImageToFirebase(_plantImage!);
+
+                    if (imageUrl != null) {
+                      DateTime selectedDate = DateFormat('yyyy-MM-dd').parse(_edtDateController.text);
+                      await _saveEntryToFirebase(imageUrl!, selectedDate);
+                    }
+
+                    Navigator.of(context).pop();  // Close the loading dialog
+
+                    Navigator.of(context).pop();  // Close the main dialog after saving
                   },
                   child: const Text('Add Photo'),
                 ),
@@ -133,28 +231,34 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     );
   }
 
+
   // Separate Firebase save logic into its own method
   Future<void> _saveEntryToFirebase(String imageUrl, DateTime selectedDate) async {
     String formattedDate = DateFormat('dd MMM yyyy').format(selectedDate);
 
-    // Create a new entry
+
+
+    // New entry map
     Map<String, String?> newEntry = {
       'url': imageUrl,
       'date': formattedDate,
       'plantID': widget.plantID ?? 'Unknown Plant ID',
     };
 
-    // Add entry to Firebase
-    DatabaseReference newEntryRef = dbRef.child("PhotoJournal").push();
+    try {
+      // Add the entry to Firebase
+      DatabaseReference newEntryRef = dbRef.child("PhotoJournal").push();
+      await newEntryRef.set(newEntry);
 
-    // Wait for Firebase save to complete
-    await newEntryRef.set(newEntry);
-
-    // Update the state only after successfully saving to Firebase
-    setState(() {
-      newEntry['key'] = newEntryRef.key!;
-      widget.photoJournal.insert(0, newEntry);
-    });
+      // Update the state after saving to Firebase
+      setState(() {
+        newEntry['key'] = newEntryRef.key!;
+        widget.photoJournal.insert(0, newEntry);
+      });
+      print('Photo entry saved successfully to Firebase.');
+    } catch (e) {
+      print('Error saving entry to Firebase: $e');
+    }
   }
 
   void _deletePhoto(int index) {
@@ -170,65 +274,58 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
         try {
           // Bild aus Firebase Storage löschen
           await imageRef.delete();
-          print("Photo successfully deleted from storage!");
 
           setState(() {
             widget.photoJournal.removeAt(index); // Update die UI
           });
         } catch (e) {
-          // Fehler beim Löschen aus Storage
-          print('Error deleting photo from storage: $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error deleting photo from storage: $e')),
-          );
+          CustomSnackbar snackbar = CustomSnackbar(context);
+          snackbar.showMessage('Error deleting photo from storage: $e', MessageType.error);
         }
       }).catchError((error) {
-        // Fehler beim Löschen aus der Datenbank
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error deleting photo from database: $error')),
-        );
+        CustomSnackbar snackbar = CustomSnackbar(context);
+        snackbar.showMessage('Error deleting photo from database: $error', MessageType.error);
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error: Missing key or image URL for this photo entry.')),
-      );
+      CustomSnackbar snackbar = CustomSnackbar(context);
+      snackbar.showMessage('Error: Missing key or image URL for this photo entry.', MessageType.error);
     }
   }
 
   Future<String?> _uploadImageToFirebase(File imageFile) async {
     try {
-      print("Upload startet...");
+      print("Upload started...");
 
-      // Erstelle einen einzigartigen Dateinamen für das Bild
+      // Generate a unique filename for the image
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference ref = FirebaseStorage.instance.ref().child('plantsPhotoJournal/$fileName');
 
-      // Metadaten setzen (optional, aber empfohlen)
+      // Set optional metadata
       final SettableMetadata metadata = SettableMetadata(
-        contentType: 'image/jpeg', // Stelle sicher, dass du den richtigen Content-Typ angibst
+        contentType: 'image/jpeg', // Ensure correct content-type
       );
 
-      // Datei zu Firebase Storage hochladen mit Metadaten
+      // Upload file to Firebase Storage with metadata
       UploadTask uploadTask = ref.putFile(imageFile, metadata);
 
-      // Uploadfortschritt überwachen (optional)
+      // Monitor upload progress (optional)
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
         double progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        print("Uploadfortschritt: $progress%");
+        print("Upload progress: $progress%");
       });
 
-      // Warten, bis der Upload abgeschlossen ist
+      // Wait for the upload to complete
       await uploadTask;
 
-      // Download-URL abrufen und zurückgeben
+      // Get the download URL and return it
       String downloadUrl = await ref.getDownloadURL();
 
-      print("Upload abgeschlossen! Download-URL: $downloadUrl");
+      print("Upload complete! Download URL: $downloadUrl");
       return downloadUrl;
 
     } catch (e) {
-      print("Fehler beim Hochladen des Bildes: $e");
-      return null; // Gib null zurück, falls ein Fehler auftritt
+      print("Error uploading image: $e");
+      return null; // Return null in case of an error
     }
   }
 
@@ -236,45 +333,44 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     final ImagePicker picker = ImagePicker();
 
     final selectedSource = await showModalBottomSheet<ImageSource>(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25)),
-        ),
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "Choose Image Source",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Choose Image Source",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildOptionCard(
+                    icon: Icons.camera_alt_rounded,
+                    label: "Camera",
+                    onTap: () => Navigator.of(context).pop(ImageSource.camera),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildOptionCard(
-                      icon: Icons.camera_alt_rounded,
-                      label: "Camera",
-                      onTap: () => Navigator.of(context).pop(ImageSource.camera),
-                    ),
-                    _buildOptionCard(
-                      icon: Icons.photo_library_rounded,
-                      label: "Gallery",
-                      onTap: () => Navigator.of(context).pop(ImageSource.gallery),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          );
-        }
+                  _buildOptionCard(
+                    icon: Icons.photo_library_rounded,
+                    label: "Gallery",
+                    onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
     );
 
     if (mounted && selectedSource != null) {
@@ -283,9 +379,13 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
         setState(() {
           _plantImage = File(pickedFile.path); // Save the selected image
         });
+        print('Image successfully picked: ${_plantImage?.path}');
+      } else {
+        print('No image selected');
       }
     }
   }
+
   Widget _buildOptionCard({required IconData icon, required String label, required Function() onTap}) {
     return GestureDetector(
       onTap: onTap,
@@ -444,7 +544,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                                 return child;
                               } else {
                                 // Zeige den Ladeindikator an
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(seaGreen), // Grüner Ladeindikator
                                   ),

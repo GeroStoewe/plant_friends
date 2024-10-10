@@ -227,9 +227,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             color: isDarkMode ? Colors.white : Colors.black,
           ),
         ),
-        backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        elevation: 2,
-
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Column(
         children: [
@@ -269,7 +267,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             child: filteredPlantList.isEmpty
                 ? Center(
 
-              child: Text(
+                child: Text(
                 "No plants available to be searched",
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,

@@ -225,8 +225,6 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           },
         ),
       ],
-    ),
-      ),
     );
   }
 
@@ -325,8 +323,8 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           ),
         ),
       ],
-     ),
-    );
+     );
+
   }
 
 }

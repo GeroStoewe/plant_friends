@@ -101,7 +101,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Choose image source",
+                  "Take or pick a plant photo",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

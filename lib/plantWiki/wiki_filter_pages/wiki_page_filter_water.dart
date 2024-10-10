@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/themes/colors.dart';
 import '../../../widgets/card_filter.dart';
 import '../wiki_page_filter_result_page.dart'; // Import the result page
 

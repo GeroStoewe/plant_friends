@@ -318,6 +318,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
+    String? _selectedWater;
+    String? _selectedLight;
+    String? _selectedDifficulty;
+    String? _selectedType;
+
+    // Example options for the dropdowns
+    List<String> waterOptions = ['Low', 'Medium', 'High'];
+    List<String> lightOptions = ['Direct Light', 'Indirect Light', 'Partial Shade', 'Low Light'];
+    List<String> difficultyOptions = ['Easy', 'Medium', 'Hard'];
+    List<String> typeOptions = ['Cacti/Succulents', 'Tropical Plants', 'Climbing Plants', 'Flowering Plants', 'Trees/Palms', 'Herbs', 'Others'];
+
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -414,7 +425,114 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          //controller:
+                          labelText: 'Water',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                        ),
+                        value: _selectedWater,
+                        items: waterOptions.map((String water) {
+                          return DropdownMenuItem<String>(
+                            value: water,
+                            child: Text(water),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedWater = newValue; // Update state on selection
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      // Light dropdown
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Light',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                        ),
+                        value: _selectedLight,
+                        items: lightOptions.map((String light) {
+                          return DropdownMenuItem<String>(
+                            value: light,
+                            child: Text(light),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedLight = newValue; // Update state on selection
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      // Difficulty dropdown
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Difficulty',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                        ),
+                        value: _selectedDifficulty,
+                        items: difficultyOptions.map((String difficulty) {
+                          return DropdownMenuItem<String>(
+                            value: difficulty,
+                            child: Text(difficulty),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedDifficulty = newValue; // Update state on selection
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      // Type dropdown
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Type',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                        ),
+                        value: _selectedType,
+                        items: typeOptions.map((String type) {
+                          return DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(type),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedType = newValue; // Update state on selection
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
                       // Row containing the Add photo and Save buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space out buttons
@@ -453,6 +571,10 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                                     "name": _edtNameController.text,
                                     "science_name": _edtScienceNameController.text,
                                     "date": _edtDateController.text,
+                                    "water": _selectedWater,
+                                    "light": _selectedLight,
+                                    "difficulty":_selectedDifficulty,
+                                    "type":_selectedType,
                                     "image_url": imageUrl,
                                   };
 

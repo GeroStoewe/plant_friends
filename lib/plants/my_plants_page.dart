@@ -343,7 +343,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Rounded corners for image
 
-                        child: Image.file(
+                            child: Image.file(
                           _plantImage!,
                           height: 200,
                           width: double.infinity, // Make image responsive
@@ -351,7 +351,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                         ),
                       )
                           : Text(
-
                         "No photo selected yet. Tap the camera icon to upload.",
                         style: TextStyle(
                           fontSize: 16.0,
@@ -509,6 +508,9 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     final DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -516,7 +518,15 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
+          data: isDarkMode ? ThemeData.light().copyWith(
+            colorScheme: ColorScheme.dark(
+            primary: Colors.green,
+            surface: Colors.grey[800]!,
+            onSurface: Colors.white,
+            ),
+            dialogBackgroundColor: Colors.black,
+          )
+          : ThemeData.light().copyWith(
             primaryColor: Colors.green,
             hintColor: Colors.green,
             colorScheme: const ColorScheme.light(primary: Colors.green),

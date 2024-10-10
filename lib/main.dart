@@ -2,6 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+
+import 'package:plant_friends/quiz/quiz_test_page.dart';
+
 import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
 import 'package:plant_friends/welcomePages/test_auth_page.dart';
@@ -52,6 +55,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
+
       home: const TestAuthPage(),
 
     );

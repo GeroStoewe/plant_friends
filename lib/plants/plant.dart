@@ -9,7 +9,13 @@ class PlantData {
   String? name;
   String? scienceName;
   String? date;
+
+  String? water;
+  String? light;
+  String? difficulty;
+  String? type;
   String? imageUrl;
+
 
   PlantData({this.name,this.scienceName, this.date, this.imageUrl});
 
@@ -17,6 +23,11 @@ class PlantData {
     name= json["name"];
     scienceName = json["science_name"];
     date = json["date"];
+
+    water = json["water"];
+    light = json["light"];
+    difficulty = json["difficulty"];
+    type = json["type"];
     imageUrl = json["image_url"];
   }
 }

@@ -229,7 +229,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         ),
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         elevation: 2,
-        centerTitle: true,
+
       ),
       body: Column(
         children: [
@@ -239,8 +239,9 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
               decoration: InputDecoration(
                 labelText: "Find your plants",
                 labelStyle: TextStyle(
-                    color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700,
-                    fontSize: 16,
+
+                  color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700,
+                  fontSize: 16,
                 ),
                 prefixIcon: const Icon(Icons.search, color: Colors.green),
                 filled: true,
@@ -267,21 +268,22 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           Expanded(
             child: filteredPlantList.isEmpty
                 ? Center(
-                child: Text(
-                    "No plants available to be searched",
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: isDarkMode ? Colors.white : Colors.black,
-                      fontSize: 16,
-                    ),
+
+              child: Text(
+                "No plants available to be searched",
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: isDarkMode ? Colors.white : Colors.black,
+                  fontSize: 16,
                 ),
-            )
+              ),            )
                 : ListView.builder(
               itemCount: filteredPlantList.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
-                    child: plantWidget(filteredPlantList[index]),
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: plantWidget(filteredPlantList[index]),
                 );
               },
             ),
@@ -342,7 +344,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       _plantImage != null
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Rounded corners for image
-                            child: Image.file(
+
+                        child: Image.file(
                           _plantImage!,
                           height: 200,
                           width: double.infinity, // Make image responsive
@@ -350,7 +353,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                         ),
                       )
                           : Text(
-                    "No photo selected yet. Tap the camera icon to upload.",
+
+                        "No photo selected yet. Tap the camera icon to upload.",
                         style: TextStyle(
                           fontSize: 16.0,
                           color: isDarkMode ? Colors.grey : Colors.black,
@@ -419,79 +423,79 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space out buttons
                         children: [
                           Flexible(
-                              child:
-                          // Add a new plant photo button
-                          TextButton(
-                            onPressed: () async {
-                              await _pickImage();
-                              setState(() {}); // Rebuild when image is selected
-                            },
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Modern padding
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
+                            child:
+                            // Add a new plant photo button
+                            TextButton(
+                              onPressed: () async {
+                                await _pickImage();
+                                setState(() {}); // Rebuild when image is selected
+                              },
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Modern padding
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                foregroundColor: isDarkMode ? Colors.grey : Colors.green,
                               ),
-                              foregroundColor: isDarkMode ? Colors.grey : Colors.green,
-                            ),
-                            child: Icon(
-                              Icons.camera_alt_rounded,
-                              size: 40,
-                              color: isDarkMode ? Colors.grey : Colors.green, // Icon adapts to theme
+                              child: Icon(
+                                Icons.camera_alt_rounded,
+                                size: 40,
+                                color: isDarkMode ? Colors.grey : Colors.green, // Icon adapts to theme
+                              ),
                             ),
                           ),
-                        ),
                           const SizedBox(width: 10),
                           Flexible(
                             child: ElevatedButton(
-                            onPressed: () async {
-                              String? imageUrl = "";
-                              if (_plantImage != null) {
-                                imageUrl = await _uploadImageToFirebase(_plantImage!);
+                              onPressed: () async {
+                                String? imageUrl = "";
+                                if (_plantImage != null) {
+                                  imageUrl = await _uploadImageToFirebase(_plantImage!);
 
-                                Map<String, dynamic> data = {
-                                  "name": _edtNameController.text,
-                                  "science_name": _edtScienceNameController.text,
-                                  "date": _edtDateController.text,
-                                  "image_url": imageUrl,
-                                };
+                                  Map<String, dynamic> data = {
+                                    "name": _edtNameController.text,
+                                    "science_name": _edtScienceNameController.text,
+                                    "date": _edtDateController.text,
+                                    "image_url": imageUrl,
+                                  };
 
-                                dbRef.child("Plants").push().set(data).then((value) {
-                                  if (mounted) {
-                                    Navigator.of(context).pop();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
+                                  dbRef.child("Plants").push().set(data).then((value) {
+                                    if (mounted) {
+                                      Navigator.of(context).pop();
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
                                           content: Text("Plant details updated successfully"),
-                                      ),
-                                    );
-                                  }
-                                }).catchError((error) {
-                                  if (mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
+                                        ),
+                                      );
+                                    }
+                                  }).catchError((error) {
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
                                           content: Text("Failed to update plant details: $error"),
-                                      ),
-                                    );
-                                  }
-                                });
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Modern button padding
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10), // Rounded button corners
+                                        ),
+                                      );
+                                    }
+                                  });
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Modern button padding
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10), // Rounded button corners
+                                ),
+                                foregroundColor: Colors.white,
+                                backgroundColor: isDarkMode
+                                    ? Colors.grey.shade600
+                                    : Colors.green,
+                                elevation: 5, // Button color adapted to theme
                               ),
-                              foregroundColor: Colors.white,
-                              backgroundColor: isDarkMode
-                                  ? Colors.grey.shade600
-                                  : Colors.green,
-                              elevation: 5, // Button color adapted to theme
+                              child: const Text(
+                                "Save plant",
+                                style: TextStyle(fontSize: 16.0),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                            child: const Text(
-                              "Save plant",
-                              style: TextStyle(fontSize: 16.0),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
                           ),
                         ],
                       ),
@@ -514,13 +518,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-            data: ThemeData.light().copyWith(
-              primaryColor: Colors.green,
-              hintColor: Colors.green,
-              colorScheme: const ColorScheme.light(primary: Colors.green),
-              buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
-            ),
-            child: child ?? Container(),
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.green,
+            hintColor: Colors.green,
+            colorScheme: const ColorScheme.light(primary: Colors.green),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child ?? Container(),
         );
       },
     );

@@ -1,6 +1,9 @@
 {
   "project_info": {
     "project_number": "545786364087",
+
+    "firebase_url": "https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app",
+
     "project_id": "plant-friends-app",
     "storage_bucket": "plant-friends-app.appspot.com"
   },
@@ -12,7 +15,22 @@
           "package_name": "com.hwr.plant_friends"
         }
       },
-      "oauth_client": [],
+
+      "oauth_client": [
+        {
+          "client_id": "545786364087-mibgfd0nu010focnr50ei55qpi9osdd8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "46c63fc593ecdddc5981ffccedc14167fd89421a"
+          }
+        },
+        {
+          "client_id": "545786364087-94cdafnfhgb3bp98b758cd8u8crgdj2k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+
       "api_key": [
         {
           "current_key": "AIzaSyAx_EwH-Dc0oXBcaxPqtKncLtyf-WqWYx0"
@@ -20,7 +38,20 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545786364087-94cdafnfhgb3bp98b758cd8u8crgdj2k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "545786364087-tdpucccaldqjv7l39oc014spmi8br8mq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hwr.plantFriends"
+              }
+            }
+          ]
         }
       }
     }

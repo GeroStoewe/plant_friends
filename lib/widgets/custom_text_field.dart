@@ -5,13 +5,16 @@ class CustomTextField extends StatelessWidget {
   final IconData icon;
   final String hintText;
   final bool obscureText;
+  final Widget? suffixIcon;
 
-  const CustomTextField({
+
+  CustomTextField({
     Key? key,
     required this.controller,
     required this.icon,
     required this.hintText,
-    required this.obscureText
+    required this.obscureText,
+    this.suffixIcon,
 });
 
   @override
@@ -37,7 +40,8 @@ class CustomTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               borderSide: BorderSide(color: Theme.of(context).focusColor)
           ),
-        hintText: hintText
+        hintText: hintText,
+        suffixIcon: suffixIcon
       ),
     );
   }

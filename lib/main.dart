@@ -2,6 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:plant_friends/themes/dark_theme.dart';
+import 'package:plant_friends/themes/light_theme.dart';
+import 'package:plant_friends/welcomePages/test_auth_page.dart';
+
 import 'package:plant_friends/authentication/auth_page.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -20,6 +24,7 @@ import 'package:plant_friends/plants/my_plants_page.dart';
 import 'Services/firebase_api.dart';
 import 'calendar/calendar_page.dart';
 import 'account/account_page.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,8 +52,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
-
-      home: const AuthPage(),
+      home: const TestAuthPage(),
 
     );
   }

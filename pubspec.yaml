@@ -84,6 +84,7 @@ flutter:
   assets:
 
     - lib/authentication/images/
+    - lib/welcomePages/images/
     - lib/profileImages/
     - lib/plantWiki/wiki_images/category/
     - lib/plantWiki/wiki_images/light/

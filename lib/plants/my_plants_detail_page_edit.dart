@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../calendar/calendar_functions.dart';
@@ -72,16 +73,35 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return const Center(
-              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),),
+              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen)),
             );
           },
         );
 
-        // Delete plant from database
+        // Get the imageUrl from the plant data
+        String? imageUrl = widget.plant.plantData?.imageUrl;  // Assuming the imageUrl is stored under 'imageUrl'
+
+        // If there is an image URL, delete the image from Firebase Storage
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          try {
+            await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+            print("Image at $imageUrl deleted from Firebase Storage.");
+          } catch (e) {
+            print("Error deleting image from Firebase Storage: $e");
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error deleting image from storage: $e')),
+            );
+          }
+        }
+
+        // Delete the plant from the database
         await dbRef.child("Plants").child(widget.plant.key!).remove();
 
         // Delete associated calendar events
         await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
+
+        // Delete photo journal entries for this plant (if applicable)
+        await _deleteAllEntriesForPlantAndImages(widget.plant.key!);
 
         // Hide the loading indicator
         if (mounted) {
@@ -105,6 +125,67 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       }
     }
   }
+
+  Future<void> _deleteAllEntriesForPlantAndImages(String plantID) async {
+    try {
+      // Abfrage der PhotoJournal-Einträge, die der plantID entsprechen
+      final snapshot = await dbRef
+          .child('PhotoJournal')
+          .orderByChild('plantID')
+          .equalTo(plantID)
+          .once();
+
+      if (snapshot.snapshot.value != null) {
+        Map<dynamic, dynamic> entries = snapshot.snapshot.value as Map<dynamic, dynamic>;
+
+        // Durch alle Einträge iterieren und löschen
+        for (var entryKey in entries.keys) {
+          Map<dynamic, dynamic> entry = entries[entryKey];
+          String? imageUrl = entry['url'];  // URL des Bildes aus dem Eintrag extrahieren
+          print("Image URL: $imageUrl");
+
+          if (imageUrl != null && imageUrl.isNotEmpty) {
+            try {
+              // Extrahiere nur den relativen Pfad
+              final filePath = Uri.parse(imageUrl).pathSegments.last;  // Extrahiere den letzten Teil des Pfades
+
+              // Überprüfe, ob das Bild noch existiert
+              final ref = FirebaseStorage.instance.ref(filePath);
+              await ref.getMetadata();  // Wenn dies erfolgreich ist, existiert die Datei
+
+              // Lösche das Bild aus Firebase Storage
+              await ref.delete();
+              print("Image at $filePath deleted from Firebase Storage.");
+            } catch (e) {
+              print("Error deleting image from Firebase Storage: $e");
+            }
+          }
+
+          // Lösche den Eintrag aus der Realtime Database
+          await dbRef.child('PhotoJournal').child(entryKey).remove();
+          print("Entry with key $entryKey deleted from Realtime Database.");
+        }
+      } else {
+        print("No entries found for plantID: $plantID");
+      }
+    } catch (e) {
+      print("Error deleting entries and images for plantID $plantID: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error deleting entries and images: $e')),
+      );
+    }
+  }
+
+
+// Hilfsfunktion zum Extrahieren des Pfades aus der Bild-URL
+  String _extractImagePathFromUrl(String imageUrl) {
+    // Beispiel: https://firebasestorage.googleapis.com/v0/b/YOUR_PROJECT_ID.appspot.com/o/images%2Fyour_image.jpg?alt=media
+    Uri uri = Uri.parse(imageUrl);
+    String path = uri.path;  // Der Pfad sollte nach '/o/' kommen und bis zum Ende reichen
+    path = path.replaceFirst('/o/', '').replaceAll('%2F', '/');  // Entschlüssele URL-kodierte Zeichen
+    return path;
+  }
+
 
 
   Future<void> _updatePlant(BuildContext context) async {

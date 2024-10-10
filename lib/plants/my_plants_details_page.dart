@@ -90,7 +90,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
   }
 
   Container backgroundImageAndHeader(Size size, BuildContext context) {
-    String imageUrl = widget.plant.plantData!.image ?? '';
+    String imageUrl = widget.plant.plantData!.imageUrl ?? '';
     String defaultImageUrl = 'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
 
     return Container(

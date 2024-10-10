@@ -14,7 +14,7 @@ class PlantData {
   String? light;
   String? difficulty;
   String? type;
-  String? image;
+  String? imageUrl;
 
 
 
@@ -28,6 +28,6 @@ class PlantData {
     light = json["light"];
     difficulty = json["difficulty"];
     type = json["type"];
-    image = json["image_url"];
+    imageUrl = json["image_url"];
   }
 }

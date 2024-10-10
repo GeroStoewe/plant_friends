@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import 'package:intl/intl.dart';
 import 'my_plants_details_page.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+
+import 'package:line_icons/line_icons.dart';
 import 'plant.dart';
 
 class MyPlantsPage extends StatefulWidget {
@@ -24,12 +24,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL:
-        'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+    'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
   ).ref();
+  final FirebaseStorage storage = FirebaseStorage.instance;
 
   final TextEditingController _edtNameController = TextEditingController();
   final TextEditingController _edtScienceNameController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _edtDateController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
@@ -43,14 +44,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     super.initState();
 
     _searchController.addListener(_onSearchChanged);
-    _plantSubscription = dbRef.child("Plants").onValue.listen((event) {
+    _plantSubscription = dbRef
+        .child("Plants")
+        .onValue
+        .listen((event) {
       final List<Plant> updatedPlantList = [];
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
 
       if (data != null) {
         data.forEach((key, value) {
           PlantData plantData =
-              PlantData.fromJSON(value as Map<dynamic, dynamic>);
+          PlantData.fromJSON(value as Map<dynamic, dynamic>);
           updatedPlantList.add(Plant(key: key, plantData: plantData));
         });
       }
@@ -70,122 +74,194 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     super.dispose();
   }
 
-  void _onSearchChanged(){
+  void _onSearchChanged() {
     setState(() {
-      filteredPlantList = plantList.where((plant) => plant.plantData!.name!.toLowerCase().contains(_searchController.text.toLowerCase()) ||
-          plant.plantData!.scienceName!.toLowerCase().contains(_searchController.text.toLowerCase())).toList();
+      filteredPlantList = plantList.where((plant) =>
+      plant.plantData!.name!.toLowerCase().contains(
+          _searchController.text.toLowerCase()) ||
+          plant.plantData!.scienceName!.toLowerCase().contains(
+              _searchController.text.toLowerCase())).toList();
     });
   }
+
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
 
-    final cameraStatus = await Permission.camera.request();
-    final galleryStatus = await Permission.photos.request();
-    
-    if (mounted && cameraStatus.isGranted && galleryStatus.isGranted) {
-      final selectedSource = await showModalBottomSheet<ImageSource>(
-          context: context,
-          builder: (BuildContext context) {
-            return Wrap(
+    final selectedSource = await showModalBottomSheet<ImageSource>(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(25)),
+        ),
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                ListTile(
-                  leading: const Icon(Icons.camera_alt_rounded),
-                  title: const Text("Take a photo of your plant"),
-                  onTap: () => Navigator.of(context).pop(ImageSource.camera),
-            ),
-                ListTile(
-                  leading: const Icon(Icons.photo_library_rounded),
-                  title: const Text("Choose a picture from your gallery"),
-                  onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+                const Text(
+                  "Choose Image Source",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildOptionCard(
+                      icon: Icons.camera_alt_rounded,
+                      label: "Camera",
+                      onTap: () => Navigator.of(context).pop(ImageSource.camera),
+                    ),
+                    _buildOptionCard(
+                      icon: Icons.photo_library_rounded,
+                      label: "Gallery",
+                      onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
               ],
-            );
-          },
-      );
-      if (mounted && selectedSource != null) {
-        final pickedFile = await picker.pickImage(source: selectedSource);
-        if (pickedFile != null) {
-          setState(() {
-            _plantImage = File(pickedFile.path);
-          });
+            ),
+          );
         }
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(
-              "Permissions are required to access camera and gallery")),
-        );
+    );
+
+    if (mounted && selectedSource != null) {
+      final pickedFile = await picker.pickImage(source: selectedSource);
+      if (pickedFile != null) {
+        setState(() {
+          _plantImage = File(pickedFile.path); // Save the selected image
+        });
       }
     }
   }
-/*
-  void deletePlant(Plant plant) {
-    dbRef.child("Plants").child(plant.key!).remove().then((value) {
-      if (mounted) {
-        Navigator.pop(context, true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Plant deleted successfully')),
-        );
-        setState(() {
-          plantList.remove(plant);
-        });
-      }
-    }).catchError((error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete plant: $error')),
-        );
-      }
-    });
+
+  Widget _buildOptionCard({required IconData icon, required String label, required Function() onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Rounded edges
+        ),
+        elevation: 4, // Shadow to make it stand out
+        child: Padding(
+          padding: const EdgeInsets.all(16.0), // Padding inside the card
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Ensure the icon and text are compact
+            children: [
+              Icon(
+                icon,
+                size: 50,
+                color: const Color(0xFF388E3C), // Use accent color for the icons
+              ),
+              const SizedBox(height: 10), // Space between icon and text
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
-*/
+
+
+  Future<String?> _uploadImageToFirebase(File imageFile) async {
+    try {
+      print("Upload startet...");
+
+      // Erstelle einen einzigartigen Dateinamen für das Bild
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref = FirebaseStorage.instance.ref().child('plants/$fileName');
+
+      // Metadaten setzen (optional, aber empfohlen)
+      final SettableMetadata metadata = SettableMetadata(
+        contentType: 'image/jpeg', // Stelle sicher, dass du den richtigen Content-Typ angibst
+      );
+
+      // Datei zu Firebase Storage hochladen mit Metadaten
+      UploadTask uploadTask = ref.putFile(imageFile, metadata);
+
+      // Uploadfortschritt überwachen (optional)
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        double progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        print("Uploadfortschritt: $progress%");
+      });
+
+      // Warten, bis der Upload abgeschlossen ist
+      await uploadTask;
+
+      // Download-URL abrufen und zurückgeben
+      String downloadUrl = await ref.getDownloadURL();
+
+      print("Upload abgeschlossen! Download-URL: $downloadUrl");
+      return downloadUrl;
+
+    } catch (e) {
+      print("Fehler beim Hochladen des Bildes: $e");
+      return null; // Gib null zurück, falls ein Fehler auftritt
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "My Plants",
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: Theme
+              .of(context)
+              .textTheme
+              .headlineMedium,
         ),
       ),
       body: Column(
         children: [
           Padding(padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              labelText: "Search your plants",
-              labelStyle: const TextStyle(color: Colors.black),
-              prefixIcon: const Icon(Icons.search),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    color: Colors.green,
-                    width: 2.0
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: "Find your plants",
+                labelStyle: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black),
+                prefixIcon: const Icon(Icons.search, color: Colors.green),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      color: Colors.green,
+                      width: 2.0
+                  ),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              // Change the border color when the search bar is focused
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    color: Colors.green,
-                    width: 2.0
+                // Change the border color when the search bar is focused
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      color: Colors.green,
+                      width: 2.0
+                  ),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                borderRadius: BorderRadius.circular(12.0),
               ),
             ),
           ),
-        ),
           Expanded(
             child: filteredPlantList.isEmpty
-                ? const Center(child:Text("No plants available to be searched"))
+                ? const Center(
+                child: Text("No plants available to be searched"))
                 : ListView.builder(
-                itemCount: filteredPlantList.length,
-                itemBuilder: (context, index) {
-                  return plantWidget(filteredPlantList[index]);
-                },
-              ),
+              itemCount: filteredPlantList.length,
+              itemBuilder: (context, index) {
+                return plantWidget(filteredPlantList[index]);
+              },
+            ),
           )
         ],
       ),
@@ -195,106 +271,150 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         },
         child: Container(
           width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              color: Color(0xFF388E3C),
-              shape: BoxShape.circle,
-            ),
-        child: const Center(
-              child: Text(
-                '+',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w200,
-              color: Colors.black,
+          height: 60,
+          decoration: const BoxDecoration(
+            color: Color(0xFF388E3C),
+            shape: BoxShape.circle,
+          ),
+          child: const Center(
+            child: Text(
+              '+',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w200,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
       ),
-    ),
     );
   }
 
   void plantDialog() {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return Dialog(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: _edtNameController,
-                  decoration: const InputDecoration(labelText: "Name"),
-                ),
-                TextField(
-                  controller: _edtScienceNameController,
-                  decoration:
+        return StatefulBuilder(
+          builder: (context, setState) {  // Use StatefulBuilder to allow setState within the dialog
+            return Dialog(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: _edtNameController,
+                      decoration: const InputDecoration(labelText: "Name"),
+                    ),
+                    TextField(
+                      controller: _edtScienceNameController,
+                      decoration:
                       const InputDecoration(labelText: "Scientific Name"),
-                ),
-                GestureDetector(
-                  onTap: () => _selectDate(context),
-                  child: AbsorbPointer(
-                    child: TextField(
-                      controller: _edtDateController,
-                      decoration: const InputDecoration(
-                        labelText: "Date",
-                        suffixIcon: Icon(Icons.calendar_today),
+                    ),
+                    GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: AbsorbPointer(
+                        child: TextField(
+                          controller: _edtDateController,
+                          decoration: const InputDecoration(
+                            labelText: "Date",
+                            suffixIcon: Icon(Icons.calendar_today),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 10),
+                    const SizedBox(height: 10),
+                    // Show the selected image immediately after selection
+                    _plantImage != null
+                        ? Image.file(
+                      _plantImage!,
+                      height: 200,
+                    )
+                        : Text(
+                      "No photo selected yet",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: isDarkMode ? Colors.grey : Colors.black,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: () async {
+                        await _pickImage();
+                        setState(() {});  // Rebuild the dialog when the image is selected
+                      },
+                      icon: const Icon(Icons.camera_alt_rounded),
+                      label: Text(
+                        "Add a new plant photo",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: isDarkMode ? Colors.grey : Colors.black,
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor:
+                        isDarkMode ? Colors.grey : Colors.green,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        // Upload the image to Firebase and get the URL
+                        String? imageUrl = "";
+                        if (_plantImage != null) {
+                          imageUrl = await _uploadImageToFirebase(_plantImage!);
 
-                _plantImage != null ? Image.file(
-                  _plantImage!,
-                  height: 200,
-                )
-                : const Text("No image selected yet"),
+                          // Save plant details to Firebase Realtime Database
+                          Map<String, dynamic> data = {
+                            "name": _edtNameController.text,
+                            "science_name": _edtScienceNameController.text,
+                            "date": _edtDateController.text,
+                            "image_url": imageUrl, // Include the image URL
+                          };
 
-                TextButton.icon(
-                  onPressed: _pickImage,
-                  icon: const Icon(Icons.camera_alt_rounded),
-                  label: const Text("Add a plant image"),
+                          dbRef.child("Plants").push().set(data).then((value) {
+                            if (mounted) {
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "Plant details updated successfully")),
+                              );
+                            }
+                          }).catchError((error) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        "Failed to update plant details: $error")),
+                              );
+                            }
+                          });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: isDarkMode
+                            ? Colors.grey.shade600
+                            : Colors.green,
+                      ),
+                      child: const Text(
+                        "Save new plant",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Map<String, dynamic> data = {
-                      "name": _edtNameController.text,
-                      "science_name": _edtScienceNameController.text,
-                      "date": _edtDateController.text,
-                    };
-
-                    dbRef.child("Plants").push().set(data).then((value) {
-                      if (mounted) {
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content:
-                                  Text("Plant details updated successfully")),
-                        );
-                      }
-                    }).catchError((error) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(
-                                  "Failed to update plant details: $error")),
-                        );
-                      }
-                    });
-                  },
-                  child: const Text("Save new plant"),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selectedDate = await showDatePicker(
@@ -312,13 +432,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 
   Widget plantWidget(Plant plant) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () async {
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
-                MyPlantsDetailsPage(plant: plant, dbRef: dbRef),
+                MyPlantsDetailsPage(
+                    plant: plant, dbRef: dbRef),
           ),
         );
 
@@ -327,28 +451,68 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
+            if (!isDarkMode) ...[
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 3,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ] else
+              ...[
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 3,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
           ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Icon(FluentIcons.camera_24_regular,
-                size: 50,
-                color: Color(0xFF388E3C),
-                semanticLabel: "photo",
+            GestureDetector(
+              onTap: () async {
+                await _pickImage();
+                if (_plantImage != null) {
+                  String? imageUrl = await _uploadImageToFirebase(_plantImage!);
+                  setState(() {
+                    plant.plantData!.imageUrl = imageUrl;
+                  });
+                }
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: plant.plantData!.imageUrl != null ? ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Image.network(
+                        plant.plantData!.imageUrl!,
+                        fit: BoxFit.cover,
+                      ),
+                    ) : const Icon(FluentIcons.camera_24_regular,
+                      size: 50,
+                      color: Color(0xFF388E3C),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(width: 15),
             Expanded(
@@ -357,8 +521,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 children: [
                   Text(
                     plant.plantData!.name!,
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.white : Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -366,21 +530,25 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   const SizedBox(height: 10),
                   Text(
                     plant.plantData!.scienceName!,
-                    style: const TextStyle(
-                      color: Colors.grey,
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.grey.shade400 : Colors.grey,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(LineIcons.calendarWithWeekFocus,
-                          size: 16, color: Colors.grey),
+                      Icon(
+                          LineIcons.calendarWithWeekFocus,
+                          size: 16,
+                          color: isDarkMode ? const Color(0xFFB0BEC5) : Colors
+                              .grey),
                       const SizedBox(width: 5),
                       Text(
                         plant.plantData!.date!,
-                        style: const TextStyle(
-                          color: Colors.grey,
+                        style: TextStyle(
+                          color: isDarkMode ? const Color(0xFFB0BEC5) : Colors
+                              .grey,
                         ),
                       ),
                     ],
@@ -388,19 +556,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 ],
               ),
             ),
-            IconButton(icon: const Icon(
-              Icons.delete,
-              color: Colors.grey,
-            ),
-            onPressed: () {},
-            ),
           ],
         ),
       ),
     );
   }
 }
-/// TODO: Add a photo to solve dark background color in dark mode.
-/// TODO: add photo function when you call onTap function. Use icon button or elevated button
-/// TODO: add edit symbol to the plant widget
-/// TODO: change the structure of delete and edit functions.
+/// TODO: change the structure of code according to OOP
+/// TODO: photo upload should be optional
+/// DONE TODO: color of plant widget for dark mode
+/// Done TODO: color of plant dialog modified for dark mode and light mode

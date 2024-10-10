@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:plant_friends/pages/edit_profile_page.dart';
 import 'package:plant_friends/quiz/quiz_test_page.dart';
@@ -23,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   // Variables
   String? displayName;
   String? email;
+  String? photoURL;
   bool isLoading = false;
   bool isDataLoaded = false;
 
@@ -58,6 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           displayName = user!.displayName ?? 'Anonymous';
           email = user.email;
+          photoURL = user.photoURL;
           isLoading = false;
           isDataLoaded = true;
         });
@@ -132,8 +137,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                       isDarkMode ? darkSeaGreen : darkGreyGreen)),
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.asset(
-                                      "lib/profileImages/1_plant_profile.jpg")),
+                                  child: photoURL != null
+                                      ? Image.network(
+                                    photoURL!, // Show the network image if available
+                                    fit: BoxFit.cover,
+                                  )
+                                      : Image.asset(
+                                      "lib/profileImages/1_plant_profile.jpg"), // Default image
+                              ),
                             ),
                           ),
                           Positioned(

@@ -87,114 +87,121 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _toTitleCase('${widget.filterType}: ${widget.filterValue ?? ''}'), // Convert to title case
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    return ScrollbarTheme(
+      data: ScrollbarThemeData(
+        thumbColor: WidgetStateProperty.all(seaGreen), // Set scrollbar thumb color to green
+        trackColor: WidgetStateProperty.all(Colors.grey.shade300), // Set track color
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),))
-          : Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomTextField(
-              controller: searchController,
-              icon: Icons.search,
-              hintText: 'Search by name or scientific name',
-              obscureText: false,
-            ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            _toTitleCase('${widget.filterType}: ${widget.filterValue ?? ''}'), // Convert to title case
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          Expanded(
-            child: filteredPlantData.isEmpty
-                ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'No plants match this filter.',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5, // Setzt die Breite des Buttons auf 40% der Bildschirmbreite
-                      child: CustomButtonOutlinedSmall(
-                        text: 'Request to Add a Plant',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RequestPlantFormPage(),
-                            ),
-                          );
-                        },
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        ),
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),))
+            : Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomTextField(
+                controller: searchController,
+                icon: Icons.search,
+                hintText: 'Search by name or scientific name',
+                obscureText: false,
+              ),
+            ),
+            Expanded(
+              child: filteredPlantData.isEmpty
+                  ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'No plants match this filter.',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5, // Set button width to 50% of screen width
+                        child: CustomButtonOutlinedSmall(
+                          text: 'Request to Add a Plant',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RequestPlantFormPage(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  ),
-
-                ],
-              ),
-            )
-                : ListView.builder(
-              itemCount: filteredPlantData.length,
-              itemBuilder: (context, index) {
-                final plant = filteredPlantData[index];
-                return ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8), // Rounded corners
-                    child: plant['image_url'] != null
-                        ? Image.network(
-                      plant['image_url'],
-                      width: 65,
-                      height: 65,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        } else {
-                          return SizedBox(
-                            width: 65,
-                            height: 65,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-                                    : null,
-                                valueColor: const AlwaysStoppedAnimation<Color>(seaGreen),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.error, color: Colors.red);
-                      },
-                    )
-                        : const Icon(Icons.image_not_supported),
-                  ),
-                  title: Text(plant['name'] ?? 'No name'),
-                  subtitle: Text(
-                    '${plant['scientifical_name'] ?? 'N/A'}',
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PlantWikiDetailPage(plant: plant),
+                  ],
+                ),
+              )
+                  : Scrollbar(
+                child: ListView.builder(
+                  itemCount: filteredPlantData.length,
+                  itemBuilder: (context, index) {
+                    final plant = filteredPlantData[index];
+                    return ListTile(
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(8), // Rounded corners
+                        child: plant['image_url'] != null
+                            ? Image.network(
+                          plant['image_url'],
+                          width: 65,
+                          height: 65,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return SizedBox(
+                                width: 65,
+                                height: 65,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                                        : null,
+                                    valueColor: const AlwaysStoppedAnimation<Color>(seaGreen),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.error, color: Colors.red);
+                          },
+                        )
+                            : const Icon(Icons.image_not_supported),
                       ),
+                      title: Text(plant['name'] ?? 'No name'),
+                      subtitle: Text(
+                        '${plant['scientifical_name'] ?? 'N/A'}',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlantWikiDetailPage(plant: plant),
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

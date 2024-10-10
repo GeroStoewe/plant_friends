@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
+import '../widgets/custom_snackbar.dart';
 
 class RequestPlantFormPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -22,10 +23,8 @@ class RequestPlantFormPage extends StatelessWidget {
     final notes = notesController.text;
 
     if (email.isEmpty || plantName.isEmpty) {
-      // Show an error if email or plant name is empty
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email and Plant Name are required')),
-      );
+      CustomSnackbar snackbar = CustomSnackbar(context);
+      snackbar.showMessage('Email and Plant name are required', MessageType.info);
       return;
     }
 
@@ -36,10 +35,8 @@ class RequestPlantFormPage extends StatelessWidget {
         'plantName': plantName,
         'notes': notes,
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Request submitted successfully')),
-      );
+      CustomSnackbar snackbar = CustomSnackbar(context);
+      snackbar.showMessage('Request submitted successfully', MessageType.success);
 
       // Clear the form fields
       emailController.clear();

@@ -19,7 +19,7 @@ class _CalendarPageState extends State<CalendarPage> {
   late DateTime _focusedDay;
   late DateTime _firstDay;
   late DateTime _lastDay;
-  late DateTime _selectedDay;
+  late DateTime? _selectedDay;
   late CalendarFormat _calendarFormat;
   late Map<DateTime, List<CalendarEvent>> _events;
 
@@ -37,7 +37,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _focusedDay = DateTime.now();
     _firstDay = DateTime.now().subtract(const Duration(days: 365));
     _lastDay = DateTime.now().add(const Duration(days: 365));
-    _selectedDay = DateTime.now();
+    _selectedDay = null; // Set to null initially
     _calendarFormat = CalendarFormat.month;
     _loadFirestoreEvents();
   }
@@ -52,13 +52,14 @@ class _CalendarPageState extends State<CalendarPage> {
         .where('date', isGreaterThanOrEqualTo: firstDay)
         .where('date', isLessThanOrEqualTo: lastDay)
         .withConverter(
-        fromFirestore: CalendarEvent.fromFirestore,
-        toFirestore: (event, options) => event.toFirestore())
+            fromFirestore: CalendarEvent.fromFirestore,
+            toFirestore: (event, options) => event.toFirestore())
         .get();
 
     for (var doc in snap.docs) {
       final event = doc.data();
-      final day = DateTime.utc(event.date.year, event.date.month, event.date.day);
+      final day =
+          DateTime.utc(event.date.year, event.date.month, event.date.day);
       if (_events[day] == null) {
         _events[day] = [];
       }
@@ -71,15 +72,18 @@ class _CalendarPageState extends State<CalendarPage> {
     return _events[day] ?? [];
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Calendar',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
@@ -112,23 +116,26 @@ class _CalendarPageState extends State<CalendarPage> {
                 _focusedDay = focusedDay;
               });
             },
-            calendarStyle: const CalendarStyle(
-              weekendTextStyle: TextStyle(
+            calendarStyle: CalendarStyle(
+              weekendTextStyle: const TextStyle(
                 color: darkSeaGreen,
               ),
-              selectedDecoration: BoxDecoration(
+              selectedDecoration: const BoxDecoration(
                 color: seaGreen,
                 shape: BoxShape.circle,
               ),
-              selectedTextStyle: TextStyle(
+              selectedTextStyle: const TextStyle(
                 color: Colors.white,
               ),
               todayDecoration: BoxDecoration(
-                color: darkSeaGreen,
+                border: Border.all(
+                  color: darkSeaGreen, // Farbe der Umrandung
+                  width: 2, // Breite der Umrandung
+                ),
                 shape: BoxShape.circle,
+                color: Colors.transparent, // Hintergrund transparent
               ),
-              todayTextStyle: TextStyle(
-                color: Colors.white,
+              todayTextStyle: const TextStyle(
               ),
             ),
             calendarBuilders: CalendarBuilders(
@@ -138,23 +145,46 @@ class _CalendarPageState extends State<CalendarPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     headerDateFormat.format(day),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 );
               },
             ),
           ),
           Expanded(
-            child: _getEventsForTheDay(_selectedDay).isEmpty
+            child: _selectedDay == null
                 ? const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(45.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Please select a date to see the events.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16, fontStyle: FontStyle.italic),
+                  ),
+                  SizedBox(height: 16),
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 40,
+                    color: seaGreen,
+                  ),
+                ],
+              ),
+            )
+                : _getEventsForTheDay(_selectedDay!).isEmpty
+                ? const Padding(
+              padding: EdgeInsets.all(45.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     "All your plants are happy. \nThere is nothing for you to do on this day.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                    style: TextStyle(
+                        fontSize: 16, fontStyle: FontStyle.italic),
                   ),
                   SizedBox(height: 16),
                   Icon(
@@ -167,7 +197,7 @@ class _CalendarPageState extends State<CalendarPage> {
             )
                 : SingleChildScrollView(
               child: Column(
-                children: _getEventsForTheDay(_selectedDay)
+                children: _getEventsForTheDay(_selectedDay!)
                     .map((event) => EventItem(
                   event: event,
                   onStatusChanged: _loadFirestoreEvents,
@@ -180,4 +210,5 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+
 }

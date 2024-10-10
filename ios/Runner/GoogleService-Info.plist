@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>545786364087-tdpucccaldqjv7l39oc014spmi8br8mq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.545786364087-tdpucccaldqjv7l39oc014spmi8br8mq</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>545786364087-mibgfd0nu010focnr50ei55qpi9osdd8.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDQtWGAPjE0cvINWp5lLB28oLU3rDJfW58</string>
+	<key>GCM_SENDER_ID</key>
+	<string>545786364087</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.hwr.plantFriends</string>
+	<key>PROJECT_ID</key>
+	<string>plant-friends-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>plant-friends-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:545786364087:ios:19aba50c9e659936bbcd32</string>
+	<key>DATABASE_URL</key>
+	<string>https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>

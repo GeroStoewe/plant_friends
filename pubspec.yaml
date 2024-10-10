@@ -40,6 +40,23 @@ dependencies:
   firebase_storage: ^12.3.0
   firebase_auth: ^5.2.1
   google_sign_in: ^6.2.1
+  line_awesome_flutter: ^3.0.1
+  shared_preferences: ^2.3.2
+  provider: ^6.1.2
+  intl: ^0.19.0
+  table_calendar: ^3.0.2
+  image_picker: ^0.8.7+3
+  permission_handler: ^10.2.0
+  http: ^1.2.2
+  curved_labeled_navigation_bar: ^2.0.2
+  line_icons: ^2.0.3
+  fluentui_system_icons: ^1.1.257
+
+  firebase_messaging: ^15.1.3
+  auto_size_text: ^3.0.0
+  cloud_firestore: ^5.4.4
+
+
 
 dev_dependencies:
   flutter_test:
@@ -65,8 +82,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+
     - lib/authentication/images/
     - lib/welcomePages/images/
+    - lib/profileImages/
+    - lib/plantWiki/wiki_images/category/
+    - lib/plantWiki/wiki_images/light/
+    - lib/plantWiki/wiki_images/difficulty/
+    - lib/plantWiki/wiki_images/water/
+    - lib/plantWiki/wiki_images/type/
+    - lib/plantWiki/wiki_images/corner plant/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

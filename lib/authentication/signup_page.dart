@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plant_friends/authentication/square_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
@@ -22,6 +23,7 @@ class _SignupPageState extends State<SignupPage> {
   final passwordController = TextEditingController();
 
   bool isPasswordVisible = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +180,15 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   ),
                 )),
+            if (isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.7),
+                child: Center(
+                  child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor)),
+                ),
+              )
           ],
         ),
       ),
@@ -204,24 +215,32 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
 
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
-            ),
-          );
-        });
+    setState(() {
+      isLoading = true;
+    });
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: usernameController.text, password: passwordController.text);
-      Navigator.pop(context);
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        await user.updateDisplayName(fullnameController.text);
+
+        final prefs = await SharedPreferences.getInstance();
+        final now = DateTime.now().toIso8601String();
+        await prefs.setString('joinDate', now);
+
+        await user.reload();
+        user = FirebaseAuth.instance.currentUser;
+      }
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       showErrorMessage(e.code);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

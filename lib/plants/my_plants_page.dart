@@ -229,7 +229,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         ),
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         elevation: 2,
-        centerTitle: true,
       ),
       body: Column(
         children: [

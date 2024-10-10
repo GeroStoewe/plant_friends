@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:plant_friends/pages/edit_profile_page.dart';
+import 'package:plant_friends/quiz/quiz_test_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/themes/theme_provider.dart';
 import 'package:plant_friends/widgets/custom_button.dart';
@@ -187,7 +188,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(height: 5),
                     ProfileMenuButton(
-                      onTap: isLoading ? null : () {},
+                      onTap: isLoading
+                          ? null
+                          : () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                builder: (context) => QuizTestPage()));},
                       text: "Plant Quiz",
                       icon: LineAwesomeIcons.question_circle,
                     ),

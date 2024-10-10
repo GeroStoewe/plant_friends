@@ -6,6 +6,9 @@ class QuizTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Quiz", style: Theme.of(context).textTheme.labelMedium),
+      ),
       body: Center(
         child: Image.asset(
           'lib/quiz/images/ranken.jpg',

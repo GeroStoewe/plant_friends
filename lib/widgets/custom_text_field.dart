@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
 
+
   CustomTextField({
     Key? key,
     required this.controller,

@@ -5,6 +5,7 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
+
       sha256: ddc6f775260b89176d329dee26f88b9469ef46aa3228ff6a0b91caf2b2989692
       url: "https://pub.dev"
     source: hosted
@@ -17,6 +18,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  auto_size_text:
+    dependency: "direct main"
+    description:
+      name: auto_size_text
+      sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -41,6 +50,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      sha256: a0f161b92610e078b4962d7e6ebeb66dc9cce0ada3514aeee442f68165d78185
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.17.5"
+  cloud_firestore_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      sha256: "6a55b319f8d33c307396b9104512e8130a61904528ab7bd8b5402678fca54b81"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.5"
+  cloud_firestore_web:
+    dependency: transitive
+    description:
+      name: cloud_firestore_web
+      sha256: "89dfa1304d3da48b3039abbb2865e3d30896ef858e569a16804a99f4362283a9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.12.5"
   collection:
     dependency: transitive
     description:
@@ -49,6 +82,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      sha256: "7caf6a750a0c04effbb52a676dce9a4a592e10ad35c34d6d2d0e4811160d5670"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4+2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -57,6 +98,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  curved_labeled_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: curved_labeled_navigation_bar
+      sha256: "2404496badcadcb94b6bd0d3a49bfa11a7b952c41c1b2ab917ec8d1450d132e9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   fake_async:
     dependency: transitive
     description:
@@ -65,6 +114,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+
   ffi:
     dependency: transitive
     description:
@@ -105,6 +155,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
+
   firebase_core:
     dependency: "direct main"
     description:
@@ -113,46 +164,57 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
+
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
+
       sha256: f7d7180c7f99babd4b4c517754d41a09a4943a0f7a69b65c894ca5c68ba66315
       url: "https://pub.dev"
     source: hosted
     version: "5.2.1"
+
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
+
       sha256: f4ee170441ca141c5f9ee5ad8737daba3ee9c8e7efb6902aee90b4fbd178ce25
       url: "https://pub.dev"
     source: hosted
     version: "2.18.0"
+
   firebase_database:
     dependency: "direct main"
     description:
       name: firebase_database
+
       sha256: "56934950668fca559fc2ab8efe10c75b2fd4f89aaafcc431aae21c97d8ef49aa"
       url: "https://pub.dev"
     source: hosted
     version: "11.1.2"
+
   firebase_database_platform_interface:
     dependency: transitive
     description:
       name: firebase_database_platform_interface
+
       sha256: "3473ef55674e081d94437ec396302080f0c44b6e30d2803383637d9fd4c10051"
       url: "https://pub.dev"
     source: hosted
     version: "0.2.5+42"
+
   firebase_database_web:
     dependency: transitive
     description:
       name: firebase_database_web
+
       sha256: "4513d6b59e78e685043a05af382a3b65317804cde17efedc935d2aaf6f4cc722"
       url: "https://pub.dev"
     source: hosted
     version: "0.2.6"
+
   firebase_storage:
     dependency: "direct main"
     description:
@@ -161,6 +223,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "12.3.0"
+
   firebase_storage_platform_interface:
     dependency: transitive
     description:
@@ -169,6 +232,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.29"
+
   firebase_storage_web:
     dependency: transitive
     description:
@@ -177,6 +241,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.10.0"
+
   flutter:
     dependency: "direct main"
     description: flutter
@@ -190,6 +255,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      sha256: "9ee02950848f61c4129af3d6ec84a1cfc0e47931abc746b03e7a3bc3e8ff6eda"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.22"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -272,6 +345,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.0"
+
   leak_tracker:
     dependency: transitive
     description:
@@ -304,6 +378,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+
   lints:
     dependency: transitive
     description:
@@ -344,6 +419,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+
   path:
     dependency: transitive
     description:
@@ -456,6 +532,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+
   sky_engine:
     dependency: transitive
     description: flutter
@@ -493,6 +570,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  table_calendar:
+    dependency: "direct main"
+    description:
+      name: table_calendar
+      sha256: "1e3521a3e6d3fc7f645a58b135ab663d458ab12504f1ea7f9b4b81d47086c478"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.9"
   term_glyph:
     dependency: transitive
     description:
@@ -552,3 +637,4 @@ packages:
 sdks:
   dart: ">=3.5.1 <4.0.0"
   flutter: ">=3.22.0"
+

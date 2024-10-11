@@ -13,6 +13,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 import 'package:line_icons/line_icons.dart';
 import 'plant.dart';
+import '../widgets/custom_snackbar.dart';
 
 class MyPlantsPage extends StatefulWidget {
   const MyPlantsPage({super.key});
@@ -267,7 +268,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             child: filteredPlantList.isEmpty
                 ? Center(
 
-                child: Text(
+              child: Text(
                 "No plants available to be searched",
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,
@@ -318,17 +319,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    String? _selectedWater;
-    String? _selectedLight;
-    String? _selectedDifficulty;
-    String? _selectedType;
-
-    // options for the dropdowns
-    List<String> waterOptions = ['Low', 'Medium', 'High'];
-    List<String> lightOptions = ['Direct Light', 'Indirect Light', 'Partial Shade', 'Low Light'];
-    List<String> difficultyOptions = ['Easy', 'Medium', 'Hard'];
-    List<String> typeOptions = ['Cacti/Succulents', 'Tropical Plants', 'Climbing Plants', 'Flowering Plants', 'Trees/Palms', 'Herbs', 'Others'];
-
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -352,15 +342,17 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                       // Show the selected image immediately after selection
                       _plantImage != null
                           ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10), // Rounded corners for image
-                            child: Image.file(
+                        borderRadius: BorderRadius.circular(10), // Rounded corners for image
+
+                        child: Image.file(
                           _plantImage!,
                           height: 200,
                           width: double.infinity, // Make image responsive
                           fit: BoxFit.cover,
-                          ),
+                        ),
                       )
                           : Text(
+
                         "No photo selected yet. Tap the camera icon to upload.",
                         style: TextStyle(
                           fontSize: 16.0,
@@ -424,114 +416,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          //controller:
-                          labelText: 'Water',
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                        ),
-                        value: _selectedWater,
-                        items: waterOptions.map((String water) {
-                          return DropdownMenuItem<String>(
-                            value: water,
-                            child: Text(water),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedWater = newValue; // Update state on selection
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      // Light dropdown
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'Light',
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                        ),
-                        value: _selectedLight,
-                        items: lightOptions.map((String light) {
-                          return DropdownMenuItem<String>(
-                            value: light,
-                            child: Text(light),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedLight = newValue; // Update state on selection
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      // Difficulty dropdown
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'Difficulty',
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                        ),
-                        value: _selectedDifficulty,
-                        items: difficultyOptions.map((String difficulty) {
-                          return DropdownMenuItem<String>(
-                            value: difficulty,
-                            child: Text(difficulty),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedDifficulty = newValue; // Update state on selection
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      // Type dropdown
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'Type',
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                        ),
-                        value: _selectedType,
-                        items: typeOptions.map((String type) {
-                          return DropdownMenuItem<String>(
-                            value: type,
-                            child: Text(type),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedType = newValue; // Update state on selection
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
+
                       // Row containing the Add photo and Save buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space out buttons
@@ -564,37 +449,27 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                               onPressed: () async {
                                 String? imageUrl = "";
                                 if (_plantImage != null) {
-                                imageUrl = await _uploadImageToFirebase(_plantImage!);
-                                } else {
-                                  imageUrl = null;
+                                  imageUrl = await _uploadImageToFirebase(_plantImage!);
 
                                   Map<String, dynamic> data = {
                                     "name": _edtNameController.text,
                                     "science_name": _edtScienceNameController.text,
                                     "date": _edtDateController.text,
-                                    "water": _selectedWater,
-                                    "light": _selectedLight,
-                                    "difficulty":_selectedDifficulty,
-                                    "type":_selectedType,
                                     "image_url": imageUrl,
                                   };
 
                                   dbRef.child("Plants").push().set(data).then((value) {
                                     if (mounted) {
-                                      Navigator.of(context).pop();
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Plant details updated successfully"),
-                                        ),
-                                      );
+                                      CustomSnackbar snackbar = CustomSnackbar(context);
+                                      snackbar.showMessage('Plant details updated successfully', MessageType.success);
+                                      Navigator.pop(context);
                                     }
                                   }).catchError((error) {
                                     if (mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text("Failed to update plant details: $error"),
-                                        ),
-                                      );
+                                      Navigator.pop(context);
+                                      CustomSnackbar snackbar = CustomSnackbar(context);
+                                      snackbar.showMessage('Failed to update plant details: $error', MessageType.error);
+
                                     }
                                   });
                                 }
@@ -643,13 +518,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         return Theme(
           data: isDarkMode ? ThemeData.light().copyWith(
             colorScheme: ColorScheme.dark(
-            primary: Colors.green,
-            surface: Colors.grey[800]!,
-            onSurface: Colors.white,
+              primary: Colors.green,
+              surface: Colors.grey[800]!,
+              onSurface: Colors.white,
             ),
             dialogBackgroundColor: Colors.black,
           )
-          : ThemeData.light().copyWith(
+              : ThemeData.light().copyWith(
             primaryColor: Colors.green,
             hintColor: Colors.green,
             colorScheme: const ColorScheme.light(primary: Colors.green),
@@ -798,4 +673,5 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     );
   }
 }
+
 /// TODO: change the structure of code according to OOP

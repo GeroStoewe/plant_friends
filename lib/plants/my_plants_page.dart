@@ -744,3 +744,14 @@ Widget _buildAddPlantBottomSheet() {
 }
 
 /// TODO: change the structure of code according to OOP
+/// -Each plant (name, scientific name, photo, user) should be saved for specific users in Firebase.
+// Use user ID for plant storage, linking the image URL with the real-time database.
+//
+// -Adding a photo should be optional when saving
+//
+// -Add Dropdown menu on the edit page: Light, Water, Difficulty, Plant Type) without funtions…
+// (--(Watering cycle for the plant: often – medium – rarely. Save data or retrieve plant data from Wikipedia )
+
+/// DONE
+// -open a new scrollable draggable sheet when you press + button instead of plant dialog
+// -While loading images -> show a loading bar.

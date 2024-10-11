@@ -13,6 +13,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 import 'package:line_icons/line_icons.dart';
 import 'plant.dart';
+import '../widgets/custom_snackbar.dart';
 
 class MyPlantsPage extends StatefulWidget {
   const MyPlantsPage({super.key});
@@ -267,7 +268,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             child: filteredPlantList.isEmpty
                 ? Center(
 
-                child: Text(
+              child: Text(
                 "No plants available to be searched",
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,
@@ -343,7 +344,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Rounded corners for image
 
-                            child: Image.file(
+                        child: Image.file(
                           _plantImage!,
                           height: 200,
                           width: double.infinity, // Make image responsive
@@ -351,6 +352,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                         ),
                       )
                           : Text(
+
                         "No photo selected yet. Tap the camera icon to upload.",
                         style: TextStyle(
                           fontSize: 16.0,
@@ -458,20 +460,16 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
                                   dbRef.child("Plants").push().set(data).then((value) {
                                     if (mounted) {
-                                      Navigator.of(context).pop();
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Plant details updated successfully"),
-                                        ),
-                                      );
+                                      CustomSnackbar snackbar = CustomSnackbar(context);
+                                          snackbar.showMessage('Plant details updated successfully', MessageType.success);
+                                          Navigator.pop(context);
                                     }
                                   }).catchError((error) {
                                     if (mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text("Failed to update plant details: $error"),
-                                        ),
-                                      );
+                                      Navigator.pop(context);
+                                      CustomSnackbar snackbar = CustomSnackbar(context);
+                                      snackbar.showMessage('Failed to update plant details: $error', MessageType.error);
+
                                     }
                                   });
                                 }
@@ -675,4 +673,5 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     );
   }
 }
+
 /// TODO: change the structure of code according to OOP

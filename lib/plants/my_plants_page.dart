@@ -207,6 +207,14 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     try {
       print("Upload started...");
 
+      // Get the current user's userId (can be null if the user is not signed in)
+      String? userId = _getUserId();
+
+      if (userId == null) {
+        print("Error: User is not logged in. Cannot upload image.");
+        return null; // Return null or handle the error as needed
+      }
+
       // Create a unique filename for the image
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference ref = FirebaseStorage.instance.ref().child('plants/$fileName');
@@ -214,6 +222,9 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
       // Set metadata (optional, but recommended)
       final SettableMetadata metadata = SettableMetadata(
         contentType: 'image/jpeg', // Make sure to specify the correct content type
+        customMetadata: {
+          'userId': userId,  // Add the userId to the metadata
+        },
       );
 
       // Upload the file to Firebase Storage with metadata

@@ -41,6 +41,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   List<Plant> plantList = [];
   List<Plant> filteredPlantList = [];
   File? _plantImage;
+  String? imageUrl;
 
   // Example function to get the current user's userId (assuming you're using FirebaseAuth)
   String? _getUserId() {
@@ -154,18 +155,30 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(null),
+                  child: const Text("Skip"),
+                ),
               ],
             ),
           );
         }
     );
 
-    if (mounted && selectedSource != null) {
-      final pickedFile = await picker.pickImage(source: selectedSource);
-      if (pickedFile != null) {
+    if (mounted) {
+      if (selectedSource != null) {
+        final pickedFile = await picker.pickImage(source: selectedSource);
+        if (pickedFile != null) {
+          setState(() {
+            _plantImage = File(pickedFile.path); // Save the selected image
+          });
+        }
+        print('Image successfully picked: ${_plantImage?.path}');
+      } else {
         setState(() {
-          _plantImage = File(pickedFile.path); // Save the selected image
+          _plantImage = null; // No image selected
         });
+        print('No image selected');
       }
     }
   }
@@ -203,7 +216,10 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     );
   }
 
-  Future<String?> _uploadImageToFirebase(File imageFile) async {
+  Future<String?> _uploadImageToFirebase(File? imageFile) async {
+    if (imageFile == null) {
+      return null;
+    }
     try {
       print("Upload started...");
 
@@ -517,10 +533,12 @@ Widget _buildAddPlantBottomSheet() {
                                     },
                                   );
 
-                                  String? imageUrl = "";
+                                  String? imageUrl;
                                   if (_plantImage != null) {
-                                    imageUrl =
-                                    await _uploadImageToFirebase(_plantImage!);
+                                  imageUrl =
+                                  await _uploadImageToFirebase(_plantImage!);
+                                  } else {
+                                    imageUrl ="";
 
                                     // Retrieve the userId
                                     String? userId = _getUserId();
@@ -533,7 +551,7 @@ Widget _buildAddPlantBottomSheet() {
                                       "science_name": _edtScienceNameController
                                           .text,
                                       "date": _edtDateController.text,
-                                      "image_url": imageUrl,
+                                      "image_url": imageUrl /*  ?? "" */,
                                       "user_id": userId,
                                     };
 
@@ -557,16 +575,6 @@ Widget _buildAddPlantBottomSheet() {
                                         CustomSnackbar snackbar = CustomSnackbar(context);
                                         snackbar.showMessage('Failed to get userId. Please sign in again.', MessageType.error);
                                       }
-                                    }
-                                  } else {
-                                    if (mounted) {
-                                      Navigator.pop(
-                                          context); // Close loading dialog
-                                      CustomSnackbar snackbar = CustomSnackbar(
-                                          context);
-                                      snackbar.showMessage(
-                                          'Please select an image for the plant.',
-                                          MessageType.info);
                                     }
                                   }
                                 } catch (error) {

@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart'; // To get the current user
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:intl/intl.dart';
-// import 'package:permission_handler/permission_handler.dart'; //optional
-import 'my_plants_details_page.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:line_icons/line_icons.dart';
+
+import 'my_plants_details_page.dart';
 import 'plant.dart';
 import '../widgets/custom_snackbar.dart';
 
@@ -40,6 +41,12 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   List<Plant> plantList = [];
   List<Plant> filteredPlantList = [];
   File? _plantImage;
+
+  // Example function to get the current user's userId (assuming you're using FirebaseAuth)
+  String? _getUserId() {
+    User? user = FirebaseAuth.instance.currentUser; // Get the currently logged-in user
+    return user?.uid; // Return the userId (null if the user is not signed in)
+  }
 
   @override
   void initState() {
@@ -289,14 +296,14 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           Expanded(
             child: filteredPlantList.isEmpty
                 ? Center(
-
-              child: Text(
+                  child: Text(
                 "No plants available to be searched",
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 16,
                 ),
-              ),            )
+              ),
+            )
                 : ListView.builder(
               itemCount: filteredPlantList.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -380,7 +387,7 @@ Widget _buildAddPlantBottomSheet() {
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Rounded corners for image
 
-                        child: Image.file(
+                            child: Image.file(
                           _plantImage!,
                           height: 200,
                           width: double.infinity, // Make image responsive
@@ -504,12 +511,19 @@ Widget _buildAddPlantBottomSheet() {
                                     imageUrl =
                                     await _uploadImageToFirebase(_plantImage!);
 
+                                    // Retrieve the userId
+                                    String? userId = _getUserId();
+
+                                    // Ensure that userId is not null before saving
+                                    if (userId != null) {
+
                                     Map<String, dynamic> data = {
                                       "name": _edtNameController.text,
                                       "science_name": _edtScienceNameController
                                           .text,
                                       "date": _edtDateController.text,
                                       "image_url": imageUrl,
+                                      "user_id": userId,
                                     };
 
                                     await dbRef.child("Plants").push().set(
@@ -525,6 +539,13 @@ Widget _buildAddPlantBottomSheet() {
                                       // Reset the form fields after successfully saving the plant
                                       _resetForm();
                                       Navigator.pop(context);
+                                    }
+                                  } else {
+                                      if (mounted) {
+                                        Navigator.pop(context); // Close loading dialog
+                                        CustomSnackbar snackbar = CustomSnackbar(context);
+                                        snackbar.showMessage('Failed to get userId. Please sign in again.', MessageType.error);
+                                      }
                                     }
                                   } else {
                                     if (mounted) {

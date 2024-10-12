@@ -15,9 +15,10 @@ class PlantData {
   String? difficulty;
   String? type;
   String? imageUrl;
+  String? userId; // to store the user information
 
 
-  PlantData({this.name,this.scienceName, this.date, this.imageUrl});
+  PlantData({this.name,this.scienceName, this.date, this.imageUrl, this.userId,});
 
   PlantData.fromJSON(Map<dynamic,dynamic> json){
     name= json["name"];
@@ -29,5 +30,6 @@ class PlantData {
     difficulty = json["difficulty"];
     type = json["type"];
     imageUrl = json["image_url"];
+    userId = json["user_id"];
   }
 }

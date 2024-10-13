@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
-import 'quiz_overlay.dart';
+import 'quiz_functions.dart';
 
-class QuizTestPage extends StatelessWidget {
+class QuizTestPage extends StatefulWidget {
   const QuizTestPage({super.key});
+
+  @override
+  _QuizTestPageState createState() => _QuizTestPageState();
+}
+
+class _QuizTestPageState extends State<QuizTestPage> {
+  final QuizFunctions quizFunctions = QuizFunctions();
+
+  @override
+  void dispose() {
+    // Beim Verlassen der Seite wird das Quiz automatisch geschlossen
+    quizFunctions.closeQuiz();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +102,11 @@ class QuizTestPage extends StatelessWidget {
             right: 20.0,
             child: FloatingActionButton.extended(
               onPressed: () {
-                showQuizOverlay(context); // Funktion aus quiz_overlay.dart
+                // Quiz wird nur gestartet, wenn noch kein aktives Quiz läuft
+                if (!QuizFunctions.isQuizActive) {
+                  OverlayState overlayState = Overlay.of(context)!;
+                  quizFunctions.showQuestion(context, overlayState);
+                }
               },
               label: Text(
                 'Start Quiz',

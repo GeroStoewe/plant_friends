@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:plant_friends/pages/about_page.dart';
 import 'package:plant_friends/pages/edit_profile_page.dart';
+import 'package:plant_friends/pages/user_information_page.dart';
 import 'package:plant_friends/quiz/quiz_test_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/themes/theme_provider.dart';
@@ -82,29 +84,42 @@ class _ProfilePageState extends State<ProfilePage> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,  // Setzt die AppBar-Farbe auf den Hintergrund
-        elevation: 0,  // Entfernt den Schatten der AppBar
-        title: Text(
-          "Profile",
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: isDarkMode ? Colors.white : Colors.black,  // Dynamische Farbe für Dark und Light Mode
-          ),
-        ),
-        actions: [
-          IconButton(
-              onPressed: isLoading ? null : themeProvider.toggleTheme,
-              color: isDarkMode ? Colors.white : Colors.black,  // Farbe des Icons dynamisch
-              iconSize: 30,
-              icon: Icon(
-                  isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon)),
-        ],
+    return ScrollbarTheme(
+      data: ScrollbarThemeData(
+        thumbColor: WidgetStateProperty.all(seaGreen),
+        // Set scrollbar thumb color to green
+        trackColor:
+            WidgetStateProperty.all(Colors.grey.shade300), // Set track color
       ),
-      body: Stack(
-          children: [
-            RefreshIndicator(
-              onRefresh: loadUserData,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          // Setzt die AppBar-Farbe auf den Hintergrund
+          elevation: 0,
+          // Entfernt den Schatten der AppBar
+          title: Text(
+            "Profile",
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: isDarkMode
+                      ? Colors.white
+                      : Colors
+                          .black, // Dynamische Farbe für Dark und Light Mode
+                ),
+          ),
+          actions: [
+            IconButton(
+                onPressed: isLoading ? null : themeProvider.toggleTheme,
+                color: isDarkMode ? Colors.white : Colors.black,
+                // Farbe des Icons dynamisch
+                iconSize: 28,
+                icon: Icon(
+                    isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon)),
+          ],
+        ),
+        body: Stack(children: [
+          RefreshIndicator(
+            onRefresh: loadUserData,
+            child: Scrollbar(
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -112,38 +127,39 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      const SizedBox(height: 10),
                       GestureDetector(
                         onTap: isLoading
                             ? null
                             : () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfilePage()));
-
-                          loadUserData();
-                        },
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditProfilePage()));
+              
+                                loadUserData();
+                              },
                         child: Stack(children: [
                           SizedBox(
-                            width: 160,
-                            height: 160,
+                            width: 120,
+                            height: 120,
                             child: Container(
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      width: 8,
-                                      color:
-                                      isDarkMode ? darkSeaGreen : darkGreyGreen)),
+                                      width: 6,
+                                      color: isDarkMode
+                                          ? darkSeaGreen
+                                          : darkGreyGreen)),
                               child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: photoURL != null
-                                      ? Image.network(
-                                    photoURL!, // Show the network image if available
-                                    fit: BoxFit.cover,
-                                  )
-                                      : Image.asset(
-                                      "lib/profileImages/1_plant_profile.jpg"), // Default image
+                                borderRadius: BorderRadius.circular(100.0),
+                                child: photoURL != null
+                                    ? Image.network(
+                                        photoURL!,
+                                        // Show the network image if available
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        "lib/profileImages/1_plant_profile.jpg"), // Default image
                               ),
                             ),
                           ),
@@ -151,58 +167,88 @@ class _ProfilePageState extends State<ProfilePage> {
                             bottom: 5,
                             right: 5,
                             child: Container(
-                              width: 45,
-                              height: 45,
+                              width: 35,
+                              height: 35,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  color: isDarkMode ? darkSeaGreen : darkGreyGreen),
+                                  color:
+                                      isDarkMode ? darkSeaGreen : darkGreyGreen),
                               child: Icon(
                                 LineAwesomeIcons.pencil_alt_solid,
-                                size: 28.0,
-                                color: isDarkMode ? Colors.black87 : Colors.white70,
+                                size: 26.0,
+                                color:
+                                    isDarkMode ? Colors.black87 : Colors.white70,
                               ),
                             ),
                           )
                         ]),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Text("$displayName",
                           style: Theme.of(context).textTheme.headlineMedium),
-                      const SizedBox(height: 5),
-                      Text("$email", style: Theme.of(context).textTheme.bodyLarge),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 2),
+                      Text("$email",
+                          style: Theme.of(context).textTheme.bodyLarge),
+                      const SizedBox(height: 25),
                       CustomProfileButton(
                           onPressed: isLoading
                               ? null
                               : () async {
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditProfilePage()));
-
-                            loadUserData();
-                          },
-                          width: 180,
-                          height: 60,
-                          text: "Edit Profile"),
-                      const SizedBox(height: 35),
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditProfilePage()));
+              
+                                  loadUserData();
+                                },
+                          width: 140,
+                          height: 40,
+                          text: "Edit Profile",
+                          color: Theme.of(context).primaryColor),
+                      const SizedBox(height: 20),
                       Divider(
                           thickness: 0.5,
                           color: isDarkMode ? dmDarkGrey : lmLightGrey),
-                      const SizedBox(height: 10),
-
+                      const SizedBox(height: 5),
+              
                       // MENU
                       ProfileMenuButton(
-                        onTap: isLoading ? null : () {},
-                        text: "Settings",
-                        icon: LineAwesomeIcons.cog_solid,
+                        onTap: isLoading
+                            ? null
+                            : () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UserInformationPage()));
+                        },
+                        text: "User Information",
+                        icon: LineAwesomeIcons.user_circle,
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 2),
                       ProfileMenuButton(
                         onTap: isLoading ? null : () {},
                         text: "Plant Wishlist",
                         icon: Icons.local_florist_rounded,
                       ),
+                      const SizedBox(height: 2),
+                      ProfileMenuButton(
+                        onTap: isLoading
+                            ? null
+                            : () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const QuizTestPage()));
+                              },
+                        text: "Plant Quiz",
+                        icon: LineAwesomeIcons.question_circle,
+                      ),
+                      const SizedBox(height: 5),
+                      Divider(
+                          thickness: 0.5,
+                          color: isDarkMode ? dmDarkGrey : lmLightGrey),
                       const SizedBox(height: 5),
                       ProfileMenuButton(
                         onTap: isLoading
@@ -211,21 +257,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => QuizTestPage()));},
-                        text: "Plant Quiz",
-                        icon: LineAwesomeIcons.question_circle,
-                      ),
-                      const SizedBox(height: 10),
-                      Divider(
-                          thickness: 0.5,
-                          color: isDarkMode ? dmDarkGrey : lmLightGrey),
-                      const SizedBox(height: 10),
-                      ProfileMenuButton(
-                        onTap: isLoading ? null : () {},
-                        text: "Information",
+                                  builder: (context) =>
+                                      AboutPage()));
+
+                          loadUserData();
+                        },
+                        text: "About",
                         icon: LineAwesomeIcons.info_circle_solid,
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 2),
                       ProfileMenuButton(
                         onTap: isLoading ? null : logout,
                         text: "Logout",
@@ -238,16 +278,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            if (isLoading)
-              Container(
-                color: Colors.black.withOpacity(0.7),
-                child: Center(
-                  child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).primaryColor)),
-                ),
-              )
-          ]
+          ),
+          if (isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.7),
+              child: Center(
+                child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).primaryColor)),
+              ),
+            )
+        ]),
       ),
     );
   }

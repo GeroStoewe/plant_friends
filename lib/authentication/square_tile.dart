@@ -22,12 +22,13 @@ class SquareTile extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(12.0),
+        height: 80,
         decoration: BoxDecoration(
           border: Border.all(color: isDarkMode ? dmDarkGrey : lmLightGrey),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Image.asset(imagePath, width: 40),
+        child: Image.asset(imagePath, width: 60),
       ),
     );
   }

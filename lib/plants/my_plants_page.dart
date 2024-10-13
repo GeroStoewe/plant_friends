@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../calendar/calendar_functions.dart';
 import 'my_plants_details_page.dart';
 import 'plant.dart';
 import '../widgets/custom_snackbar.dart';
@@ -41,6 +42,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   List<Plant> plantList = [];
   List<Plant> filteredPlantList = [];
   File? _plantImage;
+
+  String? _selectedPlantType;
+  String? _selectedDifficulty;
+  String? _selectedLightRequirement;
+  String? _selectedWaterRequirement;
+
+
 
   // Example function to get the current user's userId (assuming you're using FirebaseAuth)
   String? _getUserId() {
@@ -366,6 +374,38 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 Widget _buildAddPlantBottomSheet() {
   final theme = Theme.of(context);
   final isDarkMode = theme.brightness == Brightness.dark;
+  CalenderFunctions calenderFunctions = CalenderFunctions();
+  bool _isLoadingImage = false; // Add a flag to manage loading state
+  // Liste der Pflanzenarten (kann angepasst werden)
+  List<String> plantTypes = [
+    'Cacti/Succulents',
+    'Tropical Plants',
+    'Climbing Plants',
+    'Flowering Plants',
+    'Trees/Palms',
+    'Herbs',
+    'Others'
+  ];
+  // Liste der Schwierigkeitsgrade
+  List<String> difficulties = [
+    'Easy',
+    'Medium',
+    'Hard',
+  ];
+
+  // Liste der Lichtanforderungen
+  List<String> lightRequirements = [
+    'Direct Light',
+    'Indirect Light',
+    'Partial Shade',
+    'Low Light',
+  ];
+  // Liste der Wasseranforderungen
+  List<String> waterRequirements = [
+    'Low',
+    'Medium',
+    'High',
+  ];
 
   return DraggableScrollableSheet(
       expand: true,
@@ -451,7 +491,7 @@ Widget _buildAddPlantBottomSheet() {
                           child: TextField(
                             controller: _edtDateController,
                             decoration: InputDecoration(
-                              labelText: "Date",
+                              labelText: "Date of purchase",
                               labelStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: isDarkMode ? Colors.white : Colors.black,
@@ -469,6 +509,146 @@ Widget _buildAddPlantBottomSheet() {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      // Dropdown Menu für Pflanzenart
+                      DropdownButtonFormField<String>(
+                        value: _selectedPlantType,
+                        hint: Text(
+                          'Select Plant Type',
+                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
+                        ),
+                        items: plantTypes.map((String type) {
+                          return DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(
+                              type,
+                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedPlantType = newValue; // Update selected type
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                          labelText: "Plant Type",
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+
+                      // Dropdown Menu für Schwierigkeitsgrad
+                      DropdownButtonFormField<String>(
+                        value: _selectedDifficulty,
+                        hint: Text(
+                          'Select Difficulty',
+                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
+                        ),
+                        items: difficulties.map((String difficulty) {
+                          return DropdownMenuItem<String>(
+                            value: difficulty,
+                            child: Text(
+                              difficulty,
+                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedDifficulty = newValue; // Update selected difficulty
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                          labelText: "Difficulty",
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+
+                      // Dropdown Menu für Lichtanforderungen
+                      DropdownButtonFormField<String>(
+                        value: _selectedLightRequirement,
+                        hint: Text(
+                          'Select Light Requirement',
+                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
+                        ),
+                        items: lightRequirements.map((String light) {
+                          return DropdownMenuItem<String>(
+                            value: light,
+                            child: Text(
+                              light,
+                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedLightRequirement = newValue; // Update selected light requirement
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                          labelText: "Light Requirement",
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+
+                      // Dropdown Menu für Wasseranforderungen
+                      DropdownButtonFormField<String>(
+                        value: _selectedWaterRequirement,
+                        hint: Text(
+                          'Select Water Requirement',
+                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
+                        ),
+                        items: waterRequirements.map((String water) {
+                          return DropdownMenuItem<String>(
+                            value: water,
+                            child: Text(
+                              water,
+                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedWaterRequirement = newValue; // Update selected water requirement
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green, width: 2.0),
+                          ),
+                          labelText: "Water Requirement",
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+
 
                       // Row containing the Add photo and Save buttons
                       Row(
@@ -535,10 +715,33 @@ Widget _buildAddPlantBottomSheet() {
                                       "date": _edtDateController.text,
                                       "image_url": imageUrl,
                                       "user_id": userId,
+                                      "water": _selectedWaterRequirement,
+                                      "type": _selectedPlantType,
+                                      "light": _selectedLightRequirement,
+                                      "difficulty": _selectedDifficulty
                                     };
 
-                                    await dbRef.child("Plants").push().set(
-                                        data);
+
+
+                                    // Save plant details to Firebase and get the reference
+                                    DatabaseReference newPlantRef = dbRef.child("Plants").push();
+
+                                      await newPlantRef.set(data);
+                                      String newPlantId = newPlantRef.key!;
+                                    // Call event creation functions
+                                    await calenderFunctions.createNewEventsWatering(
+                                      newPlantId, // Pass the plant ID if available
+                                      _edtNameController.text, // Use plant name
+                                      _selectedWaterRequirement!, // Use selected water requirement
+                                    );
+
+                                    // Assuming a default day interval for fertilizing (e.g., 30 days)
+                                    int fertilizingInterval = 30; // You can change this as needed
+                                    await calenderFunctions.createNewEventsFertilizing(
+                                      newPlantId, // Pass the plant ID if available
+                                      _edtNameController.text, // Use plant name
+                                      fertilizingInterval, // Use the fertilizing interval
+                                    );
 
                                     if (mounted) {
                                       Navigator.pop(context);

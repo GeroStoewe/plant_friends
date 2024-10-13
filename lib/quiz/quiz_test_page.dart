@@ -1,8 +1,72 @@
 import 'package:flutter/material.dart';
-import 'quiz_overlay.dart';
+import 'quiz_overlay.dart'; // Importiere dein Overlay-Handling
 
-class QuizTestPage extends StatelessWidget {
+class QuizTestPage extends StatefulWidget {
   const QuizTestPage({super.key});
+
+  @override
+  _QuizTestPageState createState() => _QuizTestPageState();
+}
+
+class _QuizTestPageState extends State<QuizTestPage> {
+  OverlayEntry? _quizOverlayEntry; // OverlayEntry auf Klassenebene
+
+  // Funktion zum Anzeigen des Overlays
+  void _showQuizOverlay() {
+    if (_quizOverlayEntry != null) {
+      // Falls das Overlay bereits angezeigt wird, entferne es
+      _quizOverlayEntry!.remove();
+      _quizOverlayEntry = null;
+    }
+
+    _quizOverlayEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          top: 100,
+          left: 20,
+          right: 20,
+          child: Material(
+            elevation: 10.0,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "This is a quiz question!",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      _closeQuiz(); // Quiz schließen
+                    },
+                    child: Text("Close Quiz"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    Overlay.of(context)!.insert(_quizOverlayEntry!); // Overlay in den Overlay-Stack einfügen
+  }
+
+  // Funktion zum Schließen des Overlays
+  void _closeQuiz() {
+    _quizOverlayEntry?.remove();
+    _quizOverlayEntry = null;
+  }
+
+  // Wenn die Seite verlassen wird, sicherstellen, dass das Overlay geschlossen wird
+  @override
+  void dispose() {
+    _closeQuiz();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +79,9 @@ class QuizTestPage extends StatelessWidget {
           // Hintergrundbild mit stärkerer Transparenz (blasser)
           Positioned.fill(
             child: Image.asset(
-              'lib/quiz/images/plantpots.jpg', // Ersetze durch dein Bild
+              'lib/quiz/images/plantpots.jpg',
               fit: BoxFit.cover,
               color: isDarkMode ? Colors.black.withOpacity(0.6) : Colors.black.withOpacity(0.0),
-
               colorBlendMode: BlendMode.darken,
             ),
           ),
@@ -31,7 +94,7 @@ class QuizTestPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 40.0, left: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context); // Seite verlassen
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
@@ -77,7 +140,6 @@ class QuizTestPage extends StatelessWidget {
                       ),
                     ),
                   ],
-
                 ),
               ),
               const SizedBox(height: 30),
@@ -90,7 +152,7 @@ class QuizTestPage extends StatelessWidget {
             right: 20.0,
             child: FloatingActionButton.extended(
               onPressed: () {
-                showQuizOverlay(context); // Funktion aus quiz_overlay.dart
+                _showQuizOverlay(); // Zeige das Quiz-Overlay
               },
               label: Text(
                 'Start Quiz',

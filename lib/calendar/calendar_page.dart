@@ -1,5 +1,8 @@
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:plant_friends/themes/colors.dart';
@@ -26,6 +29,10 @@ class _CalendarPageState extends State<CalendarPage> {
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
+  String? _getUserId() {
+    User? user = FirebaseAuth.instance.currentUser; // Get the currently logged-in user
+    return user?.uid; // Return the userId (null if the user is not signed in)
+  }
 
   @override
   void initState() {
@@ -43,23 +50,30 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   _loadFirestoreEvents() async {
+    String? currentUserId = _getUserId(); // Aktuelle UserID holen
+    if (currentUserId == null) {
+      // Wenn der Benutzer nicht angemeldet ist, keine Events laden
+      return;
+    }
+
     final firstDay = DateTime(_focusedDay.year, _focusedDay.month, 1);
     final lastDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 0);
     _events = {};
 
     final snap = await FirebaseFirestore.instance
         .collection('events')
+        .where('user_id', isEqualTo: currentUserId) // Filter für die aktuelle UserID
         .where('date', isGreaterThanOrEqualTo: firstDay)
         .where('date', isLessThanOrEqualTo: lastDay)
         .withConverter(
-            fromFirestore: CalendarEvent.fromFirestore,
-            toFirestore: (event, options) => event.toFirestore())
+        fromFirestore: CalendarEvent.fromFirestore,
+        toFirestore: (event, options) => event.toFirestore())
         .get();
 
     for (var doc in snap.docs) {
       final event = doc.data();
       final day =
-          DateTime.utc(event.date.year, event.date.month, event.date.day);
+      DateTime.utc(event.date.year, event.date.month, event.date.day);
       if (_events[day] == null) {
         _events[day] = [];
       }
@@ -67,6 +81,7 @@ class _CalendarPageState extends State<CalendarPage> {
     }
     setState(() {});
   }
+
 
   List<CalendarEvent> _getEventsForTheDay(DateTime day) {
     return _events[day] ?? [];

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CalenderFunctions {
 
@@ -22,6 +23,11 @@ class CalenderFunctions {
       'Winter': 12,
     },
   };
+
+  String? _getUserId() {
+    User? user = FirebaseAuth.instance.currentUser; // Get the currently logged-in user
+    return user?.uid; // Return the userId (null if the user is not signed in)
+  }
 
   Future<void> createNewEventsWatering(String? plantID, String plantName, String waterNeeds) async {
     DateTime firstDay = DateTime.now();
@@ -59,15 +65,22 @@ class CalenderFunctions {
   Future<DateTime?> getNextWateringDate(String? plantID) async {
     final firestore = FirebaseFirestore.instance;
     DateTime now = DateTime.now();
+    String? userId = _getUserId(); // Aktuelle User-ID abrufen
+
+    if (userId == null) {
+      print('User is not logged in. Cannot fetch events.');
+      return null;
+    }
 
     try {
       // Adjust now to include today's date regardless of the current time
       DateTime today = DateTime(now.year, now.month, now.day);
 
-      // Query Firestore for future watering events for the given plantID
+      // Query Firestore for future watering events for the given plantID and userID
       QuerySnapshot querySnapshot = await firestore
           .collection('events')
           .where('plantID', isEqualTo: plantID)
+          .where('user_id', isEqualTo: userId) // Filter for the current user
           .where('eventType', isEqualTo: 'Watering')
           .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(today))
           .limit(1)
@@ -87,18 +100,26 @@ class CalenderFunctions {
     }
   }
 
+
   Future<DateTime?> getNextFertilizingDate(String? plantID) async {
     final firestore = FirebaseFirestore.instance;
     DateTime now = DateTime.now();
+    String? userId = _getUserId(); // Aktuelle User-ID abrufen
+
+    if (userId == null) {
+      print('User is not logged in. Cannot fetch events.');
+      return null;
+    }
 
     try {
       // Adjust now to include today's date regardless of the current time
       DateTime today = DateTime(now.year, now.month, now.day);
 
-      // Query Firestore for future fertilizing events for the given plantID
+      // Query Firestore for future fertilizing events for the given plantID and userID
       QuerySnapshot querySnapshot = await firestore
           .collection('events')
           .where('plantID', isEqualTo: plantID)
+          .where('user_id', isEqualTo: userId) // Filter for the current user
           .where('eventType', isEqualTo: 'Fertilizing')
           .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(today))
           .limit(1)
@@ -117,6 +138,7 @@ class CalenderFunctions {
       return null;
     }
   }
+
   Future<void> _createEventsInRange(
       DateTime startDate,
       DateTime endDate,
@@ -127,6 +149,12 @@ class CalenderFunctions {
       ) async {
     final firestore = FirebaseFirestore.instance;
     DateTime currentDate = startDate;
+    String? userId = _getUserId(); // User-ID abrufen
+
+    if (userId == null) {
+      print('User is not logged in. Cannot create events.');
+      return;
+    }
 
     while (currentDate.isBefore(endDate)) {
       final event = {
@@ -134,6 +162,7 @@ class CalenderFunctions {
         'plantName': plantName,
         'eventType': eventType,
         'isDone': false,
+        'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
 
@@ -154,6 +183,12 @@ class CalenderFunctions {
       ) async {
     final firestore = FirebaseFirestore.instance;
     DateTime currentDate = startDate;
+    String? userId = _getUserId(); // User-ID abrufen
+
+    if (userId == null) {
+      print('User is not logged in. Cannot create events.');
+      return;
+    }
 
     while (currentDate.isBefore(endDate)) {
       // Determine the season for the current date
@@ -167,6 +202,7 @@ class CalenderFunctions {
         'plantName': plantName,
         'eventType': eventType,
         'isDone': false,
+        'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
 
@@ -176,6 +212,7 @@ class CalenderFunctions {
       currentDate = currentDate.add(Duration(days: dayInterval));
     }
   }
+
   Future<void> deleteAllEventsForPlant(String plantID) async {
     final firestore = FirebaseFirestore.instance;
 

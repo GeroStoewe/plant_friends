@@ -221,7 +221,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
 
                     Navigator.of(context).pop();  // Close the main dialog after saving
                   },
-                  child: const Text('Add Photo'),
+                  child: const Text('Add Photo', style: TextStyle(color: seaGreen)),
                 ),
               ],
             );
@@ -646,14 +646,14 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel'),
+              child: const Text('Cancel', style: TextStyle(color: seaGreen)),
             ),
             TextButton(
               onPressed: () {
                 _deletePhoto(index); // Delete the photo if confirmed
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Yes'),
+              child: const Text('Yes', style: TextStyle(color: seaGreen)),
             ),
           ],
         );

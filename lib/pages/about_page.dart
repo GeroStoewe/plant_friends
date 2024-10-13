@@ -80,7 +80,7 @@ class _AboutPage extends State<AboutPage> {
                             CustomCard(
                               headline: "About Us",
                               icon: Icons.info_outline_rounded,
-                              text: "We (Laura Voss, Lisa Kütemeier, \nAylinOymak, Gero Stöwe) are \nstudying computer science in the \n3rd semester. We developed this \nplant app as part of the “Software \nEngineering” course. Our vision is to \nsupport plant lovers in the planning, \nselection and care of houseplants.",
+                              text: "We (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) are \nstudying computer science in the \n3rd semester. We developed this \nplant app as part of the “Software \nEngineering” course. Our vision is to \nsupport plant lovers in the planning, \nselection and care of houseplants.",
                             ),
                             const SizedBox(height: 10),
                             CustomCard(

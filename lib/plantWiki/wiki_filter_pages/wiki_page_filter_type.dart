@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/themes/colors.dart';
 import '../../../widgets/card_filter.dart';
+import '../../themes/colors.dart';
 import '../wiki_page_filter_result_page.dart'; // Import the FilterCard widget
 
 class TypeFilterPage extends StatelessWidget {

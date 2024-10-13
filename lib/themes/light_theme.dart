@@ -9,6 +9,12 @@ ThemeData lightTheme() {
     focusColor: seaGreen,
     scaffoldBackgroundColor: lightBG,
     textTheme: const TextTheme(
+      bodySmall: TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w200
+      ),
       bodyMedium: TextStyle(
           color: Colors.black,
           fontSize: 16,
@@ -21,7 +27,13 @@ ThemeData lightTheme() {
         ),
       headlineMedium: TextStyle(
           color: Colors.black,
-          fontSize: 28,
+          fontSize: 26,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.bold
+      ),
+      headlineSmall: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.bold
       ),
@@ -36,6 +48,12 @@ ThemeData lightTheme() {
           fontSize: 24,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500
+      ),
+      labelSmall: TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400
       ),
       displayMedium: TextStyle(
           color: Colors.white,

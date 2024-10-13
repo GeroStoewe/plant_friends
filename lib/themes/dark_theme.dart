@@ -9,6 +9,12 @@ ThemeData darkTheme() {
     focusColor: seaGreen,
     scaffoldBackgroundColor: darkBG,
     textTheme: const TextTheme(
+      bodySmall: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w200
+      ),
       bodyMedium: TextStyle(
           color: Colors.white,
           fontSize: 16,
@@ -22,7 +28,13 @@ ThemeData darkTheme() {
       ),
       headlineMedium: TextStyle(
           color: Colors.white,
-          fontSize: 28,
+          fontSize: 26,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.bold
+      ),
+      headlineSmall: TextStyle(
+          color: Colors.white,
+          fontSize: 24,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.bold
       ),
@@ -38,6 +50,12 @@ ThemeData darkTheme() {
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400
         ),
+      labelSmall: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400
+      ),
       displayMedium: TextStyle(
           color: Colors.white,
           fontSize: 20,

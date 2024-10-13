@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'quiz_overlay.dart';
 
-class QuizTestPage extends StatelessWidget {
+class QuizTestPage extends StatefulWidget { // StatelessWidget zu StatefulWidget geändert
   const QuizTestPage({super.key});
+
+  @override
+  State<QuizTestPage> createState() => _QuizTestPageState();
+}
+
+class _QuizTestPageState extends State<QuizTestPage> {
+  OverlayEntry? quizOverlayEntry;
+
+  @override
+  void dispose() {
+    quizOverlayEntry?.remove(); // Schließt das Overlay, wenn die Seite verlassen wird
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +31,6 @@ class QuizTestPage extends StatelessWidget {
               'lib/quiz/images/plantpots.jpg', // Ersetze durch dein Bild
               fit: BoxFit.cover,
               color: isDarkMode ? Colors.black.withOpacity(0.6) : Colors.black.withOpacity(0.0),
-
               colorBlendMode: BlendMode.darken,
             ),
           ),
@@ -31,7 +43,8 @@ class QuizTestPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 40.0, left: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context); // Navigiert zurück
+                    quizOverlayEntry?.remove(); // Schließt das Quiz-Overlay beim Zurückgehen
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
@@ -77,7 +90,6 @@ class QuizTestPage extends StatelessWidget {
                       ),
                     ),
                   ],
-
                 ),
               ),
               const SizedBox(height: 30),
@@ -90,7 +102,7 @@ class QuizTestPage extends StatelessWidget {
             right: 20.0,
             child: FloatingActionButton.extended(
               onPressed: () {
-                showQuizOverlay(context); // Funktion aus quiz_overlay.dart
+                quizOverlayEntry = showQuizOverlay(context); // Quiz-Overlay speichern
               },
               label: Text(
                 'Start Quiz',

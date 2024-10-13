@@ -376,11 +376,35 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
 
   Future<void> _selectDate(BuildContext context) async {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     final DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: isDarkMode
+              ? ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: seaGreen, // Header background color in dark mode
+              onPrimary: Colors.black, // Header text color in dark mode
+              onSurface: seaGreen, // Selected date color in dark mode
+            ),
+            dialogBackgroundColor: Colors.grey[900], // Date picker background in dark mode
+          )
+              : ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: seaGreen, // Header background color in light mode
+              onPrimary: Colors.white, // Header text color in light mode
+              onSurface: seaGreen, // Selected date color in light mode
+            ),
+            dialogBackgroundColor: Colors.white, // Date picker background in light mode
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (selectedDate != null) {
@@ -390,11 +414,14 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     String imageUrl = widget.plant.plantData!.imageUrl ?? '';
-    String defaultImageUrl = 'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
+    String defaultImageUrl =
+        'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
 
     return Scaffold(
       appBar: AppBar(
@@ -442,18 +469,22 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                               fit: BoxFit.cover,
                             )
                                 : Image.network(
-                              imageUrl.isNotEmpty ? imageUrl : defaultImageUrl,
+                              imageUrl.isNotEmpty
+                                  ? imageUrl
+                                  : defaultImageUrl,
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
+                              errorBuilder:
+                                  (context, error, stackTrace) {
                                 return const Icon(
                                   Icons.error,
                                   size: 60,
                                   color: Colors.red,
                                 );
                               },
-                              loadingBuilder: (context, child, loadingProgress) {
+                              loadingBuilder: (context, child,
+                                  loadingProgress) {
                                 if (loadingProgress == null) {
                                   return child;
                                 } else {
@@ -461,7 +492,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                                     width: 120,
                                     height: 120,
                                     child: Center(
-                                      child: CircularProgressIndicator(),
+                                      child:
+                                      CircularProgressIndicator(),
                                     ),
                                   );
                                 }
@@ -495,47 +527,101 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 20),
+
+              // Name Input with Green Label
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Plant Name",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: seaGreen, // Green color for label
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5),
               CustomTextField(
                 controller: _edtNameController,
                 icon: Icons.local_florist,
-                hintText: "Name",
+                hintText: "Enter plant name",
                 obscureText: false,
               ),
               const SizedBox(height: 15),
 
+              // Scientific Name Input with Green Label
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Scientific Name",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: seaGreen, // Green color for label
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5),
               CustomTextField(
                 controller: _edtScienceNameController,
                 icon: Icons.science,
-                hintText: "Scientific Name",
+                hintText: "Enter scientific name",
                 obscureText: false,
               ),
               const SizedBox(height: 15),
 
+              // Date Input with Green Label
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Date of purchase",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: seaGreen, // Green color for label
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5),
               GestureDetector(
                 onTap: () => _selectDate(context),
                 child: AbsorbPointer(
                   child: CustomTextField(
                     controller: _edtDateController,
                     icon: Icons.calendar_today,
-                    hintText: "Date",
+                    hintText: "Select date of purchase",
                     obscureText: false,
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
 
+              const SizedBox(height: 20),
+
+              // Dropdown section label with Green color
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Plant Care Information",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: seaGreen, // Green color for label
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Difficulty Dropdown with Green Label
               DropdownButtonFormField<String>(
                 value: _selectedDifficulty,
                 decoration: InputDecoration(
+                  labelText: "Difficulty",
+                  labelStyle: const TextStyle(color: seaGreen), // Green color
                   filled: true,
-                  fillColor: Theme.of(context).brightness == Brightness.dark
+                  fillColor: isDarkMode
                       ? Colors.white.withOpacity(0.1)
                       : Colors.black.withOpacity(0.1),
                   prefixIcon: Icon(
                     Icons.star,
-                    color: Theme.of(context).brightness == Brightness.dark
+                    color: isDarkMode
                         ? Colors.white.withOpacity(0.3)
                         : Colors.black.withOpacity(0.5),
                   ),
@@ -557,17 +643,19 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
               ),
               const SizedBox(height: 15),
 
-              // Dropdown für Light
+              // Light Dropdown with Green Label
               DropdownButtonFormField<String>(
                 value: _selectedLight,
                 decoration: InputDecoration(
+                  labelText: "Light Requirement",
+                  labelStyle: const TextStyle(color: seaGreen), // Green color
                   filled: true,
-                  fillColor: Theme.of(context).brightness == Brightness.dark
+                  fillColor: isDarkMode
                       ? Colors.white.withOpacity(0.1)
                       : Colors.black.withOpacity(0.1),
                   prefixIcon: Icon(
                     Icons.wb_sunny_outlined,
-                    color: Theme.of(context).brightness == Brightness.dark
+                    color: isDarkMode
                         ? Colors.white.withOpacity(0.3)
                         : Colors.black.withOpacity(0.5),
                   ),
@@ -576,10 +664,14 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                     borderSide: BorderSide.none,
                   ),
                 ),
+
                 items: const [
-                  DropdownMenuItem(value: "Direct Light", child: Text("Direct Light")),
-                  DropdownMenuItem(value: "Indirect Light", child: Text("Indirect Light")),
-                  DropdownMenuItem(value: "Partial Shade", child: Text("Partial Shade")),
+                  DropdownMenuItem(
+                      value: "Direct Light", child: Text("Direct Light")),
+                  DropdownMenuItem(
+                      value: "Indirect Light", child: Text("Indirect Light")),
+                  DropdownMenuItem(
+                      value: "Partial Shade", child: Text("Partial Shade")),
                   DropdownMenuItem(value: "Low Light", child: Text("Low Light")),
                 ],
                 onChanged: (String? newValue) {
@@ -590,17 +682,19 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
               ),
               const SizedBox(height: 15),
 
-              // Dropdown für Water
+              // Water Dropdown with Green Label
               DropdownButtonFormField<String>(
                 value: _selectedWater,
                 decoration: InputDecoration(
+                  labelText: "Water Requirement",
+                  labelStyle: const TextStyle(color: seaGreen), // Green color
                   filled: true,
-                  fillColor: Theme.of(context).brightness == Brightness.dark
+                  fillColor: isDarkMode
                       ? Colors.white.withOpacity(0.1)
                       : Colors.black.withOpacity(0.1),
                   prefixIcon: Icon(
                     Icons.water_drop_outlined,
-                    color: Theme.of(context).brightness == Brightness.dark
+                    color: isDarkMode
                         ? Colors.white.withOpacity(0.3)
                         : Colors.black.withOpacity(0.5),
                   ),
@@ -622,17 +716,19 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
               ),
               const SizedBox(height: 15),
 
-              // Dropdown für Plant Type
+              // Plant Type Dropdown with Green Label
               DropdownButtonFormField<String>(
                 value: _selectedPlantType,
                 decoration: InputDecoration(
+                  labelText: "Plant Type",
+                  labelStyle: const TextStyle(color: seaGreen), // Green color
                   filled: true,
-                  fillColor: Theme.of(context).brightness == Brightness.dark
+                  fillColor: isDarkMode
                       ? Colors.white.withOpacity(0.1)
                       : Colors.black.withOpacity(0.1),
                   prefixIcon: Icon(
                     Icons.eco_sharp,
-                    color: Theme.of(context).brightness == Brightness.dark
+                    color: isDarkMode
                         ? Colors.white.withOpacity(0.3)
                         : Colors.black.withOpacity(0.5),
                   ),
@@ -642,10 +738,15 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   ),
                 ),
                 items: const [
-                  DropdownMenuItem(value: "Cacti/Succulents", child: Text("Cacti/Succulents")),
-                  DropdownMenuItem(value: "Tropical Plants", child: Text("Tropical Plants")),
-                  DropdownMenuItem(value: "Climbing Plants", child: Text("Climbing Plants")),
-                  DropdownMenuItem(value: "Flowering Plants", child: Text("Flowering Plants")),
+                  DropdownMenuItem(
+                      value: "Cacti/Succulents",
+                      child: Text("Cacti/Succulents")),
+                  DropdownMenuItem(
+                      value: "Tropical Plants", child: Text("Tropical Plants")),
+                  DropdownMenuItem(
+                      value: "Climbing Plants", child: Text("Climbing Plants")),
+                  DropdownMenuItem(
+                      value: "Flowering Plants", child: Text("Flowering Plants")),
                   DropdownMenuItem(value: "Trees/Palms", child: Text("Trees/Palms")),
                   DropdownMenuItem(value: "Herbs", child: Text("Herbs")),
                   DropdownMenuItem(value: "Others", child: Text("Others")),
@@ -656,7 +757,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   });
                 },
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
+
               Center(
                 child: CustomButton(
                   text: 'Save Changes',
@@ -669,6 +771,9 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       ),
     );
   }
+
+
+
   Widget _buildOptionCard({required IconData icon, required String label, required Function() onTap}) {
     return GestureDetector(
       onTap: onTap,

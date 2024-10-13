@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
 import 'quiz_overlay.dart';
 
-class QuizTestPage extends StatefulWidget { // StatelessWidget zu StatefulWidget geändert
+class QuizTestPage extends StatelessWidget {
   const QuizTestPage({super.key});
-
-  @override
-  State<QuizTestPage> createState() => _QuizTestPageState();
-}
-
-class _QuizTestPageState extends State<QuizTestPage> {
-  OverlayEntry? quizOverlayEntry;
-
-  @override
-  void dispose() {
-    quizOverlayEntry?.remove(); // Schließt das Overlay, wenn die Seite verlassen wird
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +30,7 @@ class _QuizTestPageState extends State<QuizTestPage> {
                 padding: const EdgeInsets.only(top: 40.0, left: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context); // Navigiert zurück
-                    quizOverlayEntry?.remove(); // Schließt das Quiz-Overlay beim Zurückgehen
+                    Navigator.pop(context);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
@@ -102,7 +88,7 @@ class _QuizTestPageState extends State<QuizTestPage> {
             right: 20.0,
             child: FloatingActionButton.extended(
               onPressed: () {
-                quizOverlayEntry = showQuizOverlay(context); // Quiz-Overlay speichern
+                showQuizOverlay(context); // Funktion aus quiz_overlay.dart
               },
               label: Text(
                 'Start Quiz',

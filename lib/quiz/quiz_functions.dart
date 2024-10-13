@@ -7,10 +7,12 @@ class QuizFunctions {
   int careScore = 0;
   int environmentScore = 0;
   List<int> userAnswers = []; // Speichert die Antworten als Index
+  static bool isQuizActive = false;  // Statische Variable für den Status des Quiz
 
   void closeQuiz() {
     overlayEntry?.remove();
     overlayEntry = null;
+    isQuizActive = false; // Quiz wird geschlossen, kann wieder gestartet werden
   }
 
   bool hasPets() {
@@ -27,7 +29,6 @@ class QuizFunctions {
 
     overlayEntry = OverlayEntry(
       builder: (context) {
-        // Berechnung der dynamischen Schriftgröße basierend auf Bildschirmgröße
         double textScaleFactor = MediaQuery.of(context).size.width / 375;
 
         return Positioned(
@@ -116,6 +117,8 @@ class QuizFunctions {
   }
 
   void showQuestion(BuildContext context, OverlayState overlayState) {
+    isQuizActive = true; // Quiz ist aktiv, Button sperren
+
     overlayEntry = OverlayEntry(
       builder: (context) {
         double textScaleFactor = MediaQuery.of(context).size.width / 375; // Dynamische Schriftgröße basierend auf Bildschirmgröße
@@ -140,42 +143,20 @@ class QuizFunctions {
                 ],
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Question ${currentQuestionIndex + 1} of ${questions.length}',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontSize: 24 * textScaleFactor, // Dynamische Schriftgröße
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          closeQuiz();
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      questions[currentQuestionIndex].question,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 16 * textScaleFactor, // Dynamische Schriftgröße
-                      ),
-                      textAlign: TextAlign.center,
+                  Text(
+                    questions[currentQuestionIndex].question,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontSize: 20 * textScaleFactor,
                     ),
                   ),
                   SizedBox(height: 20),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: List.generate(
-                        questions[currentQuestionIndex].answers.length, (index) {
-                      return Center(
+                    children: List.generate(questions[currentQuestionIndex].answers.length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ElevatedButton(
                           onPressed: () {
                             checkAnswer(
@@ -188,8 +169,8 @@ class QuizFunctions {
                           },
                           child: Text(
                             questions[currentQuestionIndex].answers[index],
-                            style: TextStyle(
-                              fontSize: 16 * textScaleFactor, // Gleiche Schriftgröße wie Frage
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontSize: 16 * textScaleFactor, // Dynamische Schriftgröße
                             ),
                           ),
                         ),

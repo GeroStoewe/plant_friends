@@ -5,13 +5,15 @@ class CustomProfileButton extends StatelessWidget {
   final double width;
   final double height;
   final String text;
+  final Color? color;
 
   const CustomProfileButton({
     super.key,
     required this.onPressed,
     required this.width,
     required this.height,
-    required this.text
+    required this.text,
+    required this.color
   });
 
   @override
@@ -22,13 +24,13 @@ class CustomProfileButton extends StatelessWidget {
       child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: color,
             side: BorderSide.none,
             shape: const StadiumBorder()
           ),
           child: Text(
               text,
-              style: Theme.of(context).textTheme.labelMedium
+              style: Theme.of(context).textTheme.displayMedium
           )
       ),
     );

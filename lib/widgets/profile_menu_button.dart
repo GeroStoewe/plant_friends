@@ -25,31 +25,32 @@ class ProfileMenuButton extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       leading: Container(
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           color: isDarkMode ? darkSeaGreen.withOpacity(0.1) : lightSeaGreen.withOpacity(0.2)
         ),
         child: Icon(
             icon,
+            size: 20,
             color: isDarkMode ? seaGreen : forestGreen
         ),
       ),
       title: Text(
         text,
-        style: Theme.of(context).textTheme.labelLarge?.apply(color: textColor),
+        style: Theme.of(context).textTheme.labelSmall?.apply(color: textColor),
       ),
       trailing: endIcon ? Container(
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(20.0),
           color: isDarkMode ? Colors.grey.withOpacity(0.1) : Colors.grey.withOpacity(0.25)
         ),
         child: Icon(
           LineAwesomeIcons.angle_right_solid,
-          size: 18.0,
+          size: 16.0,
           color: isDarkMode ? Colors.grey : Colors.black,
         ),
       ) : null,

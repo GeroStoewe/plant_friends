@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../themes/colors.dart';
+import '../themes/theme_provider.dart';
 import '../widgets/custom_profile_button.dart';
 import '../widgets/custom_text_field.dart';
 
@@ -28,11 +34,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool isLoading = false;
   String? updatedEmail;
   String joinDate = '';
+  String? photoURL;
+
+  File? plantImage;
 
   @override
   void initState() {
     super.initState();
     fetchJoinDate();
+    loadCurrentUser();
   }
 
   Future<void> fetchJoinDate() async {
@@ -51,6 +61,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  Future<void> loadCurrentUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        photoURL = user.photoURL; // Load the current photo URL if available
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery
@@ -59,279 +78,312 @@ class _EditProfilePageState extends State<EditProfilePage> {
     bool isDarkMode = Theme
         .of(context)
         .brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(LineAwesomeIcons.angle_left_solid,
-                color: Colors.white70),
-          ),
-          title: Text("Edit Profile",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .labelMedium),
-        ),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Container(
-                      padding: EdgeInsets.all(size.width * 0.05),
-                      child: Column(
-                          children: [
-                            const SizedBox(height: 25),
-                            Stack(children: [
-                              SizedBox(
-                                width: 160,
-                                height: 160,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 8,
-                                          color:
-                                          isDarkMode
-                                              ? darkSeaGreen
-                                              : darkGreyGreen)),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                          100.0),
-                                      child: Image.asset(
-                                          "lib/profileImages/1_plant_profile.jpg")),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 5,
-                                right: 5,
-                                child: Container(
-                                  width: 45,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      color: isDarkMode
-                                          ? darkSeaGreen
-                                          : darkGreyGreen),
-                                  child: Icon(
-                                    LineAwesomeIcons.camera_solid,
-                                    size: 28.0,
-                                    color: isDarkMode ? Colors.black87 : Colors
-                                        .white70,
-                                  ),
-                                ),
-                              )
-                            ]),
-                            const SizedBox(height: 40),
-                            Form(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: "Change Your ",
-                                        style: Theme
-                                            .of(context)
-                                            .textTheme
-                                            .displayLarge,
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: "Full Name",
-                                            style: TextStyle(
-                                              color: Theme
-                                                  .of(context)
-                                                  .primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  CustomTextField(
-                                      controller: fullnameController,
-                                      icon: Icons.person_outline_rounded,
-                                      hintText: "New Full Name",
-                                      obscureText: false),
-                                  const SizedBox(height: 30),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: "Change Your ",
-                                        style: Theme
-                                            .of(context)
-                                            .textTheme
-                                            .displayLarge,
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: "Email Address",
-                                            style: TextStyle(
-                                              color: Theme
-                                                  .of(context)
-                                                  .primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  CustomTextField(
-                                      controller: usernameController,
-                                      icon: Icons.alternate_email_rounded,
-                                      hintText: "New Email Address",
-                                      obscureText: false),
-                                  const SizedBox(height: 15),
-                                  CustomTextField(
-                                    controller: currPasswordController,
-                                    icon: Icons.lock_outline_rounded,
-                                    hintText: "Current Password",
-                                    obscureText: !isPasswordVisible,
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        isPasswordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Theme
-                                            .of(context)
-                                            .hintColor,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          isPasswordVisible =
-                                          !isPasswordVisible;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: "Change Your ",
-                                        style: Theme
-                                            .of(context)
-                                            .textTheme
-                                            .displayLarge,
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: "Password",
-                                            style: TextStyle(
-                                              color: Theme
-                                                  .of(context)
-                                                  .primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  CustomTextField(
-                                    controller: currPasswordController,
-                                    icon: Icons.lock_outline_rounded,
-                                    hintText: "Current Password",
-                                    obscureText: !isPasswordVisible,
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        isPasswordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Theme
-                                            .of(context)
-                                            .hintColor,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          isPasswordVisible =
-                                          !isPasswordVisible;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  CustomTextField(
-                                    controller: newPasswordController,
-                                    icon: Icons.lock_outline_rounded,
-                                    hintText: "New Password",
-                                    obscureText: !isPasswordVisible,
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        isPasswordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Theme
-                                            .of(context)
-                                            .hintColor,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          isPasswordVisible =
-                                          !isPasswordVisible;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 35),
-                                  CustomProfileButton(
-                                      onPressed: saveChanges,
-                                      width: 180,
-                                      height: 80,
-                                      text: "SAVE"
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Text.rich(
-                                      TextSpan(
-                                          text: "Joined: ",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: isDarkMode
-                                                  ? dmLightGrey
-                                                  : lmDarkGrey
-                                          ),
-                                          children: [
-                                            TextSpan(
-                                                text: joinDate,
-                                                style: TextStyle(
-                                                    fontSize: 22,
-                                                    color: Theme
-                                                        .of(context)
-                                                        .hintColor
-                                                )
-                                            ),
-                                          ]
-                                      )
-                                  )
-                                ],
-                              ),
-                            )
-                          ])),
+    return ScrollbarTheme(
+        data: ScrollbarThemeData(
+        thumbColor: WidgetStateProperty.all(seaGreen), // Set scrollbar thumb color to green
+    trackColor: WidgetStateProperty.all(Colors.grey.shade300), // Set track color
+    ),
+      child: Scaffold(
+          appBar: AppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,  // Setzt die AppBar-Farbe auf den Hintergrund
+              elevation: 0,  // Entfernt den Schatten der AppBar
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(LineAwesomeIcons.angle_left_solid,
+                    color: isDarkMode ? dmLightGrey : lmLightGrey),
+              ),
+              title: Text(
+                "Edit Profile",
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: isDarkMode ? Colors.white : Colors.black,  // Dynamische Farbe für Dark und Light Mode
                 ),
-                if (isLoading)
-                  Container(
-                    color: Colors.black.withOpacity(0.7),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme
-                                  .of(context)
-                                  .primaryColor)),
+              ),
+              actions: [
+                IconButton(
+                    onPressed: isLoading ? null : themeProvider.toggleTheme,
+                    color: isDarkMode ? Colors.white : Colors.black,  // Farbe des Icons dynamisch
+                    iconSize: 30,
+                    icon: Icon(
+                        isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon)),
+              ],
+            ),
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Stack(
+                children: [
+                  Scrollbar(
+                    child: SingleChildScrollView(
+                      child: Container(
+                          padding: EdgeInsets.all(size.width * 0.05),
+                          child: Column(
+                              children: [
+                                const SizedBox(height: 25),
+                                GestureDetector(
+                                  onTap: pickImage,
+                                  child: Stack(children: [
+                                    SizedBox(
+                                      width: 160,
+                                      height: 160,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                width: 8,
+                                                color:
+                                                isDarkMode
+                                                    ? darkSeaGreen
+                                                    : darkGreyGreen)),
+                                        child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                100.0),
+                                            child: plantImage != null
+                                                ? Image.file(
+                                              plantImage!,
+                                              fit: BoxFit.cover,
+                                            )
+                                                : (photoURL != null
+                                                ? Image.network(
+                                              photoURL!,
+                                              fit: BoxFit.cover,
+                                            )
+                                                : Image.asset(
+                                                "lib/profileImages/1_plant_profile.jpg")
+                                    )))),
+                                    Positioned(
+                                      bottom: 5,
+                                      right: 5,
+                                      child: Container(
+                                        width: 45,
+                                        height: 45,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(30.0),
+                                            color: isDarkMode
+                                                ? darkSeaGreen
+                                                : darkGreyGreen),
+                                        child: Icon(
+                                          LineAwesomeIcons.camera_solid,
+                                          size: 28.0,
+                                          color: isDarkMode ? Colors.black87 : Colors
+                                              .white70,
+                                        ),
+                                      ),
+                                    )
+                                  ]),
+                                ),
+                                const SizedBox(height: 40),
+                                Form(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: "Change Your ",
+                                            style: Theme
+                                                .of(context)
+                                                .textTheme
+                                                .displayLarge,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Full Name",
+                                                style: TextStyle(
+                                                  color: Theme
+                                                      .of(context)
+                                                      .primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      CustomTextField(
+                                          controller: fullnameController,
+                                          icon: Icons.person_outline_rounded,
+                                          hintText: "New Full Name",
+                                          obscureText: false),
+                                      const SizedBox(height: 30),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: "Change Your ",
+                                            style: Theme
+                                                .of(context)
+                                                .textTheme
+                                                .displayLarge,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Email Address",
+                                                style: TextStyle(
+                                                  color: Theme
+                                                      .of(context)
+                                                      .primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      CustomTextField(
+                                          controller: usernameController,
+                                          icon: Icons.alternate_email_rounded,
+                                          hintText: "New Email Address",
+                                          obscureText: false),
+                                      const SizedBox(height: 15),
+                                      CustomTextField(
+                                        controller: currPasswordController,
+                                        icon: Icons.lock_outline_rounded,
+                                        hintText: "Current Password",
+                                        obscureText: !isPasswordVisible,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            isPasswordVisible
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                            color: Theme
+                                                .of(context)
+                                                .hintColor,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              isPasswordVisible =
+                                              !isPasswordVisible;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 30),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: "Change Your ",
+                                            style: Theme
+                                                .of(context)
+                                                .textTheme
+                                                .displayLarge,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Password",
+                                                style: TextStyle(
+                                                  color: Theme
+                                                      .of(context)
+                                                      .primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      CustomTextField(
+                                        controller: currPasswordController,
+                                        icon: Icons.lock_outline_rounded,
+                                        hintText: "Current Password",
+                                        obscureText: !isPasswordVisible,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            isPasswordVisible
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                            color: Theme
+                                                .of(context)
+                                                .hintColor,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              isPasswordVisible =
+                                              !isPasswordVisible;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      CustomTextField(
+                                        controller: newPasswordController,
+                                        icon: Icons.lock_outline_rounded,
+                                        hintText: "New Password",
+                                        obscureText: !isPasswordVisible,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            isPasswordVisible
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                            color: Theme
+                                                .of(context)
+                                                .hintColor,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              isPasswordVisible =
+                                              !isPasswordVisible;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 35),
+                                      CustomProfileButton(
+                                          onPressed: saveChanges,
+                                          width: 180,
+                                          height: 80,
+                                          text: "SAVE",
+                                          color: Theme.of(context).primaryColor,
+                                      ),
+                                      const SizedBox(height: 30),
+                                      Text.rich(
+                                          TextSpan(
+                                              text: "Joined: ",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: isDarkMode
+                                                      ? dmLightGrey
+                                                      : lmDarkGrey
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                    text: joinDate,
+                                                    style: TextStyle(
+                                                        fontSize: 22,
+                                                        color: Theme
+                                                            .of(context)
+                                                            .hintColor
+                                                    )
+                                                ),
+                                              ]
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ])),
                     ),
-                  )
-              ]
-          ),
-        ));
+                  ),
+                  if (isLoading)
+                    Container(
+                      color: Colors.black.withOpacity(0.7),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme
+                                    .of(context)
+                                    .primaryColor)),
+                      ),
+                    )
+                ]
+            ),
+          )),
+    );
   }
 
   Future<void> reAuthenticateUser(User user) async {
@@ -352,7 +404,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      try {
+        // Upload the image to Firebase Storage
+        try {
+          if (plantImage != null) {
+            // Define Firebase Storage path
+            Reference storageRef = FirebaseStorage.instance
+                .ref()
+                .child('profile_images')
+                .child('${user.uid}.jpg');
+
+            // Upload the file
+            UploadTask uploadTask = storageRef.putFile(plantImage!);
+            TaskSnapshot snapshot = await uploadTask;
+
+            // Get the download URL of the uploaded image
+            String downloadURL = await snapshot.ref.getDownloadURL();
+
+            // Update user's profile with new photo URL
+            await user.updatePhotoURL(downloadURL);
+
+            setState(() {
+              photoURL = downloadURL; // Set the new photoURL
+            });
+          }
+
         // Check if the full name field is not empty and update display name
         if (fullnameController.text.isNotEmpty) {
           await user.updateDisplayName(fullnameController.text);
@@ -432,7 +507,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         if (fullnameController.text.isNotEmpty ||
             usernameController.text.isNotEmpty ||
             currPasswordController.text.isNotEmpty ||
-            newPasswordController.text.isNotEmpty) {
+            newPasswordController.text.isNotEmpty ||
+            plantImage != null) {
 
           // Return updated values to the previous screen
           Navigator.pop(context, {
@@ -440,6 +516,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ? fullnameController.text
                 : user.displayName,
             'email': updatedEmail ?? user.email,
+            'photoURL': photoURL ?? user.photoURL
           });
         } else {
           showMessage(
@@ -516,5 +593,92 @@ class _EditProfilePageState extends State<EditProfilePage> {
           duration: const Duration(seconds: 3),
         ),
       );
+  }
+
+  Future<void> pickImage() async {
+    final ImagePicker picker = ImagePicker();
+
+    final selectedSource = await showModalBottomSheet<ImageSource>(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        ),
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Choose image source",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildOptionCard(
+                      icon: Icons.camera_alt_rounded,
+                      label: "Camera",
+                      onTap: () => Navigator.of(context).pop(ImageSource.camera),
+                    ),
+                    buildOptionCard(
+                      icon: Icons.photo_library_rounded,
+                      label: "Gallery",
+                      onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        }
+    );
+
+    if (mounted && selectedSource != null) {
+      final pickedFile = await picker.pickImage(source: selectedSource);
+      if (pickedFile != null) {
+        setState(() {
+          plantImage = File(pickedFile.path); // Save the selected image
+        });
+      }
+    }
+  }
+
+  Widget buildOptionCard({required IconData icon, required String label, required Function() onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Rounded edges
+        ),
+        elevation: 4, // Shadow to make it stand out
+        child: Padding(
+          padding: const EdgeInsets.all(16.0), // Padding inside the card
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Ensure the icon and text are compact
+            children: [
+              Icon(
+                icon,
+                size: 50,
+                color: const Color(0xFF388E3C), // Use accent color for the icons
+              ),
+              const SizedBox(height: 10), // Space between icon and text
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

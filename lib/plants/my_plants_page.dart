@@ -710,21 +710,6 @@ Widget _buildAddPlantBottomSheet() {
                                     },
                                   );
 
-                                  /*option 1: camera geht nicht
-                                  String? imageUrl;
-                                  if (_plantImage != null) {
-                                  String? imageUrl = await _uploadImageToFirebase(_plantImage!);
-                                  } else {
-                                    imageUrl = null;
-                                  } */
-
-                                  /*Option 2: camera und gallery und no photo upload funktioniert aber null check operator fehler
-                                  String? imageUrl =
-                                    _isImagePicked ? await _uploadImageToFirebase(_plantImage!) : null; // Assign an empty string if no image is selected
-                                  */
-
-                                  //option three:
-                                  // Declare imageUrl outside of the conditional block
                                   String? imageUrl;
 
                                   // Check if the image is picked and upload if it is
@@ -732,7 +717,7 @@ Widget _buildAddPlantBottomSheet() {
                                     imageUrl = await _uploadImageToFirebase(_plantImage!);
                                   } else {
                                     // No image is picked, so set imageUrl to null (or "" if preferred)
-                                    imageUrl = null; // Or: imageUrl = "";
+                                    imageUrl = null; // null instead of " " due to null check operator
                                   }
 
                                   // Debug print statement to ensure imageUrl is set

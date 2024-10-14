@@ -708,12 +708,9 @@ Widget _buildAddPlantBottomSheet() {
                                     },
                                   );
 
-                                  String? imageUrl = "";
-                                  if (_plantImage != null) {
-                                    imageUrl =
-                                    await _uploadImageToFirebase(_plantImage!);
-                                    } else {
-                                    imageUrl = ""; // Assign an empty string if no image is selected
+                                    String? imageUrl =
+                                    _isImagePicked ? await _uploadImageToFirebase(_plantImage!)
+                                    : " "; // Assign an empty string if no image is selected
 
                                     // Retrieve the userId
                                     String? userId = _getUserId();
@@ -726,7 +723,7 @@ Widget _buildAddPlantBottomSheet() {
                                       "science_name": _edtScienceNameController
                                           .text,
                                       "date": _edtDateController.text,
-                                      "image_url": imageUrl,
+                                      "image_url": imageUrl ?? "",
                                       "user_id": userId,
                                       "water": _selectedWaterRequirement,
                                       "type": _selectedPlantType,
@@ -774,7 +771,6 @@ Widget _buildAddPlantBottomSheet() {
                                         snackbar.showMessage('Failed to get userId. Please sign in again.', MessageType.error);
                                       }
                                     }
-                                  }
                                 } catch (error) {
                                   if (mounted) {
                                   Navigator.pop(context);

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart'; // To get the current user
+import 'package:firebase_auth/firebase_auth.dart'; // To get the current userId
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -50,7 +50,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
 
 
-  // Example function to get the current user's userId (assuming you're using FirebaseAuth)
+  // Function to get the current user's userId on FirebaseAuth
   String? _getUserId() {
     User? user = FirebaseAuth.instance.currentUser; // Get the currently logged-in user
     return user?.uid; // Return the userId (null if the user is not signed in)
@@ -95,7 +95,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     _edtScienceNameController.dispose();
     _edtDateController.dispose();
 
-    // Set the plant image to null to clean up (optional)
+    // Set the plant image to null to clean up
     _plantImage = null;
 
     super.dispose();
@@ -200,14 +200,14 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0), // Padding inside the card
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Ensure the icon and text are compact
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 icon,
                 size: 50,
-                color: const Color(0xFF388E3C), // Use accent color for the icons
+                color: const Color(0xFF388E3C),
               ),
-              const SizedBox(height: 10), // Space between icon and text
+              const SizedBox(height: 10),
               Text(
                 label,
                 style: const TextStyle(

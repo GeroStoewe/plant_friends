@@ -110,6 +110,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
       // Reset selected image
       setState(() {
         _plantImage = null;
+        _isImagePicked = false;
       });
     }
 
@@ -709,10 +710,32 @@ Widget _buildAddPlantBottomSheet() {
                                     },
                                   );
 
-                                    String? imageUrl =
-                                    _isImagePicked ? await _uploadImageToFirebase(_plantImage!) : null; // Assign an empty string if no image is selected
+                                  /*option 1: camera geht nicht
+                                  String? imageUrl;
+                                  if (_plantImage != null) {
+                                  String? imageUrl = await _uploadImageToFirebase(_plantImage!);
+                                  } else {
+                                    imageUrl = null;
+                                  } */
 
-                                    // Debug print statement to ensure imageUrl is set
+                                  /*Option 2: camera und gallery und no photo upload funktioniert aber null check operator fehler
+                                  String? imageUrl =
+                                    _isImagePicked ? await _uploadImageToFirebase(_plantImage!) : null; // Assign an empty string if no image is selected
+                                  */
+
+                                  //option three:
+                                  // Declare imageUrl outside of the conditional block
+                                  String? imageUrl;
+
+                                  // Check if the image is picked and upload if it is
+                                  if (_isImagePicked && _plantImage != null) {
+                                    imageUrl = await _uploadImageToFirebase(_plantImage!);
+                                  } else {
+                                    // No image is picked, so set imageUrl to null (or "" if preferred)
+                                    imageUrl = null; // Or: imageUrl = "";
+                                  }
+
+                                  // Debug print statement to ensure imageUrl is set
                                     print("Image URL: $imageUrl");
 
                                     // Retrieve the userId
@@ -925,21 +948,19 @@ Widget _buildAddPlantBottomSheet() {
                       ),
                     ),
                     child: ClipOval(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
                         child: plant.plantData!.imageUrl != null && plant.plantData!.imageUrl!.isNotEmpty
-                        ? ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: Image.network(
-                        plant.plantData!.imageUrl!,
-                        fit: BoxFit.cover,
-                      ),
-                    ) : ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: Image.asset(
-                        'lib/profileImages/2_plant_profile.jpg',
-                        fit: BoxFit.cover,
+                            ? Image.network(
+                          plant.plantData!.imageUrl!, // Display the network image if it exists
+                          fit: BoxFit.cover,
+                        )
+                            : Image.asset(
+                          'lib/profileImages/2_plant_profile.jpg', // Fallback to the asset image if no URL
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
                   ),// Camera icon overlay
                   Positioned(
                     bottom: 5,

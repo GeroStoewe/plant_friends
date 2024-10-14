@@ -61,6 +61,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     super.initState();
 
     _searchController.addListener(_onSearchChanged);
+    String? currentUserId = _getUserId(); // Aktuelle UserID holen
     _plantSubscription = dbRef
         .child("Plants")
         .onValue
@@ -70,9 +71,11 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
       if (data != null) {
         data.forEach((key, value) {
-          PlantData plantData =
-          PlantData.fromJSON(value as Map<dynamic, dynamic>);
-          updatedPlantList.add(Plant(key: key, plantData: plantData));
+          PlantData plantData = PlantData.fromJSON(value as Map<dynamic, dynamic>);
+          // Hier prüfen, ob die user_id mit der aktuellen UserID übereinstimmt
+          if (plantData.userId == currentUserId) {
+            updatedPlantList.add(Plant(key: key, plantData: plantData));
+          }
         });
       }
 
@@ -446,7 +449,7 @@ Widget _buildAddPlantBottomSheet() {
                         ),
                       ),
                       // Show the selected image immediately after selection
-                      _isImagePicked
+                      _isImagePicked && _plantImage != null
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Rounded corners for image
 
@@ -539,7 +542,7 @@ Widget _buildAddPlantBottomSheet() {
                         }).toList(),
                         onChanged: (String? newValue) {
                           setState(() {
-                            _selectedPlantType = newValue; // Update selected type
+                            _selectedPlantType = newValue ?? plantTypes[0]; // Set default value if null
                           });
                         },
                         decoration: InputDecoration(
@@ -556,7 +559,6 @@ Widget _buildAddPlantBottomSheet() {
                       ),
                       const SizedBox(height: 15),
 
-                      // Dropdown Menu für Schwierigkeitsgrad
                       DropdownButtonFormField<String>(
                         value: _selectedDifficulty,
                         hint: Text(
@@ -574,7 +576,7 @@ Widget _buildAddPlantBottomSheet() {
                         }).toList(),
                         onChanged: (String? newValue) {
                           setState(() {
-                            _selectedDifficulty = newValue; // Update selected difficulty
+                            _selectedDifficulty = newValue ?? difficulties[0]; // Set default value if null
                           });
                         },
                         decoration: InputDecoration(
@@ -585,8 +587,7 @@ Widget _buildAddPlantBottomSheet() {
                           labelText: "Difficulty",
                           labelStyle: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
+                            color: isDarkMode ? Colors.white : Colors.black,),
                         ),
                       ),
                       const SizedBox(height: 15),

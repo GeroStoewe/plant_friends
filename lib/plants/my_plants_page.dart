@@ -424,6 +424,7 @@ Widget _buildAddPlantBottomSheet() {
       maxChildSize:1.0,
       minChildSize:1.0,
       builder: (context, scrollController) {
+        print("Building DraggableScrollableSheet");
       return Padding(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -710,10 +711,15 @@ Widget _buildAddPlantBottomSheet() {
 
                                     String? imageUrl =
                                     _isImagePicked ? await _uploadImageToFirebase(_plantImage!)
-                                    : " "; // Assign an empty string if no image is selected
+                                    : null; // Assign an empty string if no image is selected
+
+                                    // Debug print statement to ensure imageUrl is set
+                                    print("Image URL: $imageUrl");
 
                                     // Retrieve the userId
                                     String? userId = _getUserId();
+                                    // Debug print statement to ensure userId is set
+                                    print("User ID: $userId");
 
                                     // Ensure that userId is not null before saving
                                     if (userId != null) {
@@ -723,7 +729,7 @@ Widget _buildAddPlantBottomSheet() {
                                       "science_name": _edtScienceNameController
                                           .text,
                                       "date": _edtDateController.text,
-                                      "image_url": imageUrl ?? "",
+                                      "image_url": imageUrl,
                                       "user_id": userId,
                                       "water": _selectedWaterRequirement,
                                       "type": _selectedPlantType,
@@ -731,7 +737,8 @@ Widget _buildAddPlantBottomSheet() {
                                       "difficulty": _selectedDifficulty
                                     };
 
-
+                                      // Debug print statement to ensure data map is created correctly
+                                      print("Data: $data");
 
                                     // Save plant details to Firebase and get the reference
                                     DatabaseReference newPlantRef = dbRef.child("Plants").push();

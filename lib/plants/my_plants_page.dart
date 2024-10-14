@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../calendar/calendar_functions.dart';
+import '../themes/colors.dart';
 import 'my_plants_details_page.dart';
 import 'plant.dart';
 import '../widgets/custom_snackbar.dart';
@@ -123,6 +123,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     });
   }
 
+  bool _isImagePicked = false;
+
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
 
@@ -168,12 +170,21 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
         }
     );
 
-    if (mounted && selectedSource != null) {
-      final pickedFile = await picker.pickImage(source: selectedSource);
-      if (pickedFile != null) {
+    if (mounted) {
+      if (selectedSource != null) {
+        final pickedFile = await picker.pickImage(source: selectedSource);
+        if (pickedFile != null) {
+          setState(() {
+            _plantImage = File(pickedFile.path);// Save the selected image
+            _isImagePicked = true;
+          });
+        }
+        print('Image successfully picked: ${_plantImage?.path}');
+      } else {
         setState(() {
-          _plantImage = File(pickedFile.path); // Save the selected image
+          _isImagePicked = false; // No image selected
         });
+        print('No image selected');
       }
     }
   }
@@ -434,7 +445,7 @@ Widget _buildAddPlantBottomSheet() {
                         ),
                       ),
                       // Show the selected image immediately after selection
-                      _plantImage != null
+                      _isImagePicked
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Rounded corners for image
 
@@ -672,7 +683,7 @@ Widget _buildAddPlantBottomSheet() {
                               child: Icon(
                                 Icons.camera_alt_rounded,
                                 size: 40,
-                                color: isDarkMode ? Colors.grey : Colors.green, // Icon adapts to theme
+                                color: isDarkMode ? Colors.green.shade800 : Colors.green, // Icon adapts to theme
                               ),
                             ),
                           ),
@@ -701,6 +712,8 @@ Widget _buildAddPlantBottomSheet() {
                                   if (_plantImage != null) {
                                     imageUrl =
                                     await _uploadImageToFirebase(_plantImage!);
+                                    } else {
+                                    imageUrl = ""; // Assign an empty string if no image is selected
 
                                     // Retrieve the userId
                                     String? userId = _getUserId();
@@ -761,16 +774,6 @@ Widget _buildAddPlantBottomSheet() {
                                         snackbar.showMessage('Failed to get userId. Please sign in again.', MessageType.error);
                                       }
                                     }
-                                  } else {
-                                    if (mounted) {
-                                      Navigator.pop(
-                                          context); // Close loading dialog
-                                      CustomSnackbar snackbar = CustomSnackbar(
-                                          context);
-                                      snackbar.showMessage(
-                                          'Please select an image for the plant.',
-                                          MessageType.info);
-                                    }
                                   }
                                 } catch (error) {
                                   if (mounted) {
@@ -787,7 +790,7 @@ Widget _buildAddPlantBottomSheet() {
                                 ),
                                 foregroundColor: Colors.white,
                                 backgroundColor: isDarkMode
-                                    ? Colors.grey.shade600
+                                    ? Colors.green.shade800
                                     : Colors.green,
                                 elevation: 5, // Button color adapted to theme
                               ),
@@ -913,17 +916,43 @@ Widget _buildAddPlantBottomSheet() {
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 4,
+                        color: isDarkMode ? darkSeaGreen : darkGreyGreen,
+                      ),
                     ),
-                    child: plant.plantData!.imageUrl != null ? ClipRRect(
+                    child: ClipOval(
+                        child: plant.plantData!.imageUrl != null && plant.plantData!.imageUrl!.isNotEmpty
+                        ? ClipRRect(
                       borderRadius: BorderRadius.circular(40),
                       child: Image.network(
                         plant.plantData!.imageUrl!,
                         fit: BoxFit.cover,
                       ),
-                    ) : const Icon(FluentIcons.camera_24_regular,
-                      size: 50,
-                      color: Color(0xFF388E3C),
+                    ) : ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Image.asset(
+                        'lib/profileImages/2_plant_profile.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  ),// Camera icon overlay
+                  Positioned(
+                    bottom: 5,
+                    right: 5,
+                    child: Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isDarkMode ? darkSeaGreen : darkGreyGreen,
+                      ),
+                      child: Icon(Icons.camera_alt_rounded,
+                        size: 14.0,
+                        color: isDarkMode ? Colors.black87 : Colors.white70,
+                      ),
                     ),
                   ),
                 ],
@@ -977,16 +1006,3 @@ Widget _buildAddPlantBottomSheet() {
     );
   }
 }
-
-/// TODO: change the structure of code according to OOP
-/// -Each plant (name, scientific name, photo, user) should be saved for specific users in Firebase.
-// Use user ID for plant storage, linking the image URL with the real-time database.
-//
-// -Adding a photo should be optional when saving
-//
-// -Add Dropdown menu on the edit page: Light, Water, Difficulty, Plant Type) without funtions…
-// (--(Watering cycle for the plant: often – medium – rarely. Save data or retrieve plant data from Wikipedia )
-
-/// DONE
-// -open a new scrollable draggable sheet when you press + button instead of plant dialog
-// -While loading images -> show a loading bar.

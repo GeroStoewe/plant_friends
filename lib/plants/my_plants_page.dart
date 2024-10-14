@@ -710,8 +710,7 @@ Widget _buildAddPlantBottomSheet() {
                                   );
 
                                     String? imageUrl =
-                                    _isImagePicked ? await _uploadImageToFirebase(_plantImage!)
-                                    : null; // Assign an empty string if no image is selected
+                                    _isImagePicked ? await _uploadImageToFirebase(_plantImage!) : null; // Assign an empty string if no image is selected
 
                                     // Debug print statement to ensure imageUrl is set
                                     print("Image URL: $imageUrl");

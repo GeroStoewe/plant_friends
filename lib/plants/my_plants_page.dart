@@ -915,7 +915,15 @@ Widget _buildAddPlantBottomSheet() {
               onTap: () async {
                 await _pickImage();
                 if (_plantImage != null) {
+                  String? oldImageUrl = plant.plantData?.imageUrl;
+
+                  // If there is an image URL, delete the image from Firebase Storage
+                  if (oldImageUrl != null && oldImageUrl.isNotEmpty) {
+                    await FirebaseStorage.instance.refFromURL(oldImageUrl).delete();
+                  }
+
                   String? imageUrl = await _uploadImageToFirebase(_plantImage!);
+
 
                   if (imageUrl != null) {
                     // Step 2: Update the plant data in Firebase with the new image URL

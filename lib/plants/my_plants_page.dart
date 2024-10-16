@@ -916,9 +916,23 @@ Widget _buildAddPlantBottomSheet() {
                 await _pickImage();
                 if (_plantImage != null) {
                   String? imageUrl = await _uploadImageToFirebase(_plantImage!);
-                  setState(() {
-                    plant.plantData!.imageUrl = imageUrl;
-                  });
+
+                  if (imageUrl != null) {
+                    // Step 2: Update the plant data in Firebase with the new image URL
+                    Map<String, dynamic> updatedData = {
+                      "image_url": imageUrl,
+                      // Updating just the image URL in Firebase
+                    };
+                    // Firebase key stored in plant.key
+                    DatabaseReference plantRef = dbRef.child("Plants").child(
+                        plant.key!);
+                    await plantRef.update(updatedData);
+
+                    setState(() {
+                      plant.plantData!.imageUrl = imageUrl;
+                      _isImagePicked = true;
+                    });
+                  }
                 }
               },
               child: Stack(
@@ -1015,3 +1029,5 @@ Widget _buildAddPlantBottomSheet() {
     );
   }
 }
+
+//TODO: Readme aktualiseren mit einleitung und ein photo von jeder Seite hochladen

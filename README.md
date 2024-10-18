@@ -68,6 +68,7 @@ The key features of the Plant Friends app include:
 The Plant Friends app follows a common Flutter project structure:
 
 lib/
+
 │── main.dart 
                
 │── authentication/  

@@ -15,8 +15,8 @@ To run this project locally, ensure the following are installed:
 	1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
 	2.	Flutter SDK (installation guide [here](https://docs.flutter.dev/get-started/install)
 	3.	Git installed 
-    4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
-    5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
+	4.  	Android Emulator through Android Studio (optional, only required if not using a physical Android device)
+	5.  	Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
 
 
 ## Local Development
@@ -68,17 +68,28 @@ The key features of the Plant Friends app include:
 The Plant Friends app follows a common Flutter project structure:
 
 lib/
-│── main.dart                
-│── authentication/            
+│── main.dart 
+               
+│── authentication/  
+          
 │── calendar/
+
 │── fonts/
+
 │── pages/
+
 │── plants/
+
 │── plantWiki/
+
 │── profileImages/
+
 │── quiz/
-│── services/                 
+
+│── services/
+                 
 │── themes/
+
 │── widgets/
 
 
@@ -101,7 +112,6 @@ implemented in this app.
 ## 📸 Sample of Views
 
 * Welcome Page:
-
   <br/>
   <br/>
   <img src="./docs/screenshots/welcome_page_1.png">
@@ -110,44 +120,44 @@ implemented in this app.
   <br/>
   <img src="./docs/screenshots/welcome_page_2.png">
 
-* Sign up:
 
+* Sign up:
   <br/>
   <br/>
   <img src="./docs/screenshots/sign_up_page.png">
 
-* Login:
 
+* Login:
   <br/>
   <br/>
   <img src="./docs/screenshots/login_page.png">
 
-* Navigation Bar:
 
+* Navigation Bar:
   <br/>
   <br/>
   <img src="./docs/screenshots/navigation_bar_dark_and_light_mode.png">
 
-* My Plants:
 
+* My Plants:
   <br/>
   <br/>
   <img src="./docs/screenshots/my_plants_page.png">
 
-* Calendar:
 
+* Calendar:
   <br/>
   <br/>
   <img src="./docs/screenshots/calendar_page.png">
 
-* Plant-Wiki:
 
+* Plant-Wiki:
   <br/>
   <br/>
   <img src="./docs/screenshots/plant_wiki_page.png">
 
-* Account:
 
+* Account:
   <br/>
   <br/>
   <img src="./docs/screenshots/account_page.png">

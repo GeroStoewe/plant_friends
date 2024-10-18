@@ -100,7 +100,7 @@ implemented in this app.
 
 ## 📸 Sample of Views
 
-* Welcome Page
+* Welcome Page:
 
   <br/>
   <br/>
@@ -110,43 +110,43 @@ implemented in this app.
   <br/>
   <img src="./docs/screenshots/welcome_page_2.png">
 
-* Sign up
+* Sign up:
 
   <br/>
   <br/>
   <img src="./docs/screenshots/sign_up_page.png">
 
-* Login
+* Login:
 
   <br/>
   <br/>
   <img src="./docs/screenshots/login_page.png">
 
-* Navigation Bar
+* Navigation Bar:
 
   <br/>
   <br/>
   <img src="./docs/screenshots/navigation_bar_dark_and_light_mode.png">
 
-* My Plants
+* My Plants:
 
   <br/>
   <br/>
   <img src="./docs/screenshots/my_plants_page.png">
 
-* Calendar
+* Calendar:
 
   <br/>
   <br/>
   <img src="./docs/screenshots/calendar_page.png">
 
-* Plant-wiki
+* Plant-Wiki:
 
   <br/>
   <br/>
   <img src="./docs/screenshots/plant_wiki_page.png">
 
-* Account
+* Account:
 
   <br/>
   <br/>

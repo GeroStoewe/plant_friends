@@ -227,12 +227,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 2),
                       ProfileMenuButton(
-                        onTap: isLoading ? null : () {},
-                        text: "Plant Wishlist",
-                        icon: Icons.local_florist_rounded,
-                      ),
-                      const SizedBox(height: 2),
-                      ProfileMenuButton(
                         onTap: isLoading
                             ? null
                             : () async {

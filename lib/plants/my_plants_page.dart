@@ -1037,5 +1037,3 @@ Widget _buildAddPlantBottomSheet() {
     );
   }
 }
-
-//TODO: Readme aktualiseren mit einleitung und ein photo von jeder Seite hochladen

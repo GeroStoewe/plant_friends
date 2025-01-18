@@ -550,6 +550,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     // Determine the background color and icon based on the message type
     Color backgroundColor;
     IconData icon;
+    IconData iconClose = Icons.close_rounded;
 
     switch (type) {
       case MessageType.error:
@@ -567,32 +568,45 @@ class _EditProfilePageState extends State<EditProfilePage> {
         break;
     }
 
+    // Reference to ScaffoldMessenger
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     // Show the Snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(
-                icon,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 7.5),
-              Expanded(
-                child: Text(
-                  message,
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-              ),
-            ],
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
           ),
-          backgroundColor: backgroundColor,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+          const SizedBox(width: 7.5),
+          Expanded(
+            child: Text(
+              message,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+            ),
           ),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+          GestureDetector(
+            onTap: () {
+              scaffoldMessenger.hideCurrentSnackBar(); // Close the snackbar
+            },
+            child: Icon(
+              iconClose,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: backgroundColor,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      duration: const Duration(seconds: 3),
+    );
+
+    scaffoldMessenger.showSnackBar(snackBar);
   }
 
   Future<void> pickImage() async {

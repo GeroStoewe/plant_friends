@@ -107,6 +107,8 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     String? imageUrl = "";
 
+    _edtDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -130,7 +132,10 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
 
                   // Date Field
                   GestureDetector(
-                    onTap: () => _selectDate(context),
+                    onTap: () async {
+                      await _selectDate(context);
+                      setDialogState(() {});
+                    },
                     child: AbsorbPointer(
                       child: TextField(
                         controller: _edtDateController,

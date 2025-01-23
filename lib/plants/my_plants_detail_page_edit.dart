@@ -633,7 +633,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 items: const [
                   DropdownMenuItem(value: "Easy", child: Text("Easy")),
                   DropdownMenuItem(value: "Medium", child: Text("Medium")),
-                  DropdownMenuItem(value: "Hard", child: Text("Hard")),
+                  DropdownMenuItem(value: "Difficult", child: Text("Hard")),
                 ],
                 onChanged: (String? newValue) {
                   setState(() {

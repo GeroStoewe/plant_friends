@@ -8,16 +8,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:line_icons/line_icons.dart';
+import 'package:plant_friends/plants/add_new_plant_with_wiki_data.dart';
 
-import '../calendar/calendar_functions.dart';
 import '../themes/colors.dart';
+import '../widgets/custom_button_outlined_small.dart';
+import 'add_new_plant.dart';
 import 'my_plants_details_page.dart';
 import 'plant.dart';
-import '../widgets/custom_snackbar.dart';
 
 class MyPlantsPage extends StatefulWidget {
   const MyPlantsPage({super.key});
@@ -44,11 +44,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   List<Plant> plantList = [];
   List<Plant> filteredPlantList = [];
   File? _plantImage;
-
-  String? _selectedPlantType;
-  String? _selectedDifficulty;
-  String? _selectedLightRequirement;
-  String? _selectedWaterRequirement;
 
 
 
@@ -105,19 +100,6 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
 
     super.dispose();
   }
-
-  void _resetForm() {
-    // Clear the text fields
-    _edtNameController.clear();
-    _edtScienceNameController.clear();
-    _edtDateController.clear();
-
-      // Reset selected image
-      setState(() {
-        _plantImage = null;
-        _isImagePicked = false;
-      });
-    }
 
   void _onSearchChanged() {
     setState(() {
@@ -386,15 +368,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
       ),
       floatingActionButton: GestureDetector(
         onTap: () {
-          //plantDialog();
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-              ),
-              builder: (context) => _buildAddPlantBottomSheet(),
-          );
+          showAddPlantOptions(context); // Zeigt den Dialog an
         },
         child: Container(
           width: 60,
@@ -402,504 +376,85 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           decoration: BoxDecoration(
             color: isDarkMode ? const Color(0xFF4CAF50) : const Color(0xFF388E3C),
             shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
           child: Center(
             child: Text(
               '+',
               style: TextStyle(
                 fontSize: 30,
-                fontWeight: FontWeight.w200,
+                fontWeight: FontWeight.w300,
                 color: isDarkMode ? Colors.black : Colors.white,
               ),
             ),
           ),
         ),
       ),
+
     );
   }
 
-Widget _buildAddPlantBottomSheet() {
-  final theme = Theme.of(context);
-  final isDarkMode = theme.brightness == Brightness.dark;
-  CalenderFunctions calenderFunctions = CalenderFunctions();
-  bool _isLoadingImage = false; // Add a flag to manage loading state
-  // Liste der Pflanzenarten (kann angepasst werden)
-  List<String> plantTypes = [
-    'Cacti/Succulents',
-    'Tropical Plants',
-    'Climbing Plants',
-    'Flowering Plants',
-    'Trees/Palms',
-    'Herbs',
-    'Others'
-  ];
-  // Liste der Schwierigkeitsgrade
-  List<String> difficulties = [
-    'Easy',
-    'Medium',
-    'Hard',
-  ];
-
-  // Liste der Lichtanforderungen
-  List<String> lightRequirements = [
-    'Direct Light',
-    'Indirect Light',
-    'Partial Shade',
-    'Low Light',
-  ];
-  // Liste der Wasseranforderungen
-  List<String> waterRequirements = [
-    'Low',
-    'Medium',
-    'High',
-  ];
-
-  return DraggableScrollableSheet(
-      expand: true,
-      initialChildSize: 1.0,
-      maxChildSize:1.0,
-      minChildSize:1.0,
-      builder: (context, scrollController) {
-        print("Building DraggableScrollableSheet");
-      return Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16.0,
-            right: 16.0,
-            top: 20.0,
-        ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 35),
-                      const Text(
-                        'Add new plant',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
+  void showAddPlantOptions(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add new plant'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5, // Set button width to 50% of screen width
+                  child: CustomButtonOutlinedSmall(
+                    text: 'I have all the data for my plant',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddNewPlantPage(),
                         ),
-                      ),
-                      // Show the selected image immediately after selection
-                      _isImagePicked && _plantImage != null
-                          ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10), // Rounded corners for image
-
-                            child: Image.file(
-                          _plantImage!,
-                          height: 200,
-                          width: double.infinity, // Make image responsive
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                          : Text(
-                        "No photo selected yet.\nTap the camera icon to upload a photo. \nSwipe down to quit.",
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          color: isDarkMode ? Colors.grey : Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      if (_identifiedPlant.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: Text(
-                            'Identified Plant: $_identifiedPlant',
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      const SizedBox(height: 15),
-
-                      // Modern spacing and styling for input fields
-                      TextField(
-                        controller: _edtNameController,
-                        decoration: InputDecoration(
-                          labelText: "Name",
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold, // Bold label for modern feel
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      TextField(
-                        controller: _edtScienceNameController,
-                        decoration: InputDecoration(
-                          labelText: "Scientific Name",
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      GestureDetector(
-                        onTap: () => _selectDate(context),
-                        child: AbsorbPointer(
-                          child: TextField(
-                            controller: _edtDateController,
-                            decoration: InputDecoration(
-                              labelText: "Date of purchase",
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: isDarkMode ? Colors.white : Colors.black,
-                              ),
-                              border: const OutlineInputBorder(),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green, width: 2.0),
-                              ),
-                              suffixIcon: Icon(
-                                Icons.calendar_today,
-                                color: isDarkMode ? Colors.grey : Colors.green, // Modern icon coloring
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      // Dropdown Menu für Pflanzenart
-                      DropdownButtonFormField<String>(
-                        value: _selectedPlantType,
-                        hint: Text(
-                          'Select Plant Type',
-                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
-                        ),
-                        items: plantTypes.map((String type) {
-                          return DropdownMenuItem<String>(
-                            value: type,
-                            child: Text(
-                              type,
-                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedPlantType = newValue ?? plantTypes[0]; // Set default value if null
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                          labelText: "Plant Type",
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-
-                      DropdownButtonFormField<String>(
-                        value: _selectedDifficulty,
-                        hint: Text(
-                          'Select Difficulty',
-                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
-                        ),
-                        items: difficulties.map((String difficulty) {
-                          return DropdownMenuItem<String>(
-                            value: difficulty,
-                            child: Text(
-                              difficulty,
-                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedDifficulty = newValue ?? difficulties[0]; // Set default value if null
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                          labelText: "Difficulty",
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-
-                      // Dropdown Menu für Lichtanforderungen
-                      DropdownButtonFormField<String>(
-                        value: _selectedLightRequirement,
-                        hint: Text(
-                          'Select Light Requirement',
-                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
-                        ),
-                        items: lightRequirements.map((String light) {
-                          return DropdownMenuItem<String>(
-                            value: light,
-                            child: Text(
-                              light,
-                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedLightRequirement = newValue; // Update selected light requirement
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                          labelText: "Light Requirement",
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-
-                      // Dropdown Menu für Wasseranforderungen
-                      DropdownButtonFormField<String>(
-                        value: _selectedWaterRequirement,
-                        hint: Text(
-                          'Select Water Requirement',
-                          style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
-                        ),
-                        items: waterRequirements.map((String water) {
-                          return DropdownMenuItem<String>(
-                            value: water,
-                            child: Text(
-                              water,
-                              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedWaterRequirement = newValue; // Update selected water requirement
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green, width: 2.0),
-                          ),
-                          labelText: "Water Requirement",
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-
-
-                      // Row containing the Add photo and Save buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space out buttons
-                        children: [
-                          Flexible(
-                            child:
-                            // Add a new plant photo button
-                            TextButton(
-                              onPressed: () async {
-                                await _pickImage();
-                                setState(() {}); // Rebuild when image is selected
-                              },
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Modern padding
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                foregroundColor: isDarkMode ? Colors.grey : Colors.green,
-                              ),
-                              child: Icon(
-                                Icons.camera_alt_rounded,
-                                size: 40,
-                                color: isDarkMode ? Colors.green.shade800 : Colors.green, // Icon adapts to theme
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Flexible(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                try {
-                                  // Show loading indicator while saving the data
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    // Prevent closing the dialog by tapping outside
-                                    builder: (BuildContext context) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(
-                                          valueColor: AlwaysStoppedAnimation<
-                                              Color>(Color(
-                                              0xFF388E3C)), // Green color for loading
-                                        ),
-                                      );
-                                    },
-                                  );
-
-                                  String? imageUrl;
-
-                                  // Check if the image is picked and upload if it is
-                                  if (_isImagePicked && _plantImage != null) {
-                                    imageUrl = await _uploadImageToFirebase(_plantImage!);
-                                  } else {
-                                    // No image is picked, so set imageUrl to null (or "" if preferred)
-                                    imageUrl = null; // null instead of " " due to null check operator
-                                  }
-
-                                  // Debug print statement to ensure imageUrl is set
-                                    print("Image URL: $imageUrl");
-
-                                    // Retrieve the userId
-                                    String? userId = _getUserId();
-                                    // Debug print statement to ensure userId is set
-                                    print("User ID: $userId");
-
-                                    // Ensure that userId is not null before saving
-                                    if (userId != null) {
-
-                                    Map<String, dynamic> data = {
-                                      "name": _edtNameController.text,
-                                      "science_name": _edtScienceNameController
-                                          .text,
-                                      "date": _edtDateController.text,
-                                      "image_url": imageUrl,
-                                      "user_id": userId,
-                                      "water": _selectedWaterRequirement,
-                                      "type": _selectedPlantType,
-                                      "light": _selectedLightRequirement,
-                                      "difficulty": _selectedDifficulty
-                                    };
-
-                                      // Debug print statement to ensure data map is created correctly
-                                      print("Data: $data");
-
-                                    // Save plant details to Firebase and get the reference
-                                    DatabaseReference newPlantRef = dbRef.child("Plants").push();
-
-                                      await newPlantRef.set(data);
-                                      String newPlantId = newPlantRef.key!;
-                                    // Call event creation functions
-                                    await calenderFunctions.createNewEventsWatering(
-                                      newPlantId, // Pass the plant ID if available
-                                      _edtNameController.text, // Use plant name
-                                      _selectedWaterRequirement!, // Use selected water requirement
-                                    );
-
-                                    // Assuming a default day interval for fertilizing (e.g., 30 days)
-                                    int fertilizingInterval = 30; // You can change this as needed
-                                    await calenderFunctions.createNewEventsFertilizing(
-                                      newPlantId, // Pass the plant ID if available
-                                      _edtNameController.text, // Use plant name
-                                      fertilizingInterval, // Use the fertilizing interval
-                                    );
-
-                                    if (mounted) {
-                                      Navigator.pop(context);
-                                      CustomSnackbar snackbar = CustomSnackbar(
-                                          context);
-                                      snackbar.showMessage(
-                                          'Plant details saved successfully!',
-                                          MessageType.success);
-                                      // Reset the form fields after successfully saving the plant
-                                      _resetForm();
-                                      Navigator.pop(context);
-                                    }
-                                  } else {
-                                      if (mounted) {
-                                        Navigator.pop(context); // Close loading dialog
-                                        CustomSnackbar snackbar = CustomSnackbar(context);
-                                        snackbar.showMessage('Failed to get userId. Please sign in again.', MessageType.error);
-                                      }
-                                    }
-                                } catch (error) {
-                                  if (mounted) {
-                                  Navigator.pop(context);
-                                  CustomSnackbar snackbar = CustomSnackbar(context);
-                                  snackbar.showMessage('Failed to save plant details: $error', MessageType.error);
-                                }
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Modern button padding
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10), // Rounded button corners
-                                ),
-                                foregroundColor: Colors.white,
-                                backgroundColor: isDarkMode
-                                    ? Colors.green.shade800
-                                    : Colors.green,
-                                elevation: 5, // Button color adapted to theme
-                              ),
-                              child: const Text(
-                                "Save",
-                                style: TextStyle(fontSize: 16.0),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
-              );
-          },
-  );
-}
-
-
-  Future<void> _selectDate(BuildContext context) async {
-    final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
-
-    final DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: isDarkMode ? ThemeData.light().copyWith(
-            colorScheme: ColorScheme.dark(
-              primary: Colors.green,
-              surface: Colors.grey[800]!,
-              onSurface: Colors.white,
-            ),
-            dialogBackgroundColor: Colors.black,
-          )
-              : ThemeData.light().copyWith(
-            primaryColor: Colors.green,
-            hintColor: Colors.green,
-            colorScheme: const ColorScheme.light(primary: Colors.green),
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5, // Set button width to 50% of screen width
+                  child: CustomButtonOutlinedSmall(
+                    text: 'I need help',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddNewPlantWithWiki(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
-          child: child ?? Container(),
         );
       },
     );
-
-    if (selectedDate != null) {
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      final String formattedDate = formatter.format(selectedDate);
-      _edtDateController.text = formattedDate;
-    }
   }
+
+
+
+
 
   Widget plantWidget(Plant plant) {
     final theme = Theme.of(context);

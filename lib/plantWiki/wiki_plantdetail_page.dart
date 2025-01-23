@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../themes/colors.dart';
 import '../../widgets/custom_info_card.dart';
+import '../plants/add_new_plant_with_prefilled_data.dart';
 
 class PlantWikiDetailPage extends StatelessWidget {
   final dynamic plant;
@@ -52,6 +53,34 @@ class PlantWikiDetailPage extends StatelessWidget {
               right: 10,
               child: getPlantTypeImage(),
             ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: seaGreen,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddNewPlantWithPrefilledData(plant: plant),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Add plant to \n"My Plants"',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
+
           ],
         ),
       ),
@@ -314,3 +343,4 @@ class PlantWikiDetailPage extends StatelessWidget {
     }
   }
 }
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../themes/colors.dart';
+
+
 class FilterCard extends StatelessWidget {
   final String title;
   final String imagePath;

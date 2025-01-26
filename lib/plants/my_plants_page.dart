@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart'; // To get the current userId
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:line_icons/line_icons.dart';
 
@@ -127,7 +129,36 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
     });
   }
 
+  Future<void> _identifyPlantWithApi(String imagePath) async {
+    final apiKey = '2b10i3KvRsGFF7xGiCaTQRWe';
+    final project = 'all';
+    final url = Uri.parse(
+      'https://my-api.plantnet.org/v2/identify/$project?api-key=$apiKey',
+    );
+
+    final request = http.MultipartRequest('POST', url)
+      ..files.add(await http.MultipartFile.fromPath('images', imagePath));
+
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.bytesToString();
+      final data = json.decode(responseData);
+
+      setState(() {
+        _identifiedPlant = data['results'][0]['species']['scientificName'] ?? 'Unknown Plant';
+      });
+
+      print('Plant identified: $data');
+    } else {
+      final errorData = await response.stream.bytesToString();
+      print('Error by plant identification: ${response.statusCode}');
+      print('Error Details: $errorData');
+    }
+  }
+
   bool _isImagePicked = false;
+  String _identifiedPlant = '';
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -184,6 +215,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           });
         }
         print('Image successfully picked: ${_plantImage?.path}');
+        await _identifyPlantWithApi(_plantImage!.path);
       } else {
         setState(() {
           _isImagePicked = false; // No image selected
@@ -468,6 +500,15 @@ Widget _buildAddPlantBottomSheet() {
                           color: isDarkMode ? Colors.grey : Colors.black,
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      if (_identifiedPlant.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: Text(
+                            'Identified Plant: $_identifiedPlant',
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                        ),
                       const SizedBox(height: 15),
 
                       // Modern spacing and styling for input fields

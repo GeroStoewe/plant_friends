@@ -19,6 +19,6 @@ class FirebaseApi {
   }
 }
 
-//TODO: fix issue with iphone.
+//TODO: fix issue with iphone. (No worries, Android works fine)
 /// While initializing the app, there is a permission question asking for notifications.
 /// If you click "allow" on Iphone, the app does not work anymore. If you "deny", the app works as expected.

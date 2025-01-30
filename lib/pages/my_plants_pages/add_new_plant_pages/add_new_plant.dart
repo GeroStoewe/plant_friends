@@ -376,7 +376,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                   ),
                 )
                     : Text(
-                  "No photo selected yet.\nTap the camera icon to upload a photo. \nSwipe down to quit.",
+                  "No photo selected yet.\nTap the camera icon to upload a photo.",
                   style: TextStyle(
                     fontSize: 17.0,
                     color: isDarkMode ? Colors.grey : Colors.black,

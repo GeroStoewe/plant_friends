@@ -153,6 +153,17 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             calendarBuilders: CalendarBuilders(
+              dowBuilder: (context, day) {
+                return Center(
+                  child: Text(
+                    DateFormat.E().format(day), // Format the day of the week (e.g., Mon, Tue)
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold, // Make the text bold
+                      fontSize: 14, // Adjust font size
+                    ),
+                  ),
+                );
+              },
               headerTitleBuilder: (context, day) {
                 final headerDateFormat = DateFormat('MMMM yyyy');
                 return Container(

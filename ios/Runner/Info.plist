@@ -66,5 +66,17 @@
     <string>We need access to the camera to take photos of your plants.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>We need access to your photo library to select photos of your plants.</string>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <true/>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>remote-notification</string>
+    </array>
 </dict>
 </plist>

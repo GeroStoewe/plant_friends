@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/themes/colors.dart'; // Assuming lmCardBG and dmCardBG are defined here
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:intl/intl.dart';
 
-class CustomInfoCard extends StatelessWidget {
+import '../../../themes/colors.dart';
+
+class EventCardNextDate extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String value;
+  final DateTime? date;
 
-  const CustomInfoCard({
+  const EventCardNextDate({
     Key? key,
     required this.icon,
     required this.title,
-    required this.value,
+    required this.date,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final formattedDate = date != null ? DateFormat('dd/MM/yyyy').format(date!) : 'N/A';
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -28,32 +30,29 @@ class CustomInfoCard extends StatelessWidget {
         children: [
           Icon(
             icon,
+            size: 25,
             color: seaGreen,
           ),
           const SizedBox(width: 8),
-          Expanded( // Use Expanded to avoid overflow
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AutoSizeText(
+                Text(
                   title,
                   style: TextStyle(
                     color: seaGreen,
                     fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
-                  maxLines: 1, // Limit to one line and shrink if needed
-                  minFontSize: 12, // Minimum font size
-                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                AutoSizeText(
-                  value,
+                Text(
+                  formattedDate,
                   style: TextStyle(
                     color: seaGreen,
+                    fontSize: 16,
                   ),
-                  maxLines: 1, // Limit to one line and shrink if needed
-                  minFontSize: 12, // Minimum font size
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

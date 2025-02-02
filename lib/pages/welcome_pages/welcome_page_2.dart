@@ -23,7 +23,7 @@ class WelcomePage2 extends StatelessWidget {
               children: [
                 SizedBox(
                   width: size.width,
-                  height: size.height * 0.5,
+                  height: size.height * 0.6,
                   child: Image.asset(
                     'lib/images/welcome/images/wallpaper_welcome_page2.jpg',
                     fit: BoxFit.cover,
@@ -32,15 +32,15 @@ class WelcomePage2 extends StatelessWidget {
               ],
             ),
             Positioned(
-              top: size.height * 0.48,
+              top: size.height * 0.5,
               child: Container(
                 width: size.width,
-                height: size.height * 0.52,
+                height: size.height * 0.5,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
                   ),
                 ),
                 child: Scrollbar(
@@ -48,45 +48,41 @@ class WelcomePage2 extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        double textScaleFactor = 1.0;
-                        double buttonWidthScaleFactor = 1.0;
+                        double textScaleFactor = size.width / 400; // Normalize for different widths
 
-                        // Passe den Text und die Button-Größe je nach Höhe an
-                        if (constraints.maxHeight < 400) {
-                          textScaleFactor = 0.85;
-                          buttonWidthScaleFactor = 0.9;
-                        } else if (constraints.maxHeight < 300) {
-                          textScaleFactor = 0.75;
-                          buttonWidthScaleFactor = 0.8;
+                        if (constraints.maxHeight > 350) {
+                          textScaleFactor *= 0.95; // Kleinere Bildschirme -> kleinerer Text
+                        } else if (constraints.maxHeight < 350) {
+                          textScaleFactor *= 0.75; // Noch kleinere Bildschirme
                         }
 
                         return Padding(
-                          padding: EdgeInsets.all(size.width * 0.05), // Dynamisches Padding
+                          padding: EdgeInsets.all(size.width * 0.04), // Dynamisches Padding
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const SizedBox(height: 10),
+                              SizedBox(height: size.height * 0.002),
                               Text(
                                 "Ready to get started?",
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium
-                                    ?.copyWith(fontSize: 24 * textScaleFactor),
+                                    ?.copyWith(fontSize: 28 * textScaleFactor),
                               ),
-                              const SizedBox(height: 15),
+                              SizedBox(height: size.height * 0.03),
                               Text(
                                 "Create an account or log in to manage your plants today.",
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  fontSize: 16 * textScaleFactor,
+                                  fontSize: 18 * textScaleFactor,
                                   color: isDarkMode ? dmLightGrey : lmDarkGrey,
                                 ),
                               ),
-                              const SizedBox(height: 40),
+                              SizedBox(height: size.height * 0.04),
 
                               // Login Button
                               SizedBox(
-                                width: size.width * buttonWidthScaleFactor, // Dynamische Button-Breite
+                                width: size.width * 0.8, // Dynamische Button-Breite
                                 child: CustomButton(
                                   onTap: () {
                                     Navigator.pushReplacement(
@@ -99,11 +95,11 @@ class WelcomePage2 extends StatelessWidget {
                                   text: "Login",
                                 ),
                               ),
-                              const SizedBox(height: 20),
+                              SizedBox(height: size.height * 0.025),
 
                               // Sign Up Button
                               SizedBox(
-                                width: size.width * buttonWidthScaleFactor, // Dynamische Button-Breite
+                                width: size.width * 0.8, // Dynamische Button-Breite
                                 child: CustomButton(
                                   onTap: () {
                                     Navigator.pushReplacement(

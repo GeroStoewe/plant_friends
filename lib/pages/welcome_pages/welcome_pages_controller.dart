@@ -15,6 +15,8 @@ class _WelcomePagesControllerState extends State<WelcomePagesController> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -31,7 +33,7 @@ class _WelcomePagesControllerState extends State<WelcomePagesController> {
             ],
           ),
           Positioned(
-            bottom: 30,
+            bottom: size.height * 0.02,
             left: 0,
             right: 0,
             child: Row(
@@ -49,11 +51,11 @@ class _WelcomePagesControllerState extends State<WelcomePagesController> {
 
   Widget buildDot(int index, BuildContext context) {
     return Container(
-      height: 10,
-      width: _currentPage == index ? 12 : 8,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      height: 16,
+      width: _currentPage == index ? 16 : 10,
+      margin: const EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         color: _currentPage == index
             ? Theme.of(context).primaryColor
             : Colors.grey,

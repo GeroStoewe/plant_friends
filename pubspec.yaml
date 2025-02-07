@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # This dependency is used for the walk through tutorial for the app.
+  showcaseview: ^1.1.0
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

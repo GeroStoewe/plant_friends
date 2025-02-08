@@ -657,6 +657,19 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
+                            if (_edtNameController.text.isEmpty ||
+                                _edtScienceNameController.text.isEmpty ||
+                                _edtDateController.text.isEmpty ||
+                                _selectedPlantType == null ||
+                                _selectedDifficulty == null ||
+                                _selectedLightRequirement == null ||
+                                _selectedWaterRequirement == null) {
+
+                              // Show warning banner if any required field is missing
+                              CustomSnackbar snackbar = CustomSnackbar(context);
+                              snackbar.showMessage('Please fill in all required fields.', MessageType.error);
+                              return; // Exit the function early
+                            }
                             // Show loading indicator while saving the data
                             showDialog(
                               context: context,

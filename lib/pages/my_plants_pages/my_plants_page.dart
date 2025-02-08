@@ -557,6 +557,26 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                             ? Image.network(
                           plant.plantData!.imageUrl!, // Display the network image if it exists
                           fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(seaGreen),
+                                ),
+                              ),
+                            );
+
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              'lib/images/profile/2_plant_profile.jpg',
+                              fit: BoxFit.cover,
+                            );
+                          },
                         )
                             : Image.asset(
                           'lib/images/profile/2_plant_profile.jpg', // Fallback to the asset image if no URL

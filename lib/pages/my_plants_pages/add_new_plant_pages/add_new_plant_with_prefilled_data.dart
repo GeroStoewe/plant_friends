@@ -695,7 +695,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                                 _edtScienceNameController.text.isEmpty ||
                                 _edtDateController.text.isEmpty ||
                                 _selectedPlantType == null ||
-                                _selectedDifficulty == null ||
+                                //_selectedDifficulty == null ||
                                 _selectedLightRequirement == null ||
                                 _selectedWaterRequirement == null) {
 

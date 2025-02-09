@@ -42,7 +42,8 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
   String? _selectedDifficulty;
   String? _selectedLightRequirement;
   String? _selectedWaterRequirement;
-
+  TextEditingController _customWaterIntervalController = TextEditingController();
+  bool _isCustomWaterInterval = false;
 
 
   // Function to get the current user's userId on FirebaseAuth
@@ -72,11 +73,13 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
           }
         });
       }
+if(mounted){
+  setState(() {
+    plantList = updatedPlantList;
+    filteredPlantList = updatedPlantList;
+  });
+}
 
-      setState(() {
-        plantList = updatedPlantList;
-        filteredPlantList = updatedPlantList;
-      });
     });
   }
   Future<void> _selectDate(BuildContext context) async {
@@ -342,6 +345,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
       'High',
     ];
 
+
     return DraggableScrollableSheet(
       expand: true,
       initialChildSize: 1.0,
@@ -482,7 +486,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                   ),
                 ),
                 const SizedBox(height: 15),
-
+/*
                 DropdownButtonFormField<String>(
                   value: _selectedDifficulty,
                   hint: Text(
@@ -515,7 +519,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                   ),
                 ),
                 const SizedBox(height: 15),
-
+*/
                 // Dropdown Menu für Lichtanforderungen
                 DropdownButtonFormField<String>(
                   value: _selectedLightRequirement,
@@ -553,23 +557,38 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
 
                 // Dropdown Menu für Wasseranforderungen
                 DropdownButtonFormField<String>(
-                  value: _selectedWaterRequirement,
+                  value: _isCustomWaterInterval ? "Custom" : _selectedWaterRequirement,
                   hint: Text(
                     'Select Water Requirement',
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
-                  items: waterRequirements.map((String water) {
-                    return DropdownMenuItem<String>(
-                      value: water,
+                  items: [
+                    ...waterRequirements.map((String water) {
+                      return DropdownMenuItem<String>(
+                        value: water,
+                        child: Text(
+                          water,
+                          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                    DropdownMenuItem<String>(
+                      value: "Custom",
                       child: Text(
-                        water,
+                        "Custom (Enter Days)",
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedWaterRequirement = newValue; // Update selected water requirement
+                      if (newValue == "Custom") {
+                        _isCustomWaterInterval = true;
+                        _selectedWaterRequirement = "Custom";
+                      } else {
+                        _isCustomWaterInterval = false;
+                        _selectedWaterRequirement = newValue;
+                      }
                     });
                   },
                   decoration: InputDecoration(
@@ -584,6 +603,25 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                     ),
                   ),
                 ),
+                if (_isCustomWaterInterval)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: TextField(
+                      controller: _customWaterIntervalController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Enter Watering Interval (Days)",
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black,
+                        ),
+                        border: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 15),
 
 
@@ -678,12 +716,25 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                               await newPlantRef.set(data);
                               String newPlantId = newPlantRef.key!;
 
-                              // Call event creation functions
-                              await calenderFunctions.createNewEventsWatering(
-                                newPlantId,
-                                _edtNameController.text,
-                                _selectedWaterRequirement!,
-                              );
+                              if(_isCustomWaterInterval){
+                                int waterInterval = int.tryParse(_customWaterIntervalController.text) ?? 5;
+                                await calenderFunctions.createNewEventsWateringCustom(
+                                  newPlantId,
+                                  _edtNameController.text,
+                                  waterInterval,
+                                );
+                              }else{
+                                await calenderFunctions.createNewEventsWatering(
+                                  newPlantId,
+                                  _edtNameController.text,
+                                  _selectedWaterRequirement!,
+                                );
+                              }
+                              // Update the Firebase entry with the watering intervals string
+                              await newPlantRef.update({
+                                "custom_water_interval": int.tryParse(_customWaterIntervalController.text) ?? 5,
+                              });
+
 
                               int fertilizingInterval = 30; // Default interval for fertilizing
                               await calenderFunctions.createNewEventsFertilizing(

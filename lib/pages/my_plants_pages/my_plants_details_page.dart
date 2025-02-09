@@ -92,7 +92,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
   Container backgroundImageAndHeader(Size size, BuildContext context) {
     String imageUrl = widget.plant.plantData!.imageUrl ?? '';
-    String defaultImageUrl = 'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
+    String defaultImageUrl = 'https://firebasestorage.googleapis.com/v0/b/plant-friends-app.appspot.com/o/placeholder_plant%2FnoPlant_plant.webp?alt=media&token=6c20d3e6-4b8c-4b59-a677-2340202020a7';
 
     return Container(
       height: size.height * 0.50,

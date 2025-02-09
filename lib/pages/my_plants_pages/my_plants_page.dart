@@ -573,13 +573,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                           },
                           errorBuilder: (context, error, stackTrace) {
                             return Image.asset(
-                              'lib/images/profile/2_plant_profile.jpg',
+                              'lib/images/profile/noPlant_plant.webp',
                               fit: BoxFit.cover,
                             );
                           },
                         )
                             : Image.asset(
-                          'lib/images/profile/2_plant_profile.jpg', // Fallback to the asset image if no URL
+                          'lib/images/profile/noPlant_plant.webp', // Fallback to the asset image if no URL
                           fit: BoxFit.cover,
                         ),
                       ),

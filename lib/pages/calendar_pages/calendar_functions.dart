@@ -11,16 +11,16 @@ class CalenderFunctions {
       'Winter': 28,
     },
     'Medium': {
-      'Spring': 12,
-      'Summer': 8,
-      'Autumn': 12,
-      'Winter': 19,
+      'Spring': 9,
+      'Summer': 7,
+      'Autumn': 9,
+      'Winter': 12,
     },
     'High': {
-      'Spring': 5,
-      'Summer': 4,
-      'Autumn': 6,
-      'Winter': 12,
+      'Spring': 4,
+      'Summer': 3,
+      'Autumn': 5,
+      'Winter': 7,
     },
   };
 
@@ -40,6 +40,7 @@ class CalenderFunctions {
       // Handle errors (e.g., invalid input format)
       print('Error: $e');
     }
+
   }
 
 
@@ -61,6 +62,26 @@ class CalenderFunctions {
       print('Error: $e');
     }
   }
+  Future<void> createNewEventsWateringCustom(String? plantID, String plantName, int waterIntervall) async {
+    wateringIntervals['Custom'] = {
+      'Spring': waterIntervall,
+      'Summer': waterIntervall,
+      'Autumn': waterIntervall,
+      'Winter': waterIntervall,
+    };
+
+    DateTime firstDay = DateTime.now();
+    DateTime lastDay = DateTime.now().add(const Duration(days: 180));
+    String eventType = "Watering";
+
+    try {
+      await _createEventsInRangeWatering(firstDay, lastDay, plantID, plantName, eventType, "Custom");
+    } catch (e) {
+      // Handle errors (e.g., invalid input format)
+      print('Error: $e');
+    }
+  }
+
 
   Future<DateTime?> getNextWateringDate(String? plantID) async {
     final firestore = FirebaseFirestore.instance;
@@ -165,8 +186,8 @@ class CalenderFunctions {
         'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
-
-      await firestore.collection('events').add(event);
+      print("EVENT: "+ event.toString());
+      //await firestore.collection('events').add(event);
 
       // Move to the next event date
       currentDate = currentDate.add(Duration(days: intervalDays));
@@ -205,8 +226,8 @@ class CalenderFunctions {
         'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
-
-      await firestore.collection('events').add(event);
+      print("EVENT: "+ event.toString());
+      //await firestore.collection('events').add(event);
 
       // Move to the next event date
       currentDate = currentDate.add(Duration(days: dayInterval));
@@ -245,5 +266,14 @@ class CalenderFunctions {
       return 'Winter';
     }
   }
+
+  int getWateringInterval(String level) {
+    DateTime now = DateTime.now();
+    String season = _getCurrentSeason(now);
+
+    return wateringIntervals[level]?[season] ?? 0; // Fallback auf 0, falls kein Wert gefunden wird
+  }
+
+
 
 }

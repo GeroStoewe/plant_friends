@@ -186,7 +186,6 @@ class CalenderFunctions {
         'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
-      print("EVENT: "+ event.toString());
       //await firestore.collection('events').add(event);
 
       // Move to the next event date
@@ -227,7 +226,7 @@ class CalenderFunctions {
         'date': Timestamp.fromDate(currentDate),
       };
       print("EVENT: "+ event.toString());
-      //await firestore.collection('events').add(event);
+      await firestore.collection('events').add(event);
 
       // Move to the next event date
       currentDate = currentDate.add(Duration(days: dayInterval));

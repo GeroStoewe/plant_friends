@@ -240,11 +240,12 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             const SizedBox(width: 16),
             Expanded(
               child: CustomInfoCard(
-                icon: Icons.water_drop,
-                title: 'Water',
-                value: widget.plant.plantData!.water ?? 'N/A',
+                icon: Icons.eco_sharp,
+                title: 'Plant Type',
+                value: widget.plant.plantData!.type ?? 'N/A',
               ),
             ),
+
           ],
         ),
         const SizedBox(height: 16),
@@ -253,21 +254,31 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           children: [
             Expanded(
               child: CustomInfoCard(
-                icon: Icons.star,
-                title: 'Difficulty',
-                value: widget.plant.plantData!.difficulty ?? 'N/A',
+                icon: Icons.water_drop,
+                title: 'Water',
+                value: widget.plant.plantData?.water ?? 'N/A',
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: CustomInfoCard(
-                icon: Icons.eco_sharp,
-                title: 'Plant Type',
-                value: widget.plant.plantData!.type ?? 'N/A',
+                icon: Icons.water_drop_outlined,
+                title: 'Watering Interval',
+                value: (widget.plant.plantData != null)
+                    ? (widget.plant.plantData!.water == 'Custom'
+                    ? (widget.plant.plantData!.customWaterInterval != null
+                    ? '${widget.plant.plantData!.customWaterInterval} day(s)'
+                    : 'N/A')
+                    : '${_calendarFunctions.getWateringInterval(widget.plant.plantData!.water ?? 'Low')} day(s)')
+                    : 'N/A',
               ),
             ),
           ],
         ),
+
+
+
+
         const SizedBox(height: 20),
         FutureBuilder<Map<String, DateTime?>>(
           future: _nextEventsFuture,

@@ -575,7 +575,7 @@ if(mounted){
                     DropdownMenuItem<String>(
                       value: "Custom",
                       child: Text(
-                        "Custom (Enter Days)",
+                        "Custom",
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     ),
@@ -663,7 +663,7 @@ if(mounted){
                                 _selectedPlantType == null ||
                                 //_selectedDifficulty == null ||
                                 _selectedLightRequirement == null ||
-                                _selectedWaterRequirement == null) {
+                                _selectedWaterRequirement == null || (_selectedWaterRequirement == "Custom" && int.tryParse(_customWaterIntervalController.text)== null)) {
 
                               // Show warning banner if any required field is missing
                               CustomSnackbar snackbar = CustomSnackbar(context);

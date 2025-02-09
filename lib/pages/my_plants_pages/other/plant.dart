@@ -16,9 +16,10 @@ class PlantData {
   String? type;
   String? imageUrl;
   String? userId; // to store the user information
+  int? customWaterInterval;
 
 
-  PlantData({this.name,this.scienceName, this.date, this.imageUrl, this.userId,});
+  PlantData({this.name,this.scienceName, this.date, this.imageUrl, this.userId});
 
   PlantData.fromJSON(Map<dynamic,dynamic> json){
     name= json["name"];
@@ -31,5 +32,6 @@ class PlantData {
     type = json["type"];
     imageUrl = json["image_url"];
     userId = json["user_id"];
+    customWaterInterval = json["custom_water_interval"];
   }
 }

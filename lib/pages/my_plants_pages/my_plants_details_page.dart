@@ -73,7 +73,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
         return AlertDialog(
           title: const Text('Confirm Watering Event Update'),
           content: const Text(
-            "You've marked your plant as watered today. All watering events for this plant will be recalculated from today. Do you want to proceed?",
+            "You've marked your plant as watered today, even though it's not scheduled for watering. All previous watering records for this plant will be deleted, and a new cycle will start from today. Do you want to proceed?",
           ),
           actions: [
             TextButton(

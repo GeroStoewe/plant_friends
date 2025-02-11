@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../themes/colors.dart';
 import '../../widgets/custom_button_outlined_small.dart';
 import '../../widgets/custom_info_card.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../calendar_pages/calendar_event_pages/calendar_next_event_card.dart';
 import '../calendar_pages/calendar_functions.dart';
 import 'my_plants_details_page_edit.dart';
@@ -42,6 +43,86 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
       'fertilizing': nextFertilizingDate,
     };
   }
+
+  void plantWasWateredToday() {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) { // Speichere den Dialog-Context
+        return AlertDialog(
+          title: const Text('Confirm Watering Event Update'),
+          content: const Text(
+            "You've marked your plant as watered today. All watering events for this plant will be recalculated from today. Do you want to proceed?",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (mounted) {
+                  Navigator.of(dialogContext, rootNavigator: true).pop(false);
+                }
+              },
+              child: const Text('Cancel', style: TextStyle(color: Color(0xFF388E3C))),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (mounted) {
+                  Navigator.of(dialogContext, rootNavigator: true).pop(true);
+                }
+
+                // Ladeindikator anzeigen
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext loadingContext) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)),
+                        ),
+                      );
+                    },
+                  );
+                }
+
+                try {
+                  await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
+
+                  if (widget.plant.plantData?.water == "Custom") {
+                    await CalenderFunctions().createNewEventsWateringCustom(
+                      widget.plant.key!,
+                      widget.plant.plantData?.name ?? 'N/A',
+                      widget.plant.plantData?.customWaterInterval ?? 5,
+                    );
+                  } else {
+                    await CalenderFunctions().createNewEventsWatering(
+                      widget.plant.key!,
+                      widget.plant.plantData?.name ?? 'N/A',
+                      widget.plant.plantData?.water ?? "Low",
+                    );
+                  }
+
+                  if (mounted) {
+                    CustomSnackbar snackbar = CustomSnackbar(context);
+                    snackbar.showMessage('Watering events updated successfully', MessageType.success);
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    CustomSnackbar snackbar = CustomSnackbar(context);
+                    snackbar.showMessage('Error updating events: $e', MessageType.error);
+                  }
+                } finally {
+                  if (mounted) {
+                    Navigator.of(context, rootNavigator: true).pop(); // Ladeindikator schließen
+                  }
+                }
+              },
+              child: const Text('Proceed', style: TextStyle(color: Color(0xFF388E3C))),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -200,24 +281,34 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             ],
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () async {
-            // Navigiere zur Edit-Seite und warte auf das Ergebnis
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyPlantsDetailsEditPage(plant: widget.plant),
-              ),
-            );
+        Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.water_drop), // Wasser-Icon
+              onPressed: () {
+                plantWasWateredToday();
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () async {
+                // Navigiere zur Edit-Seite und warte auf das Ergebnis
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyPlantsDetailsEditPage(plant: widget.plant),
+                  ),
+                );
 
-            // Wenn das Ergebnis true ist, aktualisiere die Seite
-            if (result == true) {
-              setState(() {
-                _nextEventsFuture = _fetchNextEventDates(); // Update next events
-              });
-            }
-          },
+                // Wenn das Ergebnis true ist, aktualisiere die Seite
+                if (result == true) {
+                  setState(() {
+                    _nextEventsFuture = _fetchNextEventDates(); // Update next events
+                  });
+                }
+              },
+            ),
+          ],
         ),
       ],
     );

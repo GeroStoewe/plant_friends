@@ -24,6 +24,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
   final CalenderFunctions _calendarFunctions = CalenderFunctions();
   late Future<Map<String, DateTime?>> _nextEventsFuture;
+  bool _showPlantNeedsToBeWateredTodayButWasNotYet = false;
 
 
 
@@ -32,6 +33,15 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
     super.initState();
 
     _nextEventsFuture = _fetchNextEventDates();
+    _checkWateringStatus();
+
+  }
+
+  Future<void> _checkWateringStatus() async {
+    bool eventNotDone = await CalenderFunctions().checkIfTodaysWateringEventNotDone(widget.plant.key!);
+    setState(() {
+      _showPlantNeedsToBeWateredTodayButWasNotYet = eventNotDone;
+    });
   }
 
   Future<Map<String, DateTime?>> _fetchNextEventDates() async {
@@ -44,10 +54,22 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
     };
   }
 
-  void plantWasWateredToday() {
+  void plantWasWateredToday() async {
+    bool eventExists = await CalenderFunctions().checkIfTodaysWateringEventExists(widget.plant.key!);
+
+    if (eventExists) {
+      await CalenderFunctions().setTodaysWateringEventToDone(widget.plant.key!);
+      if (mounted) {
+        CustomSnackbar snackbar = CustomSnackbar(context);
+        snackbar.showMessage('Watering event marked as done', MessageType.success);
+        _checkWateringStatus();
+      }
+      return;
+    }
+
     showDialog(
       context: context,
-      builder: (BuildContext dialogContext) { // Speichere den Dialog-Context
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text('Confirm Watering Event Update'),
           content: const Text(
@@ -57,7 +79,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             TextButton(
               onPressed: () {
                 if (mounted) {
-                  Navigator.of(dialogContext, rootNavigator: true).pop(false);
+                  Navigator.of(dialogContext, rootNavigator: true).pop();
                 }
               },
               child: const Text('Cancel', style: TextStyle(color: Color(0xFF388E3C))),
@@ -65,7 +87,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             TextButton(
               onPressed: () async {
                 if (mounted) {
-                  Navigator.of(dialogContext, rootNavigator: true).pop(true);
+                  Navigator.of(dialogContext, rootNavigator: true).pop();
                 }
 
                 // Ladeindikator anzeigen
@@ -100,6 +122,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                     );
                   }
 
+                  CalenderFunctions().setTodaysWateringEventToDone(widget.plant.key!);
                   if (mounted) {
                     CustomSnackbar snackbar = CustomSnackbar(context);
                     snackbar.showMessage('Watering events updated successfully', MessageType.success);
@@ -283,6 +306,8 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
         ),
         Row(
           children: [
+            if (_showPlantNeedsToBeWateredTodayButWasNotYet)
+              const Icon(Icons.sentiment_dissatisfied, color: Colors.red), // Trauriger Smiley},
             IconButton(
               icon: const Icon(Icons.water_drop), // Wasser-Icon
               onPressed: () {

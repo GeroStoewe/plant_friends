@@ -306,10 +306,11 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
         ),
         Row(
           children: [
-            if (_showPlantNeedsToBeWateredTodayButWasNotYet)
-              const Icon(Icons.sentiment_dissatisfied, color: Colors.red), // Trauriger Smiley},
             IconButton(
-              icon: const Icon(Icons.water_drop), // Wasser-Icon
+              icon: Icon(Icons.water_drop,
+                  color: _showPlantNeedsToBeWateredTodayButWasNotYet
+                      ? Colors.orange
+                      : Colors.grey),
               onPressed: () {
                 plantWasWateredToday();
               },

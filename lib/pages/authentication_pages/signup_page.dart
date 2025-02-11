@@ -28,16 +28,20 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Size size = MediaQuery
+        .of(context)
+        .size;
+    bool isDarkMode = Theme
+        .of(context)
+        .brightness == Brightness.dark;
 
     return ScrollbarTheme(
-        data: ScrollbarThemeData(
+      data: ScrollbarThemeData(
         thumbColor: WidgetStateProperty.all(seaGreen),
-    // Set scrollbar thumb color to green
-    trackColor:
-    WidgetStateProperty.all(Colors.grey.shade300), // Set track color
-    ),
+        // Set scrollbar thumb color to green
+        trackColor:
+        WidgetStateProperty.all(Colors.grey.shade300), // Set track color
+      ),
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
@@ -64,7 +68,9 @@ class _SignupPageState extends State<SignupPage> {
                       width: size.width,
                       height: size.height * 0.58,
                       decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
+                          color: Theme
+                              .of(context)
+                              .scaffoldBackgroundColor,
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(30.0),
                               topRight: Radius.circular(30.0))),
@@ -77,7 +83,10 @@ class _SignupPageState extends State<SignupPage> {
                               const SizedBox(height: 5),
                               Text("Create your Account",
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.headlineMedium),
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headlineMedium),
                               const SizedBox(height: 20),
                               CustomTextField(
                                   controller: fullnameController,
@@ -101,7 +110,9 @@ class _SignupPageState extends State<SignupPage> {
                                     isPasswordVisible
                                         ? Icons.visibility
                                         : Icons.visibility_off,
-                                    color: Theme.of(context).hintColor,
+                                    color: Theme
+                                        .of(context)
+                                        .hintColor,
                                   ),
                                   onPressed: () {
                                     setState(() {
@@ -115,7 +126,7 @@ class _SignupPageState extends State<SignupPage> {
                               const SizedBox(height: 25),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 25.0),
+                                const EdgeInsets.symmetric(horizontal: 25.0),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -148,9 +159,9 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                               const SizedBox(height: 25),
                               SquareTile(
-                                      onTap: signUpWithGoogle,
-                                      imagePath:
-                                          'lib/images/authentication/google_logo.png'
+                                  onTap: signUpWithGoogle,
+                                  imagePath:
+                                  'lib/images/authentication/google_logo.png'
                               ),
                               const SizedBox(height: 20),
                               GestureDetector(
@@ -168,7 +179,9 @@ class _SignupPageState extends State<SignupPage> {
                                         text: "Login",
                                         style: TextStyle(
                                             fontSize: 18,
-                                            color: Theme.of(context).hintColor))
+                                            color: Theme
+                                                .of(context)
+                                                .hintColor))
                                   ])),
                                 ),
                               ),
@@ -184,7 +197,9 @@ class _SignupPageState extends State<SignupPage> {
                   child: Center(
                     child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).primaryColor)),
+                            Theme
+                                .of(context)
+                                .primaryColor)),
                   ),
                 )
             ],
@@ -219,7 +234,8 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
           email: usernameController.text, password: passwordController.text);
 
       User? user = userCredential.user;
@@ -251,31 +267,78 @@ class _SignupPageState extends State<SignupPage> {
             backgroundColor: darkGreyGreen,
             title: Center(
                 child: Text(message,
-                    style: Theme.of(context).textTheme.displayMedium)),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .displayMedium)),
             actions: [
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: Text("OK",
-                      style: Theme.of(context).textTheme.displaySmall))
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .displaySmall))
             ],
           );
         });
   }
 
   signUpWithGoogle() async {
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
 
-    if (gUser == null) return;
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? gUser = await googleSignIn.signIn();
+
+    if (gUser == null) {
+      showErrorMessage("Google Sign-In was cancelled.");
+      return;
+    }
 
     final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken,
-        idToken: gAuth.idToken
-    );
+      if (gAuth.accessToken == null || gAuth.idToken == null) {
+        showErrorMessage("Failed to get Google authentication tokens.");
+        return;
+      }
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      final credential = GoogleAuthProvider.credential(
+          accessToken: gAuth.accessToken,
+          idToken: gAuth.idToken
+      );
+
+      // Sign in to Firebase
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        // Auto-fill email in the form
+        setState(() {
+          usernameController.text = user.email ?? "";
+        });
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Signed in as ${user.email}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle errors
+      debugPrint('Google Sign-In Error: $e');
+      showErrorMessage('Failed to sign in with Google: ${e.toString()}');
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loading indicator
+      });
+    }
   }
 }

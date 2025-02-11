@@ -288,7 +288,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           builder: (BuildContext context) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)),
+                valueColor: AlwaysStoppedAnimation<Color>(seaGreen),
               ),
             );
           },

@@ -36,11 +36,11 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
   Future<Map<String, DateTime?>> _fetchNextEventDates() async {
     DateTime? nextWateringDate = await _calendarFunctions.getNextWateringDate(widget.plant.key);
-    DateTime? nextFertilizingDate = await _calendarFunctions.getNextFertilizingDate(widget.plant.key);
+    //DateTime? nextFertilizingDate = await _calendarFunctions.getNextFertilizingDate(widget.plant.key);
 
     return {
       'watering': nextWateringDate,
-      'fertilizing': nextFertilizingDate,
+      //'fertilizing': nextFertilizingDate,
     };
   }
 
@@ -380,7 +380,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
               return Text('Error: ${snapshot.error}');
             } else {
               DateTime? nextWateringDate = snapshot.data?['watering'];
-              DateTime? nextFertilizingDate = snapshot.data?['fertilizing'];
+              //DateTime? nextFertilizingDate = snapshot.data?['fertilizing'];
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -392,6 +392,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                       date: nextWateringDate,
                     ),
                   ),
+                  /*
                   const SizedBox(width: 16),
                   Expanded(
                     child: EventCardNextDate(
@@ -400,6 +401,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                       date: nextFertilizingDate,
                     ),
                   ),
+                   */
                 ],
               );
             }

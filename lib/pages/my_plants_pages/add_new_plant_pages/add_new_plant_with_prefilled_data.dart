@@ -783,6 +783,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                                 "custom_water_interval": int.tryParse(_customWaterIntervalController.text) ?? 5,
                               });
 
+                              /*
                               // Assuming a default day interval for fertilizing (e.g., 30 days)
                               int fertilizingInterval = 30; // You can change this as needed
                               await calenderFunctions
@@ -791,6 +792,8 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                                 _edtNameController.text, // Use plant name
                                 fertilizingInterval, // Use the fertilizing interval
                               );
+
+                               */
 
                               if (mounted) {
                                 Navigator.pop(context);

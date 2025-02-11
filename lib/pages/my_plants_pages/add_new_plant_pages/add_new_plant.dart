@@ -735,13 +735,15 @@ if(mounted){
                                 "custom_water_interval": int.tryParse(_customWaterIntervalController.text) ?? 5,
                               });
 
-
+                              /*
                               int fertilizingInterval = 30; // Default interval for fertilizing
                               await calenderFunctions.createNewEventsFertilizing(
                                 newPlantId,
                                 _edtNameController.text,
                                 fertilizingInterval,
                               );
+
+                               */
 
                               if (mounted) {
                                 Navigator.pop(context); // Close loading dialog

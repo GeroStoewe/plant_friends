@@ -64,7 +64,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Plant'),
-        content: const Text('Are you sure you want to delete this plant? This will also remove all associated watering and fertilizing events.'),
+        content: const Text('Are you sure you want to delete this plant? This will also remove all associated watering events.'), //and fertilizing events
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -254,9 +254,9 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         bool? shouldProceed = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Watering and Fertilizing Events Update'),
+            title: const Text('Watering Events Update'), //and Fertilizing
             content: const Text(
-              'You changed the water needs. All existing watering and fertilizing events will be deleted and new ones will be created. Do you want to proceed?',
+              'You changed the water needs. All existing watering events will be deleted and new ones will be created. Do you want to proceed?', //and fertilizing
             ),
             actions: [
               TextButton(
@@ -314,18 +314,20 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
             );
           }
 
-
+          /*
           // Create new fertilizing events
           await CalenderFunctions().createNewEventsFertilizing(
             widget.plant.key!,
             _edtNameController.text,
             30,
           );
+          */
+
 
           // Show success message
           if (mounted) {
             CustomSnackbar snackbar = CustomSnackbar(context);
-            snackbar.showMessage('Watering and fertilizing events updated successfully', MessageType.success);
+            snackbar.showMessage('Watering events updated successfully', MessageType.success); // and fertilizing
           }
         } catch (e) {
           // Handle error and show error message

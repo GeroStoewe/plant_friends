@@ -43,7 +43,7 @@ class CalenderFunctions {
 
   }
 
-
+  /*
   Future<void> createNewEventsFertilizing(String? plantID, String plantName, int dayInterval) async {
     DateTime firstDay = DateTime.now();
     DateTime lastDay = DateTime.now().add(const Duration(days: 365));
@@ -62,6 +62,8 @@ class CalenderFunctions {
       print('Error: $e');
     }
   }
+  */
+
   Future<void> createNewEventsWateringCustom(String? plantID, String plantName, int waterIntervall) async {
     wateringIntervals['Custom'] = {
       'Spring': waterIntervall,
@@ -121,7 +123,7 @@ class CalenderFunctions {
     }
   }
 
-
+  /*
   Future<DateTime?> getNextFertilizingDate(String? plantID) async {
     final firestore = FirebaseFirestore.instance;
     DateTime now = DateTime.now();
@@ -160,7 +162,9 @@ class CalenderFunctions {
     }
   }
 
-  Future<void> _createEventsInRange(
+
+
+  Future<void> _createEventsInRangeFertilizing(
       DateTime startDate,
       DateTime endDate,
       int intervalDays,
@@ -186,12 +190,16 @@ class CalenderFunctions {
         'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
-      await firestore.collection('events').add(event);
+      print("CREATE FERTILIZING EVENT: $event");
+
+      //await firestore.collection('events').add(event);
 
       // Move to the next event date
       currentDate = currentDate.add(Duration(days: intervalDays));
     }
   }
+  */
+
 
   Future<void> _createEventsInRangeWatering(
       DateTime startDate,

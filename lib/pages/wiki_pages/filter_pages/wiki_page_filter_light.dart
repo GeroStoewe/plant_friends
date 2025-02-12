@@ -45,7 +45,7 @@ class LightFilterPage extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => const PlantFilterResultPage(
                   filterType: 'light',
-                  filterValue: 'Partial shade',
+                  filterValue: 'Partial Shade',
                 ),
               ),
             ),
@@ -58,7 +58,7 @@ class LightFilterPage extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => const PlantFilterResultPage(
                   filterType: 'light',
-                  filterValue: 'Indirect sunlight',
+                  filterValue: 'Indirect Light',
                 ),
               ),
             ),
@@ -71,7 +71,7 @@ class LightFilterPage extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => const PlantFilterResultPage(
                   filterType: 'light',
-                  filterValue: 'Direct sunlight',
+                  filterValue: 'Direct Light',
                 ),
               ),
             ),

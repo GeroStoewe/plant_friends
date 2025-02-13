@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "545786364087-besiqls30429747ga52c614k1qniqulu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "2bb6a5614d655a8b5ba6f423c1f761da8657cabf"
+          }
+        },
+        {
           "client_id": "545786364087-c31ap2ak1cdhfkjpvqd1mvno82u93r53.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

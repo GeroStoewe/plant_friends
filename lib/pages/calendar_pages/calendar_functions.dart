@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'calendar_event_pages/calendar_event.dart';
+
 class CalenderFunctions {
 
   Map<String, Map<String, int>> wateringIntervals = {
@@ -11,16 +13,16 @@ class CalenderFunctions {
       'Winter': 28,
     },
     'Medium': {
-      'Spring': 12,
-      'Summer': 8,
-      'Autumn': 12,
-      'Winter': 19,
+      'Spring': 9,
+      'Summer': 7,
+      'Autumn': 9,
+      'Winter': 12,
     },
     'High': {
-      'Spring': 5,
-      'Summer': 4,
-      'Autumn': 6,
-      'Winter': 12,
+      'Spring': 4,
+      'Summer': 3,
+      'Autumn': 5,
+      'Winter': 7,
     },
   };
 
@@ -40,9 +42,10 @@ class CalenderFunctions {
       // Handle errors (e.g., invalid input format)
       print('Error: $e');
     }
+
   }
 
-
+  /*
   Future<void> createNewEventsFertilizing(String? plantID, String plantName, int dayInterval) async {
     DateTime firstDay = DateTime.now();
     DateTime lastDay = DateTime.now().add(const Duration(days: 365));
@@ -61,6 +64,28 @@ class CalenderFunctions {
       print('Error: $e');
     }
   }
+  */
+
+  Future<void> createNewEventsWateringCustom(String? plantID, String plantName, int waterIntervall) async {
+    wateringIntervals['Custom'] = {
+      'Spring': waterIntervall,
+      'Summer': waterIntervall,
+      'Autumn': waterIntervall,
+      'Winter': waterIntervall,
+    };
+
+    DateTime firstDay = DateTime.now();
+    DateTime lastDay = DateTime.now().add(const Duration(days: 180));
+    String eventType = "Watering";
+
+    try {
+      await _createEventsInRangeWatering(firstDay, lastDay, plantID, plantName, eventType, "Custom");
+    } catch (e) {
+      // Handle errors (e.g., invalid input format)
+      print('Error: $e');
+    }
+  }
+
 
   Future<DateTime?> getNextWateringDate(String? plantID) async {
     final firestore = FirebaseFirestore.instance;
@@ -100,7 +125,130 @@ class CalenderFunctions {
     }
   }
 
+  Future<void> setTodaysWateringEventToDone(String? plantID) async {
+    final firestore = FirebaseFirestore.instance;
+    DateTime now = DateTime.now();
+    String? userId = _getUserId(); // Aktuelle User-ID abrufen
 
+    if (userId == null) {
+      print('User is not logged in. Cannot fetch events.');
+      return;
+    }
+
+    try {
+      // Heutiger Tagesbeginn und nächster Tag für Bereichssuche
+      DateTime todayStart = DateTime(now.year, now.month, now.day);
+      DateTime tomorrowStart = todayStart.add(Duration(days: 1));
+
+      print('Checking for watering event between $todayStart and $tomorrowStart');
+
+      // Firestore-Abfrage nach Bewässerungsereignissen für heute
+      QuerySnapshot querySnapshot = await firestore
+          .collection('events')
+          .where('plantID', isEqualTo: plantID)
+          .where('user_id', isEqualTo: userId)
+          .where('eventType', isEqualTo: 'Watering')
+          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
+          .where('date', isLessThan: Timestamp.fromDate(tomorrowStart))
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot eventDoc = querySnapshot.docs.first;
+        print('Event found: ${eventDoc.id}, marking as done.');
+
+        // Das heutige Ereignis als abgeschlossen markieren
+        await firestore.collection('events').doc(eventDoc.id).update({
+          'isDone': true,
+        });
+
+        print('Event successfully marked as done.');
+      } else {
+        print('No watering event found for today.');
+      }
+    } catch (e) {
+      print('Error fetching or updating today\'s watering event: $e');
+    }
+  }
+
+
+  Future<bool> checkIfTodaysWateringEventExists(String? plantID) async {
+    final firestore = FirebaseFirestore.instance;
+    DateTime now = DateTime.now();
+    String? userId = _getUserId();
+
+    if (userId == null) {
+      print('User is not logged in. Cannot fetch events.');
+      return false;
+    }
+
+    try {
+      DateTime todayStart = DateTime(now.year, now.month, now.day);
+      DateTime tomorrowStart = todayStart.add(Duration(days: 1));
+
+      QuerySnapshot querySnapshot = await firestore
+          .collection('events')
+          .where('plantID', isEqualTo: plantID)
+          .where('user_id', isEqualTo: userId)
+          .where('eventType', isEqualTo: 'Watering')
+          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
+          .where('date', isLessThan: Timestamp.fromDate(tomorrowStart))
+          .limit(1)
+          .get();
+
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      print('Error checking today\'s watering event: $e');
+      return false;
+    }
+  }
+
+  Future<bool> checkIfTodaysWateringEventNotDone(String? plantID) async {
+    final firestore = FirebaseFirestore.instance;
+    DateTime now = DateTime.now();
+    String? userId = _getUserId();
+
+    if (userId == null) {
+      print('User is not logged in. Cannot fetch events.');
+      return false;
+    }
+
+    try {
+      DateTime todayStart = DateTime(now.year, now.month, now.day);
+      DateTime tomorrowStart = todayStart.add(const Duration(days: 1));
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await firestore
+          .collection('events')
+          .where('plantID', isEqualTo: plantID)
+          .where('user_id', isEqualTo: userId)
+          .where('eventType', isEqualTo: 'Watering')
+          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
+          .where('date', isLessThan: Timestamp.fromDate(tomorrowStart))
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return false;
+      }
+
+      for (var doc in querySnapshot.docs) {
+        var event = CalendarEvent.fromFirestore(doc);
+        if (!event.isDone) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch (e) {
+      print('Error checking today\'s watering event: $e');
+      return false;
+    }
+  }
+
+
+
+
+
+  /*
   Future<DateTime?> getNextFertilizingDate(String? plantID) async {
     final firestore = FirebaseFirestore.instance;
     DateTime now = DateTime.now();
@@ -139,7 +287,9 @@ class CalenderFunctions {
     }
   }
 
-  Future<void> _createEventsInRange(
+
+
+  Future<void> _createEventsInRangeFertilizing(
       DateTime startDate,
       DateTime endDate,
       int intervalDays,
@@ -165,13 +315,16 @@ class CalenderFunctions {
         'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
+      print("CREATE FERTILIZING EVENT: $event");
 
-      await firestore.collection('events').add(event);
+      //await firestore.collection('events').add(event);
 
       // Move to the next event date
       currentDate = currentDate.add(Duration(days: intervalDays));
     }
   }
+  */
+
 
   Future<void> _createEventsInRangeWatering(
       DateTime startDate,
@@ -205,7 +358,6 @@ class CalenderFunctions {
         'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
-
       await firestore.collection('events').add(event);
 
       // Move to the next event date
@@ -245,5 +397,14 @@ class CalenderFunctions {
       return 'Winter';
     }
   }
+
+  int getWateringInterval(String level) {
+    DateTime now = DateTime.now();
+    String season = _getCurrentSeason(now);
+
+    return wateringIntervals[level]?[season] ?? 0; // Fallback auf 0, falls kein Wert gefunden wird
+  }
+
+
 
 }

@@ -65,10 +65,13 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
   List<Plant> filteredPlantList = [];
   File? _plantImage;
 
-  late String _selectedPlantType;
-  late String _selectedDifficulty;
-  late String _selectedLightRequirement;
-  late String _selectedWaterRequirement;
+  String? _selectedPlantType;
+  String? _selectedDifficulty;
+  String? _selectedLightRequirement;
+  String? _selectedWaterRequirement;
+
+  TextEditingController _customWaterIntervalController = TextEditingController();
+  bool _isCustomWaterInterval = false;
 
   bool _isImagePicked = false;
   String _identifiedPlant = '';
@@ -511,7 +514,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                   ),
                 ),
                 const SizedBox(height: 15),
-
+/*
                 DropdownButtonFormField<String>(
                   value: widget.plant['difficulty'],
                   hint: Text(
@@ -547,7 +550,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                   ),
                 ),
                 const SizedBox(height: 15),
-
+*/
                 // Dropdown Menu für Lichtanforderungen
                 DropdownButtonFormField<String>(
                   value: widget.plant['light'],
@@ -585,26 +588,38 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
 
                 // Dropdown Menu für Wasseranforderungen
                 DropdownButtonFormField<String>(
-                  value: widget.plant['water'],
+                  value: _isCustomWaterInterval ? "Custom" : widget.plant['water'],
                   hint: Text(
                     'Select Water Requirement',
-                    style: TextStyle(
-                        color: isDarkMode ? Colors.grey : Colors.black),
+                    style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
-                  items: waterRequirements.map((String water) {
-                    return DropdownMenuItem<String>(
-                      value: water,
+                  items: [
+                    ...waterRequirements.map((String water) {
+                      return DropdownMenuItem<String>(
+                        value: water,
+                        child: Text(
+                          water,
+                          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                    DropdownMenuItem<String>(
+                      value: "Custom",
                       child: Text(
-                        water,
-                        style: TextStyle(
-                            color: isDarkMode ? Colors.white : Colors.black),
+                        "Custom",
+                        style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedWaterRequirement =
-                          newValue!; // Update selected water requirement
+                      if (newValue == "Custom") {
+                        _isCustomWaterInterval = true;
+                        _selectedWaterRequirement = "Custom";
+                      } else {
+                        _isCustomWaterInterval = false;
+                        _selectedWaterRequirement = newValue;
+                      }
                     });
                   },
                   decoration: InputDecoration(
@@ -619,6 +634,25 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     ),
                   ),
                 ),
+                if (_isCustomWaterInterval)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: TextField(
+                      controller: _customWaterIntervalController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Enter Watering Interval (Days)",
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black,
+                        ),
+                        border: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 15),
 
 
@@ -657,6 +691,19 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
+                            if (_edtNameController.text.isEmpty ||
+                                _edtScienceNameController.text.isEmpty ||
+                                _edtDateController.text.isEmpty ||
+                                _selectedPlantType == null ||
+                                //_selectedDifficulty == null ||
+                                _selectedLightRequirement == null ||
+                                _selectedWaterRequirement == null) {
+
+                              // Show warning banner if any required field is missing
+                              CustomSnackbar snackbar = CustomSnackbar(context);
+                              snackbar.showMessage('Please fill in all required fields.', MessageType.error);
+                              return; // Exit the function early
+                            }
                             // Show loading indicator while saving the data
                             showDialog(
                               context: context,
@@ -718,12 +765,25 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                               await newPlantRef.set(data);
                               String newPlantId = newPlantRef.key!;
                               // Call event creation functions
-                              await calenderFunctions.createNewEventsWatering(
-                                newPlantId, // Pass the plant ID if available
-                                _edtNameController.text, // Use plant name
-                                _selectedWaterRequirement!, // Use selected water requirement
-                              );
+                              if(_isCustomWaterInterval){
+                                int waterInterval = int.tryParse(_customWaterIntervalController.text) ?? 5;
+                                await calenderFunctions.createNewEventsWateringCustom(
+                                  newPlantId,
+                                  _edtNameController.text,
+                                  waterInterval,
+                                );
+                              }else{
+                                await calenderFunctions.createNewEventsWatering(
+                                  newPlantId,
+                                  _edtNameController.text,
+                                  _selectedWaterRequirement!,
+                                );
+                              }
+                              await newPlantRef.update({
+                                "custom_water_interval": int.tryParse(_customWaterIntervalController.text) ?? 5,
+                              });
 
+                              /*
                               // Assuming a default day interval for fertilizing (e.g., 30 days)
                               int fertilizingInterval = 30; // You can change this as needed
                               await calenderFunctions
@@ -732,6 +792,8 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                                 _edtNameController.text, // Use plant name
                                 fertilizingInterval, // Use the fertilizing interval
                               );
+
+                               */
 
                               if (mounted) {
                                 Navigator.pop(context);

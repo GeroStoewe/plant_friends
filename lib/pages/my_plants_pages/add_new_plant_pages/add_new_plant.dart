@@ -42,7 +42,8 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
   String? _selectedDifficulty;
   String? _selectedLightRequirement;
   String? _selectedWaterRequirement;
-
+  TextEditingController _customWaterIntervalController = TextEditingController();
+  bool _isCustomWaterInterval = false;
 
 
   // Function to get the current user's userId on FirebaseAuth
@@ -72,11 +73,13 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
           }
         });
       }
+if(mounted){
+  setState(() {
+    plantList = updatedPlantList;
+    filteredPlantList = updatedPlantList;
+  });
+}
 
-      setState(() {
-        plantList = updatedPlantList;
-        filteredPlantList = updatedPlantList;
-      });
     });
   }
   Future<void> _selectDate(BuildContext context) async {
@@ -342,6 +345,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
       'High',
     ];
 
+
     return DraggableScrollableSheet(
       expand: true,
       initialChildSize: 1.0,
@@ -482,7 +486,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                   ),
                 ),
                 const SizedBox(height: 15),
-
+/*
                 DropdownButtonFormField<String>(
                   value: _selectedDifficulty,
                   hint: Text(
@@ -515,7 +519,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                   ),
                 ),
                 const SizedBox(height: 15),
-
+*/
                 // Dropdown Menu für Lichtanforderungen
                 DropdownButtonFormField<String>(
                   value: _selectedLightRequirement,
@@ -553,23 +557,38 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
 
                 // Dropdown Menu für Wasseranforderungen
                 DropdownButtonFormField<String>(
-                  value: _selectedWaterRequirement,
+                  value: _isCustomWaterInterval ? "Custom" : _selectedWaterRequirement,
                   hint: Text(
                     'Select Water Requirement',
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
-                  items: waterRequirements.map((String water) {
-                    return DropdownMenuItem<String>(
-                      value: water,
+                  items: [
+                    ...waterRequirements.map((String water) {
+                      return DropdownMenuItem<String>(
+                        value: water,
+                        child: Text(
+                          water,
+                          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                    DropdownMenuItem<String>(
+                      value: "Custom",
                       child: Text(
-                        water,
+                        "Custom",
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedWaterRequirement = newValue; // Update selected water requirement
+                      if (newValue == "Custom") {
+                        _isCustomWaterInterval = true;
+                        _selectedWaterRequirement = "Custom";
+                      } else {
+                        _isCustomWaterInterval = false;
+                        _selectedWaterRequirement = newValue;
+                      }
                     });
                   },
                   decoration: InputDecoration(
@@ -584,6 +603,25 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                     ),
                   ),
                 ),
+                if (_isCustomWaterInterval)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: TextField(
+                      controller: _customWaterIntervalController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Enter Watering Interval (Days)",
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black,
+                        ),
+                        border: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green, width: 2.0),
+                        ),
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 15),
 
 
@@ -618,6 +656,21 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
+                            // Check if required fields are filled
+                            if (_edtNameController.text.isEmpty ||
+                                _edtScienceNameController.text.isEmpty ||
+                                _edtDateController.text.isEmpty ||
+                                _selectedPlantType == null ||
+                                //_selectedDifficulty == null ||
+                                _selectedLightRequirement == null ||
+                                _selectedWaterRequirement == null || (_selectedWaterRequirement == "Custom" && int.tryParse(_customWaterIntervalController.text)== null)) {
+
+                              // Show warning banner if any required field is missing
+                              CustomSnackbar snackbar = CustomSnackbar(context);
+                              snackbar.showMessage('Please fill in all required fields.', MessageType.error);
+                              return; // Exit the function early
+                            }
+
                             // Show loading indicator while saving the data
                             showDialog(
                               context: context,
@@ -626,9 +679,7 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                               builder: (BuildContext context) {
                                 return const Center(
                                   child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<
-                                        Color>(Color(
-                                        0xFF388E3C)), // Green color for loading
+                                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)), // Green color for loading
                                   ),
                                 );
                               },
@@ -640,25 +691,17 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                             if (_isImagePicked && _plantImage != null) {
                               imageUrl = await _uploadImageToFirebase(_plantImage!);
                             } else {
-                              // No image is picked, so set imageUrl to null (or "" if preferred)
-                              imageUrl = null; // null instead of " " due to null check operator
+                              imageUrl = null; // No image picked, keep null
                             }
-
-                            // Debug print statement to ensure imageUrl is set
-                            print("Image URL: $imageUrl");
 
                             // Retrieve the userId
                             String? userId = _getUserId();
-                            // Debug print statement to ensure userId is set
-                            print("User ID: $userId");
 
                             // Ensure that userId is not null before saving
                             if (userId != null) {
-
                               Map<String, dynamic> data = {
                                 "name": _edtNameController.text,
-                                "science_name": _edtScienceNameController
-                                    .text,
+                                "science_name": _edtScienceNameController.text,
                                 "date": _edtDateController.text,
                                 "image_url": imageUrl,
                                 "user_id": userId,
@@ -668,37 +711,44 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                                 "difficulty": _selectedDifficulty
                               };
 
-                              // Debug print statement to ensure data map is created correctly
-                              print("Data: $data");
-
-                              // Save plant details to Firebase and get the reference
+                              // Save plant details to Firebase
                               DatabaseReference newPlantRef = dbRef.child("Plants").push();
-
                               await newPlantRef.set(data);
                               String newPlantId = newPlantRef.key!;
-                              // Call event creation functions
-                              await calenderFunctions.createNewEventsWatering(
-                                newPlantId, // Pass the plant ID if available
-                                _edtNameController.text, // Use plant name
-                                _selectedWaterRequirement!, // Use selected water requirement
+
+                              if(_isCustomWaterInterval){
+                                int waterInterval = int.tryParse(_customWaterIntervalController.text) ?? 5;
+                                await calenderFunctions.createNewEventsWateringCustom(
+                                  newPlantId,
+                                  _edtNameController.text,
+                                  waterInterval,
+                                );
+                              }else{
+                                await calenderFunctions.createNewEventsWatering(
+                                  newPlantId,
+                                  _edtNameController.text,
+                                  _selectedWaterRequirement!,
+                                );
+                              }
+                              // Update the Firebase entry with the watering intervals string
+                              await newPlantRef.update({
+                                "custom_water_interval": int.tryParse(_customWaterIntervalController.text) ?? 5,
+                              });
+
+                              /*
+                              int fertilizingInterval = 30; // Default interval for fertilizing
+                              await calenderFunctions.createNewEventsFertilizing(
+                                newPlantId,
+                                _edtNameController.text,
+                                fertilizingInterval,
                               );
 
-                              // Assuming a default day interval for fertilizing (e.g., 30 days)
-                              int fertilizingInterval = 30; // You can change this as needed
-                              await calenderFunctions.createNewEventsFertilizing(
-                                newPlantId, // Pass the plant ID if available
-                                _edtNameController.text, // Use plant name
-                                fertilizingInterval, // Use the fertilizing interval
-                              );
+                               */
 
                               if (mounted) {
-                                Navigator.pop(context);
-                                CustomSnackbar snackbar = CustomSnackbar(
-                                    context);
-                                snackbar.showMessage(
-                                    'Plant details saved successfully!',
-                                    MessageType.success);
-                                // Reset the form fields after successfully saving the plant
+                                Navigator.pop(context); // Close loading dialog
+                                CustomSnackbar snackbar = CustomSnackbar(context);
+                                snackbar.showMessage('Plant details saved successfully!', MessageType.success);
                                 _resetForm();
                                 Navigator.pop(context);
                               }
@@ -711,12 +761,13 @@ class _AddNewPlantPageState extends State<AddNewPlantPage> {
                             }
                           } catch (error) {
                             if (mounted) {
-                              Navigator.pop(context);
+                              Navigator.pop(context); // Close loading dialog
                               CustomSnackbar snackbar = CustomSnackbar(context);
                               snackbar.showMessage('Failed to save plant details: $error', MessageType.error);
                             }
                           }
                         },
+
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Modern button padding
                           shape: RoundedRectangleBorder(

@@ -306,15 +306,42 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
         ),
         Row(
           children: [
-            IconButton(
-              icon: Icon(Icons.water_drop,
-                  color: _showPlantNeedsToBeWateredTodayButWasNotYet
-                      ? Colors.orange
-                      : Colors.grey),
-              onPressed: () {
-                plantWasWateredToday();
-              },
-            ),
+            Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.water_drop,
+                      color: _showPlantNeedsToBeWateredTodayButWasNotYet
+                          ? Colors.orange
+                          : Colors.grey),
+                  onPressed: () {
+                    plantWasWateredToday();
+                  },
+                ),
+                if (_showPlantNeedsToBeWateredTodayButWasNotYet)
+                  Positioned(
+                    top: -20,
+                    right: -15,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        "Water me!",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            )
+            ,
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () async {

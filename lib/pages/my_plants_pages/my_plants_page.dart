@@ -342,15 +342,26 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           ),
           Expanded(
             child: filteredPlantList.isEmpty
-                ? Center(
-                  child: Text(
-                "No plants available to be searched",
+                ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+                  Image.asset(
+                    'lib/images/my_plants/plant_not_found.png',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 16),
+                Text(
+                "No plants found in the search",
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 16,
                 ),
               ),
-            )
+            ],
+           )
+
                 : ListView.builder(
               itemCount: filteredPlantList.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

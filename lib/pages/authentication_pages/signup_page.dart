@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/square_tile.dart';
 
@@ -324,17 +325,13 @@ class _SignupPageState extends State<SignupPage> {
         });
 
         // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Signed in as ${user.email}'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        CustomSnackbar snackbar = CustomSnackbar(context);
+        snackbar.showMessage('Signed up as ${gUser.email}', MessageType.success);
       }
     } catch (e) {
       // Handle errors
-      debugPrint('Google Sign-In Error: $e');
-      showErrorMessage('Failed to sign in with Google: ${e.toString()}');
+      debugPrint('Google Sign-Up Error: $e');
+      showErrorMessage('Failed to sign up with Google: ${e.toString()}');
     } finally {
       setState(() {
         isLoading = false; // Hide loading indicator

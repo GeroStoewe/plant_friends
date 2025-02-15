@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/square_tile.dart';
 import 'forgot_password_page.dart';
@@ -300,16 +301,12 @@ class _LoginPageState extends State<LoginPage> {
       usernameController.text = gUser.email;
 
     // A success message or navigate to the next screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Signed in as ${gUser.email}'),
-        backgroundColor: Colors.green,
-      ),
-    );
+    CustomSnackbar snackbar = CustomSnackbar(context);
+    snackbar.showMessage('Logged in as ${gUser.email}', MessageType.success);
     } catch (e) {
       // Handle errors
-      debugPrint('Google Sign-In Error: $e');
-      showErrorMessage('Failed to sign in with Google: ${e.toString()}');
+      debugPrint('Google Login Error: $e');
+      showErrorMessage('Failed to login with Google: ${e.toString()}');
     } finally {
       setState(() {
         isLoading = false; // Hide loading indicator

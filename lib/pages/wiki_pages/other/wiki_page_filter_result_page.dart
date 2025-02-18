@@ -9,8 +9,6 @@ import '../../../themes/colors.dart';
 import '../../../widgets/custom_button_outlined_small.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../wiki_plant_details_page.dart';
-import '../../../themes/colors.dart';
-
 
 class PlantFilterResultPage extends StatefulWidget {
   final String filterType;

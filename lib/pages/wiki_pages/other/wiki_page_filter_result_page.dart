@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:plant_friends/pages/wiki_pages/filter_pages/plant_wishlist_page.dart';
 import 'package:plant_friends/pages/wiki_pages/other/wiki_new_plant_request_form.dart';
 
 import '../../../themes/colors.dart';
 import '../../../widgets/custom_button_outlined_small.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../wiki_plant_details_page.dart';
+import '../../../widgets/custom_snackbar.dart';
 
 class PlantFilterResultPage extends StatefulWidget {
   final String filterType;
@@ -28,6 +30,12 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
 
   // Store wishlist items
   Set<String> wishlist = {};
+
+  void _clearWishlist() {
+    setState(() {
+      wishlist.clear();
+    });
+  }
 
   @override
   void initState() {
@@ -89,17 +97,40 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     });
   }
 
-  // Toggle a plant in the wishlist
+  // Toggle a plant in the wishlist with Snackbar notification
   void toggleWishlist(String plantName) {
+    final isAdding = !wishlist.contains(plantName);
+
     setState(() {
-      if (wishlist.contains(plantName)) {
-        wishlist.remove(plantName);
-      } else {
+      if (isAdding) {
         wishlist.add(plantName);
+      } else {
+        wishlist.remove(plantName);
       }
     });
-  }
 
+    // Show snackbar with undo option
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(isAdding ? '$plantName added to wishlist' : '$plantName removed from wishlist'),
+        action: SnackBarAction(
+          label: 'Undo',
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          onPressed: () {
+            setState(() {
+              if (isAdding) {
+                wishlist.remove(plantName);
+              } else {
+                wishlist.add(plantName);
+              }
+            });
+          },
+        ),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +146,23 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.favorite, color: Colors.red),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PlantWishListPage(
+                      wishlist: wishlist,
+                      plantData: plantData,
+                      onClearWishlist: _clearWishlist,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),))
@@ -167,7 +215,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                     final plant = filteredPlantData[index];
                     final plantName = plant['name'] ?? 'No name';
 
-;                    return ListTile(
+                    return ListTile(
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(8), // Rounded corners
                         child: plant['image_url'] != null
@@ -205,7 +253,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                         '${plant['scientifical_name'] ?? 'N/A'}',
                         style: const TextStyle(color: Colors.grey),
                       ),
-                      trailing: IconButton(
+                      trailing:
+                      IconButton(
                         icon: Icon(
                           wishlist.contains(plantName) ? Icons.favorite : Icons.favorite_border,
                           color: wishlist.contains(plantName) ? Colors.red : null,

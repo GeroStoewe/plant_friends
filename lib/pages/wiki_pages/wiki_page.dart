@@ -5,13 +5,10 @@ import 'filter_pages/wiki_page_filter_difficulty.dart';
 import 'filter_pages/wiki_page_filter_light.dart';
 import 'filter_pages/wiki_page_filter_type.dart';
 import 'filter_pages/wiki_page_filter_water.dart';
-import 'filter_pages/plant_wishlist_page.dart';
 import 'other/wiki_page_filter_result_page.dart';
 
 class WikiPage extends StatelessWidget {
   const WikiPage({super.key});
-
-  get wishlist => null;
 
   @override
   Widget build(BuildContext context) {
@@ -88,16 +85,6 @@ class WikiPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const DifficultyFilterPage(),
-                  ),
-                ),
-              ),
-              FilterCard(
-                title: 'My wish list',
-                imagePath: 'lib/images/wiki/category/wish-list.png',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PlantWishListPage(wishlist: wishlist, plantData: [],),
                   ),
                 ),
               ),

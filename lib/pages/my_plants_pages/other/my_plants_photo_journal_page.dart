@@ -6,9 +6,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:plant_friends/pages/my_plants_pages/other/zoomable_photo.dart';
 
 import '../../../themes/colors.dart';
 import '../../../widgets/custom_snackbar.dart';
+import 'zoomable_photo.dart';
 
 class PhotoJournalPage extends StatefulWidget {
   List<Map<String, String?>> photoJournal = [];
@@ -349,7 +351,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                "Choose Image Source",
+                "Choose image source",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -478,8 +480,10 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addPhoto,
-        child: const Icon(Icons.add_a_photo),
         backgroundColor: seaGreen,
+        child: const Icon(Icons.add_a_photo,
+        color: Colors.white70,
+        ),
       ),
     );
 
@@ -536,26 +540,29 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            imageUrl,
-                            width: double.infinity,
-                            height: 150,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                // Bild ist geladen
-                                return child;
-                              } else {
-                                // Zeige den Ladeindikator an
-                                return const Center(
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(seaGreen), // Grüner Ladeindikator
-                                  ),
-                                );
-                              }
-                            },
+                        GestureDetector(
+                          onTap: () {
+                            _openFullScreenImage(context, imageUrl);
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              imageUrl,
+                              width: double.infinity,
+                              height: 200,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -567,6 +574,19 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
           ),
         ),
       ],
+    );
+  }
+
+  void _openFullScreenImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.black.withOpacity(0.9),
+          insetPadding: EdgeInsets.zero, // Full-screen effect
+          child: ZoomablePhoto(imageUrl: imageUrl),
+        );
+      },
     );
   }
 

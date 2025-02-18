@@ -9,6 +9,8 @@ import '../../../themes/colors.dart';
 import '../../../widgets/custom_button_outlined_small.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../wiki_plant_details_page.dart';
+import '../../../themes/colors.dart';
+
 
 class PlantFilterResultPage extends StatefulWidget {
   final String filterType;
@@ -109,9 +111,14 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     });
 
     // Show snackbar with undo option
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(isAdding ? '$plantName added to wishlist' : '$plantName removed from wishlist'),
+        content: Text(isAdding ? '$plantName added to wishlist' : '$plantName removed from wishlist',
+        style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,),),
+        backgroundColor: isDarkMode ? Colors.black : Colors.white,
         action: SnackBarAction(
           label: 'Undo',
           backgroundColor: Colors.green,
@@ -127,7 +134,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
           },
         ),
         dismissDirection: DismissDirection.horizontal,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
       ),
     );
   }
@@ -147,24 +154,44 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           actions: [
-            TextButton.icon(
-              icon: const Icon(Icons.favorite, color: Colors.red),
-              label: const Text('Wishlist',
-                style: TextStyle(color: Colors.red),
+        Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: TextButton.icon(
+          iconAlignment: IconAlignment.end,
+        icon: const Icon(
+          Icons.favorite,
+          color: Colors.red, // White icon for contrast
+          size: 28.0, // Slightly larger icon for better visibility
+        ),
+        label: const Text(
+          'Wishlist',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600, // Medium weight for modern look
+            color: Colors.white, // White text to match icon
+          ),
+        ),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12), // Rounded corners
+          ),
+          backgroundColor: Colors.green, // Modern button color
+        ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PlantWishListPage(
+                  wishlist: wishlist,
+                  plantData: plantData,
+                  onClearWishlist: _clearWishlist,
+                ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PlantWishListPage(
-                      wishlist: wishlist,
-                      plantData: plantData,
-                      onClearWishlist: _clearWishlist,
-                    ),
-                  ),
-                );
-              },
-            ),
+            );
+          },
+        ),
+        ),
           ],
         ),
         body: isLoading

@@ -9,7 +9,6 @@ import '../../../themes/colors.dart';
 import '../../../widgets/custom_button_outlined_small.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../wiki_plant_details_page.dart';
-import '../../../widgets/custom_snackbar.dart';
 
 class PlantFilterResultPage extends StatefulWidget {
   final String filterType;
@@ -127,7 +126,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
             });
           },
         ),
-        duration: const Duration(seconds: 3),
+        dismissDirection: DismissDirection.horizontal,
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -147,8 +147,11 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           actions: [
-            IconButton(
+            TextButton.icon(
               icon: const Icon(Icons.favorite, color: Colors.red),
+              label: const Text('Wishlist',
+                style: TextStyle(color: Colors.red),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,

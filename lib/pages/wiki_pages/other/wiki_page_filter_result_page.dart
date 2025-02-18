@@ -26,6 +26,9 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
   String searchQuery = '';
   final TextEditingController searchController = TextEditingController();
 
+  // Store wishlist items
+  Set<String> wishlist = {};
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +88,18 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
       }).toList();
     });
   }
+
+  // Toggle a plant in the wishlist
+  void toggleWishlist(String plantName) {
+    setState(() {
+      if (wishlist.contains(plantName)) {
+        wishlist.remove(plantName);
+      } else {
+        wishlist.add(plantName);
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +165,9 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                   itemCount: filteredPlantData.length,
                   itemBuilder: (context, index) {
                     final plant = filteredPlantData[index];
-                    return ListTile(
+                    final plantName = plant['name'] ?? 'No name';
+
+;                    return ListTile(
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(8), // Rounded corners
                         child: plant['image_url'] != null
@@ -187,6 +204,15 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                       subtitle: Text(
                         '${plant['scientifical_name'] ?? 'N/A'}',
                         style: const TextStyle(color: Colors.grey),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(
+                          wishlist.contains(plantName) ? Icons.favorite : Icons.favorite_border,
+                          color: wishlist.contains(plantName) ? Colors.red : null,
+                        ),
+                        onPressed: () {
+                          toggleWishlist(plantName);
+                        },
                       ),
                       onTap: () {
                         Navigator.push(

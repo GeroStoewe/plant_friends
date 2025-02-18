@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:plant_friends/pages/wiki_pages/filter_pages/plant_wishlist_page.dart';
@@ -135,6 +138,57 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         duration: const Duration(seconds: 1),
       ),
     );
+  }
+
+
+  final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL:
+    'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+  ).ref();
+
+  void _addToWishlist(String plantName) {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    // Add the plant to the wishlist in Firebase
+    dbRef
+        .child("Wishlists")
+        .child(userId)
+        .child(plantName)
+        .set(true)
+        .then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$plantName added to wishlist')),
+      );
+
+      // Update the local wishlist state
+      setState(() {
+        wishlist.add(plantName);
+      });
+    });
+  }
+
+  void _removeFromWishlist(String plantName) {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    // Remove the plant from the wishlist in Firebase
+    dbRef
+        .child("Wishlists")
+        .child(userId)
+        .child(plantName)
+        .remove()
+        .then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$plantName removed from wishlist')),
+      );
+
+      // Update the local wishlist state
+      setState(() {
+        wishlist.remove(plantName);
+      });
+    });
   }
 
   @override
@@ -288,7 +342,11 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                           color: wishlist.contains(plantName) ? Colors.red : null,
                         ),
                         onPressed: () {
-                          toggleWishlist(plantName);
+                          if (wishlist.contains(plant['name'])) {
+                          _removeFromWishlist(plant['name']);
+                          } else {
+                            _addToWishlist(plant['name']);
+                          }
                         },
                       ),
                       onTap: () {
@@ -318,3 +376,9 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     }).join(' ');
   }
 }
+
+/// TODO:
+/// build modular structure
+/// snackbars with undo button
+/// beautify plant_wishlist_page UI
+/// deleting and adding items work good with realtime database

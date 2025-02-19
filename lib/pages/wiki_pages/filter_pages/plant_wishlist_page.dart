@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import '../../wiki_pages/other/wiki_page_filter_result_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -64,7 +63,7 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
     });
   }
 
-  // Add item to wishlist
+ /* // Add item to wishlist
   void _addToWishlist(String plantName) {
     if (userId == null) return;
 
@@ -78,7 +77,7 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
         SnackBar(content: Text('$plantName added to wishlist')),
       );
     });
-  }
+  } */
 
   // Remove item from wishlist
   void _removeFromWishlist(String plantName) {
@@ -96,7 +95,7 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
     });
   }
 
-  // Clear entire wishlist
+/*  // Clear entire wishlist
   void _clearWishlist() {
     if (userId == null) return;
 
@@ -106,53 +105,116 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
         .remove()
         .then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Wishlist cleared')),
+        const SnackBar(content: Text('Wishlist cleared')),
       );
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     final wishlistPlants = widget.plantData
         .where((plant) => wishlist.contains(plant['name']))
         .toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Wishlist'),
-        actions: [
-          if (wishlist.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.delete_forever, color: Colors.red),
-              onPressed: _clearWishlist,
-            ),
-        ],
+        title: Text(
+          "My Wishlist",
+          style: Theme
+              .of(context)
+              .textTheme
+              .headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: wishlistPlants.isEmpty
-          ? const Center(child: Text('Your wishlist is empty.'))
-          : ListView(
-        children: wishlistPlants.map((plant) {
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: ListTile(
-              title: Text(plant['name']),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () {
-                  _removeFromWishlist(plant['name']);
-                },
-              ),
+          ? Center(
+          child:
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                const Text(
+                  'Your wishlist is empty. \n '
+                      'Go to Wiki and tap the heart \n '
+                      'button to add plants.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                  const SizedBox(height: 16),
+                  Image.asset(
+                  'lib/images/wiki/category/wish-list.png',
+                  width: 300,
+                    height: 300,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 16),
+
+                ]
+              )
+          )
+            :ListView(
+            children: wishlistPlants.map((plant) {
+            return Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
             ),
-          );
-        }).toList(),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+            children: [
+            ClipRRect(
+            borderRadius: BorderRadius.circular(12), // Rounded image
+            child: Image.asset(
+            'lib/images/wiki/category/wishlist-plant.png',
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+            ),
+           ),
+            const SizedBox(width: 16), // Space between image and text
+            Expanded(
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            Text(
+            plant['name' ],
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            ),
+           ),
+            const SizedBox(height: 4),
+            ],
+           ),
+          ),
+            IconButton(
+            icon: const Icon(Icons.delete, color: Colors.redAccent),
+            onPressed: () {
+            _removeFromWishlist(plant['name']);
+            },
+          ),
+        ],
+       ),
       ),
-    );
-  }
+     );
+    }).toList(),
+   ),
+  );
+ }
 }
+
 ///
 /// TODO
-/// UI trash
-/// errors
 ///
 ///
 /// change the pic of the newly added plant with KI photos randomly or as placeholder

@@ -14,19 +14,6 @@ class _ZoomablePhotoState extends State<ZoomablePhoto> {
   final TransformationController _transformationController = TransformationController();
   double _currentScale = 1.0;
 
-  void _zoomIn() {
-    setState(() {
-      _currentScale = (_currentScale * 1.2).clamp(1.0, 4.0);
-      _transformationController.value = Matrix4.identity()..scale(_currentScale);
-    });
-  }
-
-  void _zoomOut() {
-    setState(() {
-      _currentScale = (_currentScale / 1.2).clamp(1.0, 4.0);
-      _transformationController.value = Matrix4.identity()..scale(_currentScale);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,34 +42,7 @@ class _ZoomablePhotoState extends State<ZoomablePhoto> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        Positioned(
-          bottom: 20,
-          left: 0,
-          right: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, // Center the buttons horizontally
-            children: [
-              FloatingActionButton(
-                mini: true,
-                backgroundColor: Colors.white,
-                onPressed: _zoomOut,
-                child: const Icon(Icons.zoom_out, color: Colors.black),
-              ),
-              const SizedBox(width: 16), // Space between buttons
-              FloatingActionButton(
-                mini: true,
-                backgroundColor: Colors.white,
-                onPressed: _zoomIn,
-                child: const Icon(Icons.zoom_in, color: Colors.black),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
 }
-
-///
-/// TODO: remove the zoom in and out buttons
-///

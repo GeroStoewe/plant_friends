@@ -30,7 +30,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
   String searchQuery = '';
   final TextEditingController searchController = TextEditingController();
 
-  // Store wishlist items
+  // for wishlist items
   Set<String> wishlist = {};
 
   void _clearWishlist() {
@@ -99,7 +99,33 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     });
   }
 
-  // Toggle a plant in the wishlist with Snackbar notification
+  // Helper function to show a Snackbar
+  void _showSnackbar(BuildContext context, String message, {VoidCallback? onUndo}) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+        ),
+        backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        action: onUndo != null
+            ? SnackBarAction(
+          label: 'Undo',
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          onPressed: onUndo,
+        )
+            : null,
+        dismissDirection: DismissDirection.horizontal,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+
+// Toggle a plant in the wishlist with Snackbar notification
   void toggleWishlist(String plantName) {
     final isAdding = !wishlist.contains(plantName);
 
@@ -111,85 +137,57 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
       }
     });
 
-    // Show snackbar with undo option
-    final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(isAdding ? '$plantName added to wishlist' : '$plantName removed from wishlist',
-        style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,),),
-        backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        action: SnackBarAction(
-          label: 'Undo',
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          onPressed: () {
-            setState(() {
-              if (isAdding) {
-                wishlist.remove(plantName);
-              } else {
-                wishlist.add(plantName);
-              }
-            });
-          },
-        ),
-        dismissDirection: DismissDirection.horizontal,
-        duration: const Duration(seconds: 1),
-      ),
+    // Show Snackbar with undo option
+    _showSnackbar(
+      context,
+      isAdding ? '$plantName added to wishlist' : '$plantName removed from wishlist',
+      onUndo: () {
+        setState(() {
+          if (isAdding) {
+            wishlist.remove(plantName);
+          } else {
+            wishlist.add(plantName);
+          }
+        });
+      },
     );
+
+    // Sync with Firebase
+    _syncWishlistWithFirebase(plantName, isAdding);
   }
 
+// Sync wishlist with Firebase
+  void _syncWishlistWithFirebase(String plantName, bool isAdding) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
 
+    try {
+      if (isAdding) {
+        await dbRef
+            .child("Wishlists")
+            .child(userId)
+            .child(plantName)
+            .set(true);
+      } else {
+        await dbRef
+            .child("Wishlists")
+            .child(userId)
+            .child(plantName)
+            .remove();
+      }
+    } catch (e) {
+      // Handle errors (e.g., show an error Snackbar)
+      _showSnackbar(context, 'Failed to update wishlist: ${e.toString()}');
+    }
+  }
+
+// Firebase database reference
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL:
     'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
   ).ref();
 
-  void _addToWishlist(String plantName) {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId == null) return;
-
-    // Add the plant to the wishlist in Firebase
-    dbRef
-        .child("Wishlists")
-        .child(userId)
-        .child(plantName)
-        .set(true)
-        .then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$plantName added to wishlist')),
-      );
-
-      // Update the local wishlist state
-      setState(() {
-        wishlist.add(plantName);
-      });
-    });
-  }
-
-  void _removeFromWishlist(String plantName) {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId == null) return;
-
-    // Remove the plant from the wishlist in Firebase
-    dbRef
-        .child("Wishlists")
-        .child(userId)
-        .child(plantName)
-        .remove()
-        .then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$plantName removed from wishlist')),
-      );
-
-      // Update the local wishlist state
-      setState(() {
-        wishlist.remove(plantName);
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,8 +210,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
           iconAlignment: IconAlignment.end,
         icon: const Icon(
           Icons.favorite,
-          color: Colors.red, // White icon for contrast
-          size: 28.0, // Slightly larger icon for better visibility
+          color: Colors.red,
+          size: 28.0,
         ),
         label: const Text(
           'Wishlist',
@@ -342,11 +340,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                           color: wishlist.contains(plantName) ? Colors.red : null,
                         ),
                         onPressed: () {
-                          if (wishlist.contains(plant['name'])) {
-                          _removeFromWishlist(plant['name']);
-                          } else {
-                            _addToWishlist(plant['name']);
-                          }
+                          toggleWishlist(plantName);
                         },
                       ),
                       onTap: () {
@@ -378,7 +372,5 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
 }
 
 /// TODO:
-/// build modular structure
-/// snackbars with undo button
-/// beautify plant_wishlist_page UI
-/// deleting and adding items work good with realtime database
+/// heart symbol stay constant if the plant exists in the wish list
+///

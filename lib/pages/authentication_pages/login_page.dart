@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/square_tile.dart';
 import 'forgot_password_page.dart';
@@ -274,15 +275,44 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loginWithGoogle() async {
+    setState(() {
+      isLoading = true; // loading indicator
+    });
+
+    try {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
-    if (gUser == null) return;
+    if (gUser == null) {
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
 
-    final GoogleSignInAuthentication gAuth = await gUser.authentication;
+      final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken, idToken: gAuth.idToken);
+      final credential = GoogleAuthProvider.credential(
+          accessToken:
+          gAuth.accessToken,
+          idToken: gAuth.idToken
+      );
+      // Sign in with Google credentials
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      // Autofill the email field with the Google account's email
+      usernameController.text = gUser.email;
+
+    // A success message or navigate to the next screen
+    CustomSnackbar snackbar = CustomSnackbar(context);
+    snackbar.showMessage('Logged in as ${gUser.email}', MessageType.success);
+    } catch (e) {
+      // Handle errors
+      debugPrint('Google Login Error: $e');
+      showErrorMessage('Failed to login with Google: ${e.toString()}');
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loading indicator
+      });
+    }
   }
 }

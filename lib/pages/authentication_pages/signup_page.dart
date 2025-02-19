@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/square_tile.dart';
 
@@ -269,17 +270,54 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   signUpWithGoogle() async {
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
 
-    if (gUser == null) return;
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? gUser = await googleSignIn.signIn();
+
+    if (gUser == null) {
+      showErrorMessage("Google Sign-In was cancelled.");
+      return;
+    }
 
     final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken,
-        idToken: gAuth.idToken
-    );
+      if (gAuth.accessToken == null || gAuth.idToken == null) {
+        showErrorMessage("Failed to get Google authentication tokens.");
+        return;
+      }
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      final credential = GoogleAuthProvider.credential(
+          accessToken: gAuth.accessToken,
+          idToken: gAuth.idToken
+      );
+
+      // Sign in to Firebase
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        // Auto-fill email in the form
+        setState(() {
+          usernameController.text = user.email ?? "";
+        });
+
+        // Show success message
+        CustomSnackbar snackbar = CustomSnackbar(context);
+        snackbar.showMessage('Signed up as ${gUser.email}', MessageType.success);
+      }
+    } catch (e) {
+      // Handle errors
+      debugPrint('Google Sign-Up Error: $e');
+      showErrorMessage('Failed to sign up with Google: ${e.toString()}');
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loading indicator
+      });
+    }
   }
 }

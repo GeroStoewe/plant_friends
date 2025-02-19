@@ -342,15 +342,26 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           ),
           Expanded(
             child: filteredPlantList.isEmpty
-                ? Center(
-                  child: Text(
-                "No plants available to be searched",
+                ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+                  Image.asset(
+                    'lib/images/my_plants/plant_not_found.png',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 16),
+                Text(
+                "No plants found in the search",
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 16,
                 ),
               ),
-            )
+            ],
+           )
+
                 : ListView.builder(
               itemCount: filteredPlantList.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -557,9 +568,29 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                             ? Image.network(
                           plant.plantData!.imageUrl!, // Display the network image if it exists
                           fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(seaGreen),
+                                ),
+                              ),
+                            );
+
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              'lib/images/profile/noPlant_plant.webp',
+                              fit: BoxFit.cover,
+                            );
+                          },
                         )
                             : Image.asset(
-                          'lib/images/profile/2_plant_profile.jpg', // Fallback to the asset image if no URL
+                          'lib/images/profile/noPlant_plant.webp', // Fallback to the asset image if no URL
                           fit: BoxFit.cover,
                         ),
                       ),

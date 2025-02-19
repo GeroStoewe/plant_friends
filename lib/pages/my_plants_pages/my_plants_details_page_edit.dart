@@ -10,6 +10,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_number_field.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
 import '../calendar_pages/calendar_functions.dart';
@@ -34,22 +35,28 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   final TextEditingController _edtScienceNameController = TextEditingController();
   final TextEditingController _edtDateController = TextEditingController();
   File? _plantImage;
+  final TextEditingController _customWaterIntervalController = TextEditingController();
+
 
   String _selectedDifficulty = "Easy"; // Default value for difficulty
   String _selectedLight = "Direct Light"; // Default value for light
   String _selectedWater = "Low"; // Default value for water
   String _selectedPlantType = "Cacti/Succulents"; // Default value for plant type
+  int? previousWaterInterval;
+
 
   @override
   void initState() {
     super.initState();
     _edtNameController.text = widget.plant.plantData!.name!;
     _edtScienceNameController.text = widget.plant.plantData!.scienceName!;
+    _customWaterIntervalController.text = widget.plant.plantData!.customWaterInterval.toString();
     _edtDateController.text = widget.plant.plantData!.date!;
     _selectedDifficulty = widget.plant.plantData!.difficulty ?? "Easy";
     _selectedLight = widget.plant.plantData!.light ?? "Direct Light";
     _selectedWater = widget.plant.plantData!.water ?? "Low";
     _selectedPlantType = widget.plant.plantData!.type ?? "Cacti/Succulents";
+    previousWaterInterval = widget.plant.plantData!.customWaterInterval ?? 5;
   }
 
   Future<void> _deletePlant() async {
@@ -57,7 +64,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Plant'),
-        content: const Text('Are you sure you want to delete this plant? This will also remove all associated watering and fertilizing events.'),
+        content: const Text('Are you sure you want to delete this plant? This will also remove all associated watering events.'), //and fertilizing events
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -179,6 +186,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   Future<void> _updatePlant(BuildContext context) async {
     String originalWaterNeeds = widget.plant.plantData!.water ?? "Low"; // Original water needs
     bool waterNeedsChanged = originalWaterNeeds != _selectedWater;
+    int? originalCustomWaterInterval = widget.plant.plantData!.customWaterInterval ?? 5;
+    bool customWaterIntervalChanged = originalCustomWaterInterval != int.tryParse(_customWaterIntervalController.text);
 
     Map<String, dynamic> data = {};
 
@@ -219,6 +228,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         "light": _selectedLight,
         "water": _selectedWater,
         "type": _selectedPlantType,
+        "custom_water_interval": int.tryParse(_customWaterIntervalController.text) ?? 5, // Convert to int
         "image_url": newImageUrl, // Set the new image URL in the data
       };
     } else {
@@ -231,6 +241,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         "light": _selectedLight,
         "water": _selectedWater,
         "type": _selectedPlantType,
+        "custom_water_interval": int.tryParse(_customWaterIntervalController.text) ?? 5, // Convert to int
       };
     }
 
@@ -238,14 +249,14 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       // Update the plant data in the database
       await dbRef.child("Plants").child(widget.plant.key!).update(data);
 
-      if (waterNeedsChanged) {
+      if (waterNeedsChanged || customWaterIntervalChanged) {
         // Show a dialog that informs the user about the event changes
         bool? shouldProceed = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Watering and Fertilizing Events Update'),
+            title: const Text('Watering Events Update'), //and Fertilizing
             content: const Text(
-              'You changed the water needs. All existing watering and fertilizing events will be deleted and new ones will be created. Do you want to proceed?',
+              'You changed the water needs. All existing watering events will be deleted and new ones will be created. Do you want to proceed?', //and fertilizing
             ),
             actions: [
               TextButton(
@@ -277,7 +288,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           builder: (BuildContext context) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)),
+                valueColor: AlwaysStoppedAnimation<Color>(seaGreen),
               ),
             );
           },
@@ -286,25 +297,37 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         try {
           // Delete existing events
           await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
+          int? currentWaterInterval = int.tryParse(_customWaterIntervalController.text);
+          print(currentWaterInterval);
 
-          // Create new watering events
-          await CalenderFunctions().createNewEventsWatering(
-            widget.plant.key!,
-            _edtNameController.text,
-            _selectedWater,
-          );
+          if(customWaterIntervalChanged || _selectedWater == "Custom" ){
+            await CalenderFunctions().createNewEventsWateringCustom(
+              widget.plant.key!,
+              _edtNameController.text,
+              currentWaterInterval!,
+            );
+          }else{
+            await CalenderFunctions().createNewEventsWatering(
+              widget.plant.key!,
+              _edtNameController.text,
+              _selectedWater,
+            );
+          }
 
+          /*
           // Create new fertilizing events
           await CalenderFunctions().createNewEventsFertilizing(
             widget.plant.key!,
             _edtNameController.text,
             30,
           );
+          */
+
 
           // Show success message
           if (mounted) {
             CustomSnackbar snackbar = CustomSnackbar(context);
-            snackbar.showMessage('Watering and fertilizing events updated successfully', MessageType.success);
+            snackbar.showMessage('Watering events updated successfully', MessageType.success); // and fertilizing
           }
         } catch (e) {
           // Handle error and show error message
@@ -422,7 +445,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     String imageUrl = widget.plant.plantData!.imageUrl ?? '';
     String defaultImageUrl =
-        'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
+        'https://firebasestorage.googleapis.com/v0/b/plant-friends-app.appspot.com/o/placeholder_plant%2FnoPlant_plant.webp?alt=media&token=6c20d3e6-4b8c-4b59-a677-2340202020a7';
 
     return Scaffold(
       appBar: AppBar(
@@ -608,8 +631,56 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
+// Plant Type Dropdown with Green Label
+              DropdownButtonFormField<String>(
+                value: _selectedPlantType,
+                decoration: InputDecoration(
+                  labelText: "Plant Type",
+                  labelStyle: const TextStyle(color: seaGreen), // Green color
+                  filled: true,
+                  fillColor: isDarkMode
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1),
+                  prefixIcon: Icon(
+                    Icons.eco_sharp,
+                    color: isDarkMode
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.black.withOpacity(0.5),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                      value: "Cacti/Succulents",
+                      child: Text("Cacti/Succulents")),
+                  DropdownMenuItem(
+                      value: "Tropical Plants", child: Text("Tropical Plants")),
+                  DropdownMenuItem(
+                      value: "Climbing Plants", child: Text("Climbing Plants")),
+                  DropdownMenuItem(
+                      value: "Flowering Plants", child: Text("Flowering Plants")),
+                  DropdownMenuItem(value: "Trees/Palms", child: Text("Trees/Palms")),
+                  DropdownMenuItem(value: "Herbs", child: Text("Herbs")),
+                  DropdownMenuItem(value: "Others", child: Text("Others")),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedWater = newValue!;
+                    if (_selectedWater != "Custom") {
+                      _customWaterIntervalController.clear();
+                    } else if (_customWaterIntervalController.text.isEmpty) {
+                      _customWaterIntervalController.text = "5"; // Standardwert setzen
+                    }
+                  });
+                },
+              ),
+              const SizedBox(height: 15),
 
+/*
               // Difficulty Dropdown with Green Label
               DropdownButtonFormField<String>(
                 value: _selectedDifficulty,
@@ -643,7 +714,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 },
               ),
               const SizedBox(height: 15),
-
+*/
               // Light Dropdown with Green Label
               DropdownButtonFormField<String>(
                 value: _selectedLight,
@@ -688,13 +759,13 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 value: _selectedWater,
                 decoration: InputDecoration(
                   labelText: "Water Requirement",
-                  labelStyle: const TextStyle(color: seaGreen), // Green color
+                  labelStyle: const TextStyle(color: Colors.green), // Change to your color
                   filled: true,
                   fillColor: isDarkMode
                       ? Colors.white.withOpacity(0.1)
                       : Colors.black.withOpacity(0.1),
                   prefixIcon: Icon(
-                    Icons.water_drop_outlined,
+                    Icons.water_drop_rounded,
                     color: isDarkMode
                         ? Colors.white.withOpacity(0.3)
                         : Colors.black.withOpacity(0.5),
@@ -708,56 +779,40 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   DropdownMenuItem(value: "Low", child: Text("Low")),
                   DropdownMenuItem(value: "Medium", child: Text("Medium")),
                   DropdownMenuItem(value: "High", child: Text("High")),
+                  DropdownMenuItem(value: "Custom", child: Text("Custom")), // Add Custom option
                 ],
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedWater = newValue!;
+                    // Clear the custom interval text field when changing the selection
                   });
                 },
               ),
-              const SizedBox(height: 15),
 
-              // Plant Type Dropdown with Green Label
-              DropdownButtonFormField<String>(
-                value: _selectedPlantType,
-                decoration: InputDecoration(
-                  labelText: "Plant Type",
-                  labelStyle: const TextStyle(color: seaGreen), // Green color
-                  filled: true,
-                  fillColor: isDarkMode
-                      ? Colors.white.withOpacity(0.1)
-                      : Colors.black.withOpacity(0.1),
-                  prefixIcon: Icon(
-                    Icons.eco_sharp,
-                    color: isDarkMode
-                        ? Colors.white.withOpacity(0.3)
-                        : Colors.black.withOpacity(0.5),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide.none,
+
+              // Conditional field for custom water interval
+              if (_selectedWater == "Custom") ...[
+                const SizedBox(height: 5),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Watering Interval (Days)",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: seaGreen, // Green color for label
+                    ),
                   ),
                 ),
-                items: const [
-                  DropdownMenuItem(
-                      value: "Cacti/Succulents",
-                      child: Text("Cacti/Succulents")),
-                  DropdownMenuItem(
-                      value: "Tropical Plants", child: Text("Tropical Plants")),
-                  DropdownMenuItem(
-                      value: "Climbing Plants", child: Text("Climbing Plants")),
-                  DropdownMenuItem(
-                      value: "Flowering Plants", child: Text("Flowering Plants")),
-                  DropdownMenuItem(value: "Trees/Palms", child: Text("Trees/Palms")),
-                  DropdownMenuItem(value: "Herbs", child: Text("Herbs")),
-                  DropdownMenuItem(value: "Others", child: Text("Others")),
-                ],
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedPlantType = newValue!;
-                  });
-                },
-              ),
+                const SizedBox(height: 5),
+                CustomNumberField(
+                  controller: _customWaterIntervalController,
+                  icon: Icons.water_drop_outlined,
+                  hintText: "Enter watering interval (1-50 days)",
+                  obscureText: false,
+                ),
+              ],
+
+
               const SizedBox(height: 20),
 
               Center(

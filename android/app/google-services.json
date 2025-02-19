@@ -1,9 +1,7 @@
 {
   "project_info": {
     "project_number": "545786364087",
-
     "firebase_url": "https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app",
-
     "project_id": "plant-friends-app",
     "storage_bucket": "plant-friends-app.appspot.com"
   },
@@ -15,8 +13,23 @@
           "package_name": "com.hwr.plant_friends"
         }
       },
-
       "oauth_client": [
+        {
+          "client_id": "545786364087-besiqls30429747ga52c614k1qniqulu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "2bb6a5614d655a8b5ba6f423c1f761da8657cabf"
+          }
+        },
+        {
+          "client_id": "545786364087-c31ap2ak1cdhfkjpvqd1mvno82u93r53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "6acc07e74ac34753424bcba3cf7679c3516b212a"
+          }
+        },
         {
           "client_id": "545786364087-mibgfd0nu010focnr50ei55qpi9osdd8.apps.googleusercontent.com",
           "client_type": 1,
@@ -26,11 +39,18 @@
           }
         },
         {
+          "client_id": "545786364087-qk7a7ps74s5ohtlq0i1qhalk3m8vp5du.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "aad40c7732ff1cb54d68f7a33371f73b954bc893"
+          }
+        },
+        {
           "client_id": "545786364087-94cdafnfhgb3bp98b758cd8u8crgdj2k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
-
       "api_key": [
         {
           "current_key": "AIzaSyAx_EwH-Dc0oXBcaxPqtKncLtyf-WqWYx0"
@@ -38,7 +58,6 @@
       ],
       "services": {
         "appinvite_service": {
-
           "other_platform_oauth_client": [
             {
               "client_id": "545786364087-94cdafnfhgb3bp98b758cd8u8crgdj2k.apps.googleusercontent.com",

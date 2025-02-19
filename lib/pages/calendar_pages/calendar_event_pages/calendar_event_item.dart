@@ -47,8 +47,8 @@ class _EventItemState extends State<EventItem> {
           padding: const EdgeInsets.all(8.0), // Padding around the large icon
           child: widget.event.eventType == 'Watering'
               ? const Icon(Icons.water_drop, size: 30.0, color: Colors.blue)
-              : widget.event.eventType == 'Fertilizing'
-              ? const Icon(Icons.local_florist, size: 30.0, color: Colors.green)
+              //: widget.event.eventType == 'Fertilizing'
+              //? const Icon(Icons.local_florist, size: 30.0, color: Colors.green)
               : const SizedBox.shrink(), // If no event type matches
         ),
         title: Text(widget.event.plantName),

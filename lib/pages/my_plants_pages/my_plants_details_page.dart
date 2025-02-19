@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../themes/colors.dart';
 import '../../widgets/custom_button_outlined_small.dart';
 import '../../widgets/custom_info_card.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../calendar_pages/calendar_event_pages/calendar_next_event_card.dart';
 import '../calendar_pages/calendar_functions.dart';
 import 'my_plants_details_page_edit.dart';
@@ -23,6 +24,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
   final CalenderFunctions _calendarFunctions = CalenderFunctions();
   late Future<Map<String, DateTime?>> _nextEventsFuture;
+  bool _showPlantNeedsToBeWateredTodayButWasNotYet = false;
 
 
 
@@ -31,17 +33,119 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
     super.initState();
 
     _nextEventsFuture = _fetchNextEventDates();
+    _checkWateringStatus();
+
+  }
+
+  Future<void> _checkWateringStatus() async {
+    bool eventNotDone = await CalenderFunctions().checkIfTodaysWateringEventNotDone(widget.plant.key!);
+    setState(() {
+      _showPlantNeedsToBeWateredTodayButWasNotYet = eventNotDone;
+    });
   }
 
   Future<Map<String, DateTime?>> _fetchNextEventDates() async {
     DateTime? nextWateringDate = await _calendarFunctions.getNextWateringDate(widget.plant.key);
-    DateTime? nextFertilizingDate = await _calendarFunctions.getNextFertilizingDate(widget.plant.key);
+    //DateTime? nextFertilizingDate = await _calendarFunctions.getNextFertilizingDate(widget.plant.key);
 
     return {
       'watering': nextWateringDate,
-      'fertilizing': nextFertilizingDate,
+      //'fertilizing': nextFertilizingDate,
     };
   }
+
+  void plantWasWateredToday() async {
+    bool eventExists = await CalenderFunctions().checkIfTodaysWateringEventExists(widget.plant.key!);
+
+    if (eventExists) {
+      await CalenderFunctions().setTodaysWateringEventToDone(widget.plant.key!);
+      if (mounted) {
+        CustomSnackbar snackbar = CustomSnackbar(context);
+        snackbar.showMessage('Watering event marked as done', MessageType.success);
+        _checkWateringStatus();
+      }
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Confirm Watering Event Update'),
+          content: const Text(
+            "You've marked your plant as watered today, even though it's not scheduled for watering. All previous watering records for this plant will be deleted, and a new cycle will start from today. Do you want to proceed?",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (mounted) {
+                  Navigator.of(dialogContext, rootNavigator: true).pop();
+                }
+              },
+              child: const Text('Cancel', style: TextStyle(color: Color(0xFF388E3C))),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (mounted) {
+                  Navigator.of(dialogContext, rootNavigator: true).pop();
+                }
+
+                // Ladeindikator anzeigen
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext loadingContext) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF388E3C)),
+                        ),
+                      );
+                    },
+                  );
+                }
+
+                try {
+                  await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
+
+                  if (widget.plant.plantData?.water == "Custom") {
+                    await CalenderFunctions().createNewEventsWateringCustom(
+                      widget.plant.key!,
+                      widget.plant.plantData?.name ?? 'N/A',
+                      widget.plant.plantData?.customWaterInterval ?? 5,
+                    );
+                  } else {
+                    await CalenderFunctions().createNewEventsWatering(
+                      widget.plant.key!,
+                      widget.plant.plantData?.name ?? 'N/A',
+                      widget.plant.plantData?.water ?? "Low",
+                    );
+                  }
+
+                  CalenderFunctions().setTodaysWateringEventToDone(widget.plant.key!);
+                  if (mounted) {
+                    CustomSnackbar snackbar = CustomSnackbar(context);
+                    snackbar.showMessage('Watering events updated successfully', MessageType.success);
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    CustomSnackbar snackbar = CustomSnackbar(context);
+                    snackbar.showMessage('Error updating events: $e', MessageType.error);
+                  }
+                } finally {
+                  if (mounted) {
+                    Navigator.of(context, rootNavigator: true).pop(); // Ladeindikator schließen
+                  }
+                }
+              },
+              child: const Text('Proceed', style: TextStyle(color: Color(0xFF388E3C))),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +196,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
   Container backgroundImageAndHeader(Size size, BuildContext context) {
     String imageUrl = widget.plant.plantData!.imageUrl ?? '';
-    String defaultImageUrl = 'https://media.istockphoto.com/id/1280154279/de/foto/geben-sie-ihrem-haus-eine-gute-dosis-gr%C3%BCn.jpg?s=2048x2048&w=is&k=20&c=_lcpTxNP6AQsufXbQPb4bOZirU7oo-M8Z7184h3ILGM=';
+    String defaultImageUrl = 'https://firebasestorage.googleapis.com/v0/b/plant-friends-app.appspot.com/o/placeholder_plant%2FnoPlant_plant.webp?alt=media&token=6c20d3e6-4b8c-4b59-a677-2340202020a7';
 
     return Container(
       height: size.height * 0.50,
@@ -200,24 +304,64 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             ],
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () async {
-            // Navigiere zur Edit-Seite und warte auf das Ergebnis
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyPlantsDetailsEditPage(plant: widget.plant),
-              ),
-            );
+        Row(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.water_drop,
+                      color: _showPlantNeedsToBeWateredTodayButWasNotYet
+                          ? Colors.orange
+                          : Colors.grey),
+                  onPressed: () {
+                    plantWasWateredToday();
+                  },
+                ),
+                if (_showPlantNeedsToBeWateredTodayButWasNotYet)
+                  Positioned(
+                    top: -20,
+                    right: -15,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        "Water me!",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            )
+            ,
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () async {
+                // Navigiere zur Edit-Seite und warte auf das Ergebnis
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyPlantsDetailsEditPage(plant: widget.plant),
+                  ),
+                );
 
-            // Wenn das Ergebnis true ist, aktualisiere die Seite
-            if (result == true) {
-              setState(() {
-                _nextEventsFuture = _fetchNextEventDates(); // Update next events
-              });
-            }
-          },
+                // Wenn das Ergebnis true ist, aktualisiere die Seite
+                if (result == true) {
+                  setState(() {
+                    _nextEventsFuture = _fetchNextEventDates(); // Update next events
+                  });
+                }
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -240,11 +384,12 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             const SizedBox(width: 16),
             Expanded(
               child: CustomInfoCard(
-                icon: Icons.water_drop,
-                title: 'Water',
-                value: widget.plant.plantData!.water ?? 'N/A',
+                icon: Icons.eco_sharp,
+                title: 'Plant Type',
+                value: widget.plant.plantData!.type ?? 'N/A',
               ),
             ),
+
           ],
         ),
         const SizedBox(height: 16),
@@ -253,21 +398,31 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
           children: [
             Expanded(
               child: CustomInfoCard(
-                icon: Icons.star,
-                title: 'Difficulty',
-                value: widget.plant.plantData!.difficulty ?? 'N/A',
+                icon: Icons.water_drop,
+                title: 'Water',
+                value: widget.plant.plantData?.water ?? 'N/A',
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: CustomInfoCard(
-                icon: Icons.eco_sharp,
-                title: 'Plant Type',
-                value: widget.plant.plantData!.type ?? 'N/A',
+                icon: Icons.water_drop_outlined,
+                title: 'Watering Interval',
+                value: (widget.plant.plantData != null)
+                    ? (widget.plant.plantData!.water == 'Custom'
+                    ? (widget.plant.plantData!.customWaterInterval != null
+                    ? '${widget.plant.plantData!.customWaterInterval} day(s)'
+                    : 'N/A')
+                    : '${_calendarFunctions.getWateringInterval(widget.plant.plantData!.water ?? 'Low')} day(s)')
+                    : 'N/A',
               ),
             ),
           ],
         ),
+
+
+
+
         const SizedBox(height: 20),
         FutureBuilder<Map<String, DateTime?>>(
           future: _nextEventsFuture,
@@ -278,7 +433,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
               return Text('Error: ${snapshot.error}');
             } else {
               DateTime? nextWateringDate = snapshot.data?['watering'];
-              DateTime? nextFertilizingDate = snapshot.data?['fertilizing'];
+              //DateTime? nextFertilizingDate = snapshot.data?['fertilizing'];
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -290,6 +445,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                       date: nextWateringDate,
                     ),
                   ),
+                  /*
                   const SizedBox(width: 16),
                   Expanded(
                     child: EventCardNextDate(
@@ -298,6 +454,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                       date: nextFertilizingDate,
                     ),
                   ),
+                   */
                 ],
               );
             }

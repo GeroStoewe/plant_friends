@@ -54,7 +54,7 @@ The key features of the Plant Friends app include:
 | Feature                  | Description                                                                                        |
 |--------------------------|----------------------------------------------------------------------------------------------------|
 | 🌿 Add Plant             | Allows users to add a new plant by providing its name, scientific name, and photo                  |
-| ⏰ Plant Care Reminders   | Notifies users when their plants need watering and fertilizing                                     |
+| ⏰ Plant Care Reminders   | Notifies users when their plants need watering                                      |
 | 📚 Plant Wiki            | Includes a library of popular houseplants with detailed care instructions                          |
 | 📅 Watering Log          | Tracks watering history for each plant on Calendar Page                                            |
 | 👤 User Profiles         | Users can create profiles and sync their plant data across devices using Firebase                  |

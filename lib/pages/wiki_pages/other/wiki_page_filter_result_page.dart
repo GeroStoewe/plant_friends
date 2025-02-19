@@ -46,6 +46,51 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     searchController.addListener(() {
       updateSearch(searchController.text);
     });
+    _fetchWishlist(); // Fetch wishlist data when the page loads
+    _listenForWishlistUpdates(); // Optional: Listen for real-time updates
+  }
+
+  void _fetchWishlist() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    try {
+      final snapshot = await dbRef
+          .child("Wishlists")
+          .child(userId)
+          .get();
+
+      if (snapshot.exists) {
+        final data = snapshot.value as Map<dynamic, dynamic>;
+        final wishlistData = data.keys.cast<String>().toSet(); // Extract plant names from the map
+
+        setState(() {
+          wishlist = wishlistData; // Update the local wishlist state
+        });
+      }
+    } catch (e) {
+      _showSnackbar(context, 'Failed to fetch wishlist: ${e.toString()}');
+    }
+  }
+
+  void _listenForWishlistUpdates() {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    dbRef
+        .child("Wishlists")
+        .child(userId)
+        .onValue
+        .listen((event) {
+      final data = event.snapshot.value;
+      if (data != null) {
+        final wishlistData = (data as Map<dynamic, dynamic>).keys.cast<String>().toSet();
+
+        setState(() {
+          wishlist = wishlistData; // Update the local wishlist state
+        });
+      }
+    });
   }
 
   @override
@@ -140,7 +185,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     // Show Snackbar with undo option
     _showSnackbar(
       context,
-      isAdding ? '$plantName added to wishlist' : '$plantName removed from wishlist',
+      isAdding ? '$plantName added to wishlist 🌱 ' : '$plantName removed from wishlist :(',
       onUndo: () {
         setState(() {
           if (isAdding) {
@@ -217,8 +262,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
           'Wishlist',
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w600, // Medium weight for modern look
-            color: Colors.white, // White text to match icon
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
         ),
         style: TextButton.styleFrom(
@@ -370,7 +415,3 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     }).join(' ');
   }
 }
-
-/// TODO:
-/// heart symbol stay constant if the plant exists in the wish list
-///

@@ -215,6 +215,4 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
 
 ///
 /// TODO
-///
-///
 /// change the pic of the newly added plant with KI photos randomly or as placeholder

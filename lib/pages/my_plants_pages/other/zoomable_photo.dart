@@ -82,3 +82,7 @@ class _ZoomablePhotoState extends State<ZoomablePhoto> {
     );
   }
 }
+
+///
+/// TODO: remove the zoom in and out buttons
+///

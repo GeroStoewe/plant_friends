@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:plant_friends/pages/wiki_pages/filter_pages/plant_wishlist_page.dart';
 import 'package:plant_friends/pages/wiki_pages/other/wiki_new_plant_request_form.dart';
 
 import '../../../themes/colors.dart';
@@ -26,12 +30,66 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
   String searchQuery = '';
   final TextEditingController searchController = TextEditingController();
 
+  // for wishlist items
+  Set<String> wishlist = {};
+
+  void _clearWishlist() {
+    setState(() {
+      wishlist.clear();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchAndFilterPlantData();
     searchController.addListener(() {
       updateSearch(searchController.text);
+    });
+    _fetchWishlist(); // Fetch wishlist data when the page loads
+    _listenForWishlistUpdates(); // Optional: Listen for real-time updates
+  }
+
+  void _fetchWishlist() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    try {
+      final snapshot = await dbRef
+          .child("Wishlists")
+          .child(userId)
+          .get();
+
+      if (snapshot.exists) {
+        final data = snapshot.value as Map<dynamic, dynamic>;
+        final wishlistData = data.keys.cast<String>().toSet(); // Extract plant names from the map
+
+        setState(() {
+          wishlist = wishlistData; // Update the local wishlist state
+        });
+      }
+    } catch (e) {
+      _showSnackbar(context, 'Failed to fetch wishlist: ${e.toString()}');
+    }
+  }
+
+  void _listenForWishlistUpdates() {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    dbRef
+        .child("Wishlists")
+        .child(userId)
+        .onValue
+        .listen((event) {
+      final data = event.snapshot.value;
+      if (data != null) {
+        final wishlistData = (data as Map<dynamic, dynamic>).keys.cast<String>().toSet();
+
+        setState(() {
+          wishlist = wishlistData; // Update the local wishlist state
+        });
+      }
     });
   }
 
@@ -86,6 +144,96 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     });
   }
 
+  // Helper function to show a Snackbar
+  void _showSnackbar(BuildContext context, String message, {VoidCallback? onUndo}) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+        ),
+        backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        action: onUndo != null
+            ? SnackBarAction(
+          label: 'Undo',
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          onPressed: onUndo,
+        )
+            : null,
+        dismissDirection: DismissDirection.horizontal,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+
+// Toggle a plant in the wishlist with Snackbar notification
+  void toggleWishlist(String plantName) {
+    final isAdding = !wishlist.contains(plantName);
+
+    setState(() {
+      if (isAdding) {
+        wishlist.add(plantName);
+      } else {
+        wishlist.remove(plantName);
+      }
+    });
+
+    // Show Snackbar with undo option
+    _showSnackbar(
+      context,
+      isAdding ? '$plantName added to wishlist 🌱 ' : '$plantName removed from wishlist :(',
+      onUndo: () {
+        setState(() {
+          if (isAdding) {
+            wishlist.remove(plantName);
+          } else {
+            wishlist.add(plantName);
+          }
+        });
+      },
+    );
+
+    // Sync with Firebase
+    _syncWishlistWithFirebase(plantName, isAdding);
+  }
+
+// Sync wishlist with Firebase
+  void _syncWishlistWithFirebase(String plantName, bool isAdding) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    try {
+      if (isAdding) {
+        await dbRef
+            .child("Wishlists")
+            .child(userId)
+            .child(plantName)
+            .set(true);
+      } else {
+        await dbRef
+            .child("Wishlists")
+            .child(userId)
+            .child(plantName)
+            .remove();
+      }
+    } catch (e) {
+      // Handle errors (e.g., show an error Snackbar)
+      _showSnackbar(context, 'Failed to update wishlist: ${e.toString()}');
+    }
+  }
+
+// Firebase database reference
+  final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL:
+    'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+  ).ref();
+
+
   @override
   Widget build(BuildContext context) {
     return ScrollbarTheme(
@@ -100,6 +248,46 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          actions: [
+        Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: TextButton.icon(
+          iconAlignment: IconAlignment.end,
+        icon: const Icon(
+          Icons.favorite,
+          color: Colors.red,
+          size: 28.0,
+        ),
+        label: const Text(
+          'Wishlist',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12), // Rounded corners
+          ),
+          backgroundColor: Colors.green, // Modern button color
+        ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PlantWishListPage(
+                  wishlist: wishlist,
+                  plantData: plantData,
+                  onClearWishlist: _clearWishlist,
+                ),
+              ),
+            );
+          },
+        ),
+        ),
+          ],
         ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),))
@@ -150,6 +338,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                   itemCount: filteredPlantData.length,
                   itemBuilder: (context, index) {
                     final plant = filteredPlantData[index];
+                    final plantName = plant['name'] ?? 'No name';
+
                     return ListTile(
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(8), // Rounded corners
@@ -187,6 +377,16 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                       subtitle: Text(
                         '${plant['scientifical_name'] ?? 'N/A'}',
                         style: const TextStyle(color: Colors.grey),
+                      ),
+                      trailing:
+                      IconButton(
+                        icon: Icon(
+                          wishlist.contains(plantName) ? Icons.favorite : Icons.favorite_border,
+                          color: wishlist.contains(plantName) ? Colors.red : null,
+                        ),
+                        onPressed: () {
+                          toggleWishlist(plantName);
+                        },
                       ),
                       onTap: () {
                         Navigator.push(

@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "545786364087-dvjmli0059b6esokk3tukefm5ebqc3ch.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "b51e0c0bce88becc8bdf875a9aa7ea7db469b5b7"
+          }
+        },
+        {
           "client_id": "545786364087-mibgfd0nu010focnr50ei55qpi9osdd8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

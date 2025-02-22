@@ -44,7 +44,7 @@ class WikiPage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PlantFilterResultPage(filterType: 'all'),
+                    builder: (context) => const PlantFilterResultPage(filterType: 'all'),
                   ),
                 ),
               ),
@@ -95,3 +95,5 @@ class WikiPage extends StatelessWidget {
     );
   }
 }
+
+//TODO: fix the list.

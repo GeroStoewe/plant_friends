@@ -72,13 +72,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
-    bool isDarkMode = Theme
-        .of(context)
-        .brightness == Brightness.dark;
     final themeProvider = Provider.of<ThemeProvider>(context);
+    Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isLargePhone(BuildContext context) {
+      double width = MediaQuery.of(context).size.width;
+      return width > 400;
+    }
 
     return ScrollbarTheme(
         data: ScrollbarThemeData(
@@ -106,7 +107,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 IconButton(
                     onPressed: isLoading ? null : themeProvider.toggleTheme,
                     color: isDarkMode ? Colors.white : Colors.black,  // Farbe des Icons dynamisch
-                    iconSize: 30,
+                    iconSize: 28 * textScaleFactor,
                     icon: Icon(
                         isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon)),
               ],
@@ -123,13 +124,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           padding: EdgeInsets.all(size.width * 0.05),
                           child: Column(
                               children: [
-                                const SizedBox(height: 25),
                                 GestureDetector(
                                   onTap: pickImage,
                                   child: Stack(children: [
                                     SizedBox(
-                                      width: 160,
-                                      height: 160,
+                                      width: isLargePhone(context) ? 160 : 110,
+                                      height: isLargePhone(context) ? 160 : 110,
                                       child: Container(
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
@@ -159,8 +159,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       bottom: 5,
                                       right: 5,
                                       child: Container(
-                                        width: 45,
-                                        height: 45,
+                                        width: isLargePhone(context) ? 45 : 35,
+                                        height: isLargePhone(context) ? 45 : 35,
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(30.0),
                                             color: isDarkMode
@@ -168,7 +168,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                                 : darkGreyGreen),
                                         child: Icon(
                                           LineAwesomeIcons.camera_solid,
-                                          size: 28.0,
+                                          size: 28.0 * textScaleFactor,
                                           color: isDarkMode ? Colors.black87 : Colors
                                               .white70,
                                         ),
@@ -176,7 +176,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     )
                                   ]),
                                 ),
-                                const SizedBox(height: 40),
+                                SizedBox(height: size.height * 0.05),
                                 Form(
                                   child: Column(
                                     children: [
@@ -188,7 +188,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             style: Theme
                                                 .of(context)
                                                 .textTheme
-                                                .displayLarge,
+                                                .labelSmall,
                                             children: <TextSpan>[
                                               TextSpan(
                                                 text: "Full Name",
@@ -203,13 +203,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      SizedBox(height: size.height * 0.02),
                                       CustomTextField(
                                           controller: fullnameController,
                                           icon: Icons.person_outline_rounded,
                                           hintText: "New Full Name",
                                           obscureText: false),
-                                      const SizedBox(height: 30),
+                                      SizedBox(height: size.height * 0.04),
                                       Container(
                                         alignment: Alignment.centerLeft,
                                         child: RichText(
@@ -218,7 +218,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             style: Theme
                                                 .of(context)
                                                 .textTheme
-                                                .displayLarge,
+                                                .labelSmall,
                                             children: <TextSpan>[
                                               TextSpan(
                                                 text: "Email Address",
@@ -233,13 +233,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      SizedBox(height: size.height * 0.02),
                                       CustomTextField(
                                           controller: usernameController,
                                           icon: Icons.alternate_email_rounded,
                                           hintText: "New Email Address",
                                           obscureText: false),
-                                      const SizedBox(height: 15),
+                                      SizedBox(height: size.height * 0.025),
                                       CustomTextField(
                                         controller: currPasswordController,
                                         icon: Icons.lock_outline_rounded,
@@ -262,7 +262,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           },
                                         ),
                                       ),
-                                      const SizedBox(height: 30),
+                                      SizedBox(height: size.height * 0.04),
                                       Container(
                                         alignment: Alignment.centerLeft,
                                         child: RichText(
@@ -271,7 +271,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             style: Theme
                                                 .of(context)
                                                 .textTheme
-                                                .displayLarge,
+                                                .labelSmall,
                                             children: <TextSpan>[
                                               TextSpan(
                                                 text: "Password",
@@ -286,7 +286,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      SizedBox(height: size.height * 0.02),
                                       CustomTextField(
                                         controller: currPasswordController,
                                         icon: Icons.lock_outline_rounded,
@@ -309,7 +309,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           },
                                         ),
                                       ),
-                                      const SizedBox(height: 15),
+                                      SizedBox(height: size.height * 0.025),
                                       CustomTextField(
                                         controller: newPasswordController,
                                         icon: Icons.lock_outline_rounded,
@@ -332,20 +332,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           },
                                         ),
                                       ),
-                                      const SizedBox(height: 35),
+                                      SizedBox(height: size.height * 0.06),
                                       CustomProfileButton(
                                           onPressed: saveChanges,
-                                          width: 180,
-                                          height: 80,
+                                          width: isLargePhone(context) ? 180 : 120,
+                                          height: isLargePhone(context) ? 80 : 50,
                                           text: "SAVE",
                                           color: Theme.of(context).primaryColor,
                                       ),
-                                      const SizedBox(height: 30),
+                                      SizedBox(height: size.height * 0.05),
                                       Text.rich(
                                           TextSpan(
                                               text: "Joined: ",
                                               style: TextStyle(
-                                                  fontSize: 20,
+                                                  fontSize: 20 * textScaleFactor,
                                                   color: isDarkMode
                                                       ? dmLightGrey
                                                       : lmDarkGrey
@@ -354,7 +354,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                                 TextSpan(
                                                     text: joinDate,
                                                     style: TextStyle(
-                                                        fontSize: 22,
+                                                        fontSize: 22 * textScaleFactor,
                                                         color: Theme
                                                             .of(context)
                                                             .hintColor
@@ -593,7 +593,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: Icon(
               iconClose,
               color: Colors.white,
-              size: 30,
+              size: 30 ,
             ),
           ),
         ],

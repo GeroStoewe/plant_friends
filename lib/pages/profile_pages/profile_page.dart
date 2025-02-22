@@ -80,9 +80,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     final themeProvider = Provider.of<ThemeProvider>(context);
+    Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isLargePhone(BuildContext context) {
+      double width = MediaQuery.of(context).size.width;
+      return width > 400;
+    }
+
 
     return ScrollbarTheme(
       data: ScrollbarThemeData(
@@ -111,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: isLoading ? null : themeProvider.toggleTheme,
                 color: isDarkMode ? Colors.white : Colors.black,
                 // Farbe des Icons dynamisch
-                iconSize: 28,
+                iconSize: 28 * textScaleFactor,
                 icon: Icon(
                     isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon)),
           ],
@@ -123,9 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: Container(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
+                child: Column(
                     children: [
                       GestureDetector(
                         onTap: isLoading
@@ -140,8 +144,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                         child: Stack(children: [
                           SizedBox(
-                            width: 120,
-                            height: 120,
+                            width: isLargePhone(context) ? 120 : 80,
+                            height: isLargePhone(context) ? 120 : 80,
                             child: Container(
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -167,15 +171,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             bottom: 5,
                             right: 5,
                             child: Container(
-                              width: 35,
-                              height: 35,
+                              width: isLargePhone(context) ? 35 : 25,
+                              height: isLargePhone(context) ? 35 : 25,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30.0),
                                   color:
                                       isDarkMode ? darkSeaGreen : darkGreyGreen),
                               child: Icon(
                                 LineAwesomeIcons.pencil_alt_solid,
-                                size: 26.0,
+                                size: 24.0 * textScaleFactor,
                                 color:
                                     isDarkMode ? Colors.black87 : Colors.white70,
                               ),
@@ -183,96 +187,98 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         ]),
                       ),
-                      const SizedBox(height: 20),
-                      Text("$displayName",
-                          style: Theme.of(context).textTheme.headlineMedium),
-                      const SizedBox(height: 2),
-                      Text("$email",
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      const SizedBox(height: 25),
-                      CustomProfileButton(
-                          onPressed: isLoading
-                              ? null
-                              : () async {
-                                  await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              EditProfilePage()));
-
-                                  loadUserData();
-                                },
-                          width: 140,
-                          height: 40,
-                          text: "Edit Profile",
-                          color: Theme.of(context).primaryColor),
-                      const SizedBox(height: 20),
-                      Divider(
-                          thickness: 0.5,
-                          color: isDarkMode ? dmDarkGrey : lmLightGrey),
-                      const SizedBox(height: 5),
-
-                      // MENU
-                      ProfileMenuButton(
-                        onTap: isLoading
-                            ? null
-                            : () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UserInformationPage()));
-                        },
-                        text: "User Information",
-                        icon: LineAwesomeIcons.user_circle,
-                      ),
-                      const SizedBox(height: 2),
-                      ProfileMenuButton(
-                        onTap: isLoading
-                            ? null
-                            : () async {
+                      Padding(
+                          padding: isLargePhone(context) ? const EdgeInsets.all(20.0) : const EdgeInsets.all(15.0),
+                        child: Column(
+                        children: [
+                          Text("$displayName",
+                              style: Theme.of(context).textTheme.headlineSmall),
+                          SizedBox(height: size.height * 0.0001),
+                          Text("$email",
+                              style: Theme.of(context).textTheme.bodyLarge),
+                          SizedBox(height: size.height * 0.03),
+                          CustomProfileButton(
+                              onPressed: isLoading
+                                  ? null
+                                  : () async {
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const QuizTestPage()));
-                              },
-                        text: "Plant Quiz",
-                        icon: LineAwesomeIcons.question_circle,
-                      ),
-                      const SizedBox(height: 5),
-                      Divider(
-                          thickness: 0.5,
-                          color: isDarkMode ? dmDarkGrey : lmLightGrey),
-                      const SizedBox(height: 5),
-                      ProfileMenuButton(
-                        onTap: isLoading
-                            ? null
-                            : () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AboutPage()));
+                                            EditProfilePage()));
 
-                          loadUserData();
-                        },
-                        text: "About",
-                        icon: LineAwesomeIcons.info_circle_solid,
-                      ),
-                      const SizedBox(height: 2),
-                      ProfileMenuButton(
-                        onTap: isLoading ? null : logout,
-                        text: "Logout",
-                        icon: Icons.logout_rounded,
-                        endIcon: false,
-                        textColor: isDarkMode ? Colors.red : Colors.redAccent,
-                      ),
-                    ],
+                                loadUserData();
+                              },
+                              width: 150 * textScaleFactor,
+                              height: 45 * textScaleFactor,
+                              text: "Edit Profile",
+                              color: Theme.of(context).primaryColor),
+                          SizedBox(height: size.height * 0.025),
+                          Divider(
+                              thickness: 0.5,
+                              color: isDarkMode ? dmDarkGrey : lmLightGrey),
+
+                          // MENU
+                          ProfileMenuButton(
+                            onTap: isLoading
+                                ? null
+                                : () async {
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UserInformationPage()));
+                            },
+                            text: "User Information",
+                            icon: LineAwesomeIcons.user_circle,
+                          ),
+                          ProfileMenuButton(
+                            onTap: isLoading
+                                ? null
+                                : () async {
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const QuizTestPage()));
+                            },
+                            text: "Plant Quiz",
+                            icon: LineAwesomeIcons.question_circle,
+                          ),
+                          SizedBox(height: size.height * 0.005),
+                          Divider(
+                              thickness: 0.5,
+                              color: isDarkMode ? dmDarkGrey : lmLightGrey),
+                          SizedBox(height: size.height * 0.005),
+                          ProfileMenuButton(
+                            onTap: isLoading
+                                ? null
+                                : () async {
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AboutPage()));
+
+                              loadUserData();
+                            },
+                            text: "About",
+                            icon: LineAwesomeIcons.info_circle_solid,
+                          ),
+                          ProfileMenuButton(
+                            onTap: isLoading ? null : logout,
+                            text: "Logout",
+                            icon: Icons.logout_rounded,
+                            endIcon: false,
+                            textColor: isDarkMode ? Colors.red : Colors.redAccent,
+                          ),
+                        ],
+                      )
+                      )
+                    ]
                   ),
                 ),
               ),
             ),
-          ),
           if (isLoading)
             Container(
               color: Colors.black.withOpacity(0.7),

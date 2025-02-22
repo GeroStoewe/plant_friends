@@ -15,6 +15,8 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
@@ -32,20 +34,20 @@ class CustomCard extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                             text: headline,
-                            style: const TextStyle(
+                            style: TextStyle(
                           color: seaGreen,
-                          fontSize: 20,
+                          fontSize: 20 * textScaleFactor,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400
                       ),
                           ),
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: size.height * 0.0025),
                   Row(
                     children: [
-                      Icon(icon, color: isDarkMode ? Theme.of(context).hintColor : forestGreen, size: 24),
-                      const SizedBox(width: 5),
+                      Icon(icon, color: isDarkMode ? Theme.of(context).hintColor : forestGreen, size: 24 * textScaleFactor),
+                      SizedBox(width: size.width * 0.03),
                       Text(
                           text,
                           style: Theme.of(context).textTheme.bodySmall,

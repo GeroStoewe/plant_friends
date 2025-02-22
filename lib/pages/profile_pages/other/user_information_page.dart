@@ -97,7 +97,13 @@ class _UserInformationPageState extends State<UserInformationPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isLargePhone(BuildContext context) {
+      double width = MediaQuery.of(context).size.width;
+      return width > 400;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -122,7 +128,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
           IconButton(
             onPressed: isLoading ? null : themeProvider.toggleTheme,
             color: isDarkMode ? Colors.white : Colors.black,
-            iconSize: 30,
+            iconSize: 28 * textScaleFactor,
             icon:
             Icon(isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon),
           ),
@@ -135,7 +141,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Container(
-                padding: const EdgeInsets.all(15.0),
+                padding: isLargePhone(context) ? const EdgeInsets.all(15.0) : const EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -144,25 +150,25 @@ class _UserInformationPageState extends State<UserInformationPage> {
                       icon: Icons.person_outline_rounded,
                       text: "$displayName",
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: size.height * 0.01),
                     CustomCard(
                       headline: "E-Mail",
                       icon: Icons.email_rounded,
                       text: "$email",
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: size.height * 0.01),
                     CustomCard(
                       headline: "User ID",
                       icon: Icons.account_box_rounded,
                       text: user!.uid,
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: size.height * 0.01),
                     CustomCard(
                       headline: "Joined At",
                       icon: Icons.calendar_today_rounded,
                       text: joinDate,
                     ),
-                    const SizedBox(height: 40),
+                    SizedBox(height: size.height * 0.03),
                     // Password Reset Button
                     CustomProfileButton(
                         onPressed: isLoading
@@ -176,16 +182,16 @@ class _UserInformationPageState extends State<UserInformationPage> {
 
                           loadUserData();
                         },
-                        width: 200,
-                        height: 60,
+                        width: isLargePhone(context) ? 200 : 180,
+                        height: isLargePhone(context) ? 60 : 50,
                         text: "Reset Password",
                         color: Theme.of(context).primaryColor
                     ),
-                    const SizedBox(height: 30),
+                    SizedBox(height: size.height * 0.03),
                     CustomProfileButton(
                         onPressed: deleteAccount,
-                        width: 200,
-                        height: 60,
+                        width: isLargePhone(context) ? 200 : 180,
+                        height: isLargePhone(context) ? 60 : 50,
                         text: "Delete Account",
                         color: Colors.redAccent
                     ),

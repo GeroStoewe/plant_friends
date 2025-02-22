@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:plant_friends/generated/l10n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:plant_friends/pages/calendar_pages/calendar_page.dart';
 import 'package:plant_friends/pages/my_plants_pages/my_plants_page.dart';
 import 'package:plant_friends/pages/profile_pages/profile_page.dart';
@@ -16,6 +19,7 @@ import 'package:provider/provider.dart';
 
 import 'firebase/firebase_api.dart';
 import 'firebase/firebase_options.dart';
+import 'l10n/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +47,14 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme(context),
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
+      supportedLocales: L10n.all,
+      locale: const Locale('en'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
 
       home: const TestAuthPage(),
 

@@ -97,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                               obscureText: !isPasswordVisible,
                               suffixIcon: IconButton(
                                 icon: Icon(
+                                  size: 18 * textScaleFactor,
                                   isPasswordVisible
                                       ? Icons.visibility
                                       : Icons.visibility_off,

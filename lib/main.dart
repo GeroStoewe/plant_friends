@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Plant Friends',
-      theme: lightTheme(),
-      darkTheme: darkTheme(),
+      theme: lightTheme(context),
+      darkTheme: darkTheme(context),
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
 

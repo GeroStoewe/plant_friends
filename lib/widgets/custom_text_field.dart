@@ -35,6 +35,7 @@ class CustomTextField extends StatelessWidget {
             : Colors.black.withOpacity(0.1),
         prefixIcon: Icon(
           icon,
+          size: 18 * textScaleFactor,
           color: isDarkMode
               ? Colors.white.withOpacity(0.3)
               : Colors.black.withOpacity(0.5),

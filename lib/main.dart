@@ -13,22 +13,27 @@ import 'package:plant_friends/themes/dark_theme.dart';
 import 'package:plant_friends/themes/light_theme.dart';
 import 'package:plant_friends/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
+import 'package:plant_friends/global_keys.dart';
 
 import 'firebase/firebase_api.dart';
 import 'firebase/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
-    await FirebaseApi().initNotifications();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi().initNotifications();
 
-  runApp(ChangeNotifierProvider(
+  runApp(
+    ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
-      child: const MyApp()
-  )
+      child: ShowCaseWidget(
+        builder: (context) => const MyApp(),
+      ),
+    ),
   );
-
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -60,6 +65,7 @@ class CustomNavigationBar extends StatefulWidget {
 class CustomNavigationBarState extends State<CustomNavigationBar> {
   int _selectedIndex = 0;
 
+
   final List<Widget> _pages = [
     const MyPlantsPage(),
     const CalendarPage(),
@@ -88,36 +94,40 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
         onTap: _onItemTapped,
         items: [
           CurvedNavigationBarItem(
-            child: Icon(FluentIcons.leaf_three_24_regular,
-                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            child: Showcase(
+              key: getPlantsKey(),
+              description: 'Hier verwaltest du deine Pflanzen!',
+              child: Icon(FluentIcons.leaf_three_24_regular,
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            ),
             label: 'My Plants',
-              labelStyle: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
-              ),
           ),
           CurvedNavigationBarItem(
-            child: Icon(LineIcons.calendarWithWeekFocus,
-                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            child: Showcase(
+              key: getCalendarKey(),
+              description: 'Hier findest du deinen Pflanzengießkalender!',
+              child: Icon(LineIcons.calendarWithWeekFocus,
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            ),
             label: 'Calendar',
-              labelStyle: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
-              ),
           ),
           CurvedNavigationBarItem(
-            child: Icon(LineIcons.bookOpen,
-                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            child: Showcase(
+              key: getWikiKey(),
+              description: 'Hier gibt es Infos zu Pflanzen!',
+              child: Icon(LineIcons.bookOpen,
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            ),
             label: 'Plant-Wiki',
-              labelStyle: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
-              ),
           ),
           CurvedNavigationBarItem(
-            child: Icon(FluentIcons.person_accounts_20_regular,
-                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            child: Showcase(
+              key: getAccountKey(),
+              description: 'Hier kannst du dein Profil verwalten!',
+              child: Icon(FluentIcons.person_accounts_20_regular,
+                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
+            ),
             label: 'Account',
-              labelStyle: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
-              ),
           ),
         ],
         animationDuration: const Duration(milliseconds: 300),

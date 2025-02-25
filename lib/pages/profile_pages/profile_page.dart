@@ -14,6 +14,8 @@ import 'package:plant_friends/themes/theme_provider.dart';
 import 'package:plant_friends/widgets/custom_profile_button.dart';
 import 'package:plant_friends/widgets/profile_menu_button.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
+import 'package:plant_friends/global_keys.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({
@@ -31,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String? photoURL;
   bool isLoading = false;
   bool isDataLoaded = false;
+
 
   ScrollController scrollController = ScrollController();
 
@@ -239,6 +242,21 @@ class _ProfilePageState extends State<ProfilePage> {
                         text: "Plant Quiz",
                         icon: LineAwesomeIcons.question_circle,
                       ),
+                      const SizedBox(height: 5),
+                      ProfileMenuButton(
+                        onTap: () {
+                          ShowCaseWidget.of(context).startShowCase([
+                            getPlantsKey(),
+                            getCalendarKey(),
+                            getWikiKey(),
+                            getAccountKey(),
+                          ]);
+                        },
+                        text: "Tutorial starten",
+                        icon: LineAwesomeIcons.graduation_cap_solid,
+                      ),
+                      const SizedBox(height: 5),
+
                       const SizedBox(height: 5),
                       Divider(
                           thickness: 0.5,

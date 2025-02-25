@@ -13,6 +13,8 @@ import '../../../widgets/custom_profile_button.dart';
 import '../../authentication_pages/auth_page.dart';
 import '../../authentication_pages/forgot_password_page.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class UserInformationPage extends StatefulWidget {
   const UserInformationPage({Key? key}) : super(key: key);
 
@@ -35,6 +37,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
   }
 
   Future<void> fetchJoinDate() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final prefs = await SharedPreferences.getInstance();
     String? dateString = prefs.getString('joinDate');
 
@@ -45,12 +49,14 @@ class _UserInformationPageState extends State<UserInformationPage> {
       });
     } else {
       setState(() {
-        joinDate = 'Not available';
+        joinDate = localizations.notAvailable;
       });
     }
   }
 
   Future<void> loadUserData() async {
+    final localizations = AppLocalizations.of(context)!;
+
     setState(() {
       isLoading = true;
     });
@@ -65,7 +71,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
         await Future.delayed(Duration(seconds: 1));
 
         setState(() {
-          displayName = user!.displayName ?? 'Anonymous';
+          displayName = user!.displayName ?? localizations.anonymous;
           email = user.email;
           isLoading = false;
         });
@@ -104,6 +110,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
       double width = MediaQuery.of(context).size.width;
       return width > 400;
     }
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -117,7 +124,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
               color: isDarkMode ? dmLightGrey : lmLightGrey),
         ),
         title: Text(
-          "User Information",
+          localizations.userInformation,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             color: isDarkMode
                 ? Colors.white
@@ -146,25 +153,25 @@ class _UserInformationPageState extends State<UserInformationPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomCard(
-                      headline: "Full Name",
+                      headline: localizations.fullName,
                       icon: Icons.person_outline_rounded,
                       text: "$displayName",
                     ),
                     SizedBox(height: size.height * 0.01),
                     CustomCard(
-                      headline: "E-Mail",
+                      headline: localizations.emailProfile,
                       icon: Icons.email_rounded,
                       text: "$email",
                     ),
                     SizedBox(height: size.height * 0.01),
                     CustomCard(
-                      headline: "User ID",
+                      headline: localizations.userId,
                       icon: Icons.account_box_rounded,
                       text: user!.uid,
                     ),
                     SizedBox(height: size.height * 0.01),
                     CustomCard(
-                      headline: "Joined At",
+                      headline: localizations.joinedAt,
                       icon: Icons.calendar_today_rounded,
                       text: joinDate,
                     ),
@@ -184,7 +191,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
                         },
                         width: isLargePhone(context) ? 200 : 180,
                         height: isLargePhone(context) ? 60 : 50,
-                        text: "Reset Password",
+                        text: localizations.resetPasswordButton,
                         color: Theme.of(context).primaryColor
                     ),
                     SizedBox(height: size.height * 0.03),
@@ -192,7 +199,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
                         onPressed: deleteAccount,
                         width: isLargePhone(context) ? 200 : 180,
                         height: isLargePhone(context) ? 60 : 50,
-                        text: "Delete Account",
+                        text: localizations.deleteAccount,
                         color: Colors.redAccent
                     ),
                   ],

@@ -6,6 +6,8 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 import 'auth_page.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
@@ -28,6 +30,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     Size size = MediaQuery.of(context).size;
     double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: GestureDetector(
@@ -67,7 +70,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     children: [
                       SizedBox(height: size.height * 0.0025),
                       Text(
-                        "Reset your Password",
+                        localizations.resetYourPassword,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontSize: 28 * textScaleFactor
@@ -81,13 +84,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               CustomTextField(
                                 controller: usernameController,
                                 icon: Icons.alternate_email_rounded,
-                                hintText: "Please enter your Email Address",
+                                hintText: localizations.pleaseEnterEmail,
                                 obscureText: false,
                               ),
                               SizedBox(height: size.height * 0.03),
                               CustomButton(
                                 onTap: resetPassword,
-                                text: "RESET PASSWORD",
+                                text: localizations.resetPasswordButton,
                               ),
                             ],
                           ),
@@ -109,14 +112,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: "Already have an Account? ",
+                                    text: localizations.alreadyQuestion,
                                     style: TextStyle(
                                       fontSize: 16 * textScaleFactor,
                                       color: isDarkMode ? dmLightGrey : lmDarkGrey,
                                     ),
                                   ),
                                   TextSpan(
-                                    text: "Login",
+                                    text: localizations.loginSmall,
                                     style: TextStyle(
                                       fontSize: 18 * textScaleFactor,
                                       color: Theme.of(context).hintColor,
@@ -140,16 +143,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future resetPassword() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final emailRegex = RegExp(
       r'^[^@]+@[^@]+\.[^@]+$',
       caseSensitive: false,
     );
 
     if (usernameController.text.isEmpty) {
-      showErrorMessage('Email address cannot be empty');
+      showErrorMessage(localizations.emailEmptyErrorMessage);
       return;
     } else if (!emailRegex.hasMatch(usernameController.text)) {
-      showErrorMessage('Invalid email address format');
+      showErrorMessage(localizations.emailInvalidErrorMessage);
       return;
     }
 
@@ -181,6 +186,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   void showErrorMessage(String message) {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (context) {
@@ -194,7 +201,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK", style: Theme.of(context).textTheme.displaySmall),
+              child: Text(localizations.ok, style: Theme.of(context).textTheme.displaySmall),
             ),
           ],
         );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../authentication_pages/auth_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WelcomePage2 extends StatelessWidget {
   const WelcomePage2({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class WelcomePage2 extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: GestureDetector(
@@ -63,7 +65,7 @@ class WelcomePage2 extends StatelessWidget {
                             children: [
                               SizedBox(height: size.height * 0.002),
                               Text(
-                                "Ready to get started?",
+                                localizations.getStarted,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium
@@ -71,7 +73,7 @@ class WelcomePage2 extends StatelessWidget {
                               ),
                               SizedBox(height: size.height * 0.03),
                               Text(
-                                "Create an account or log in to manage your plants today.",
+                                localizations.createOrLogin,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                   fontSize: 18 * textScaleFactor,
@@ -92,7 +94,7 @@ class WelcomePage2 extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  text: "Login",
+                                  text: localizations.login,
                                 ),
                               ),
                               SizedBox(height: size.height * 0.025),
@@ -110,7 +112,7 @@ class WelcomePage2 extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  text: "Sign Up",
+                                  text: localizations.signUp,
                                 ),
                               ),
 

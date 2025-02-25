@@ -18,6 +18,8 @@ import 'add_new_plant_pages/add_new_plant_with_wiki_data.dart';
 import 'my_plants_details_page.dart';
 import 'other/plant.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class MyPlantsPage extends StatefulWidget {
   const MyPlantsPage({super.key});
 
@@ -111,6 +113,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 
   Future<void> _identifyPlantWithApi(String imagePath) async {
+    final localizations = AppLocalizations.of(context)!;
+
     final apiKey = '2b10i3KvRsGFF7xGiCaTQRWe';
     final project = 'all';
     final url = Uri.parse(
@@ -127,7 +131,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
       final data = json.decode(responseData);
 
       setState(() {
-        _identifiedPlant = data['results'][0]['species']['scientificName'] ?? 'Unknown Plant';
+        _identifiedPlant = data['results'][0]['species']['scientificName'] ?? localizations.unknownPlant;
       });
 
       print('Plant identified: $data');
@@ -142,6 +146,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   String _identifiedPlant = '';
 
   Future<void> _pickImage() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final ImagePicker picker = ImagePicker();
 
     final selectedSource = await showModalBottomSheet<ImageSource>(
@@ -156,9 +162,9 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Take or pick a plant photo",
-                  style: TextStyle(
+                Text(
+                  localizations.takeOrPickPhoto,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -169,12 +175,12 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                   children: [
                     _buildOptionCard(
                       icon: Icons.camera_alt_rounded,
-                      label: "Camera",
+                      label: localizations.camera,
                       onTap: () => Navigator.of(context).pop(ImageSource.camera),
                     ),
                     _buildOptionCard(
                       icon: Icons.photo_library_rounded,
-                      label: "Gallery",
+                      label: localizations.gallery,
                       onTap: () => Navigator.of(context).pop(ImageSource.gallery),
                     ),
                   ],
@@ -291,11 +297,12 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "My Plants",
+          localizations.myPlantsTitle,
           style: Theme
               .of(context)
               .textTheme
@@ -312,7 +319,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: "Find your plants",
+                labelText: localizations.findYourPlants,
                 labelStyle: TextStyle(
 
                   color: isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700,
@@ -353,7 +360,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                     ),
                     const SizedBox(height: 16),
                 Text(
-                "No plants found in the search",
+                localizations.noPlantsFound,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 16,
@@ -411,11 +418,13 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
   }
 
   void showAddPlantOptions(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add new plant'),
+          title: Text(localizations.addNewPlant),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -424,7 +433,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5, // Set button width to 50% of screen width
                   child: CustomButtonOutlinedSmall(
-                    text: 'I have all the data for my plant',
+                    text: localizations.allData,
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -442,7 +451,7 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5, // Set button width to 50% of screen width
                   child: CustomButtonOutlinedSmall(
-                    text: 'I need help',
+                    text: localizations.needHelp,
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(

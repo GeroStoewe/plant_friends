@@ -16,7 +16,7 @@ class AuthPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const CustomNavigationBar(); // TODO: Change with actual HomePage
+            return const CustomNavigationBar();
           } else {
             return LoginOrSignupPage(showSignupPage: showSignupPage);
           }

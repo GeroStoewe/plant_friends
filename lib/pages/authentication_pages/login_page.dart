@@ -9,6 +9,8 @@ import '../../widgets/custom_text_field.dart';
 import '../../widgets/square_tile.dart';
 import 'forgot_password_page.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
 
@@ -31,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return ScrollbarTheme(
         data: ScrollbarThemeData(
@@ -77,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(height: size.height * 0.0025),
-                            Text("Login to Plant Friends",
+                            Text(localizations.loginTitle,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                   fontSize: 28 * textScaleFactor,
@@ -87,13 +90,13 @@ class _LoginPageState extends State<LoginPage> {
                             CustomTextField(
                                 controller: usernameController,
                                 icon: Icons.alternate_email_rounded,
-                                hintText: "Email Address",
+                                hintText: localizations.email,
                                 obscureText: false),
                             SizedBox(height: size.height * 0.02),
                             CustomTextField(
                               controller: passwordController,
                               icon: Icons.lock_outline_rounded,
-                              hintText: "Password",
+                              hintText: localizations.password,
                               obscureText: !isPasswordVisible,
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -124,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
                                   children: [
                                     Text.rich(TextSpan(children: [
                                       TextSpan(
-                                          text: "Forgot Password? ",
+                                          text: localizations.forgotPasswordQuestion,
                                           style: TextStyle(
                                               fontSize: 14 * textScaleFactor,
                                               color: isDarkMode
                                                   ? dmLightGrey
                                                   : lmDarkGrey)),
                                       TextSpan(
-                                          text: "Reset Here",
+                                          text: localizations.resetHere,
                                           style: TextStyle(
                                               fontSize: 16 * textScaleFactor,
                                               color: Theme.of(context).hintColor))
@@ -139,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ]),
                             ),
                             SizedBox(height: size.height * 0.02),
-                            CustomButton(onTap: login, text: "LOGIN"),
+                            CustomButton(onTap: login, text: localizations.login),
                             SizedBox(height: size.height * 0.025),
                             Row(
                               children: [
@@ -154,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12.0),
                                   child: Text(
-                                    "Or continue with",
+                                    localizations.continueWithQuestion,
                                     style: TextStyle(
                                         color: isDarkMode
                                             ? dmLightGrey
@@ -186,14 +189,14 @@ class _LoginPageState extends State<LoginPage> {
                               child: Center(
                                 child: Text.rich(TextSpan(children: [
                                   TextSpan(
-                                      text: "New to PlantFriends? ",
+                                      text: localizations.newQuestion,
                                       style: TextStyle(
                                           fontSize: 16 * textScaleFactor,
                                           color: isDarkMode
                                               ? dmLightGrey
                                               : lmDarkGrey)),
                                   TextSpan(
-                                      text: "Create Account",
+                                      text: localizations.createAccount,
                                       style: TextStyle(
                                           fontSize: 18 * textScaleFactor,
                                           color: Theme.of(context).hintColor))
@@ -227,14 +230,16 @@ class _LoginPageState extends State<LoginPage> {
       caseSensitive: false,
     );
 
+    final localizations = AppLocalizations.of(context)!;
+
     if (usernameController.text.isEmpty) {
-      showErrorMessage('Email address cannot be empty');
+      showErrorMessage(localizations.emailEmptyErrorMessage);
       return;
     } else if (!emailRegex.hasMatch(usernameController.text)) {
-      showErrorMessage('Invalid email address format');
+      showErrorMessage(localizations.emailInvalidErrorMessage);
       return;
     } else if (passwordController.text.isEmpty) {
-      showErrorMessage('Password cannot be empty');
+      showErrorMessage(localizations.passwordEmptyErrorMessage);
       return;
     }
 
@@ -255,6 +260,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showErrorMessage(String message) {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
         context: context,
         builder: (context) {
@@ -268,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text("OK",
+                  child: Text(localizations.ok,
                       style: Theme.of(context).textTheme.displaySmall))
             ],
           );
@@ -276,6 +283,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loginWithGoogle() async {
+    final localizations = AppLocalizations.of(context)!;
+
     setState(() {
       isLoading = true; // loading indicator
     });
@@ -305,11 +314,11 @@ class _LoginPageState extends State<LoginPage> {
 
     // A success message or navigate to the next screen
     CustomSnackbar snackbar = CustomSnackbar(context);
-    snackbar.showMessage('Logged in as ${gUser.email}', MessageType.success);
+    snackbar.showMessage('${localizations.loggedInMessage} ${gUser.email}', MessageType.success);
     } catch (e) {
       // Handle errors
       debugPrint('Google Login Error: $e');
-      showErrorMessage('Failed to login with Google: ${e.toString()}');
+      showErrorMessage('${localizations.googleLoginError} ${e.toString()}');
     } finally {
       setState(() {
         isLoading = false; // Hide loading indicator

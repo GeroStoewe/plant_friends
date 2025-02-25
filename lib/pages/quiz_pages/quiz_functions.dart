@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/quiz_pages/quiz_logic.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuizFunctions {
   OverlayEntry? overlayEntry;
@@ -26,6 +27,7 @@ class QuizFunctions {
   void showResult(BuildContext context, OverlayState overlayState) {
     bool pets = hasPets();
     Map<String, String> groups = calculateGroups(careScore, environmentScore, pets);
+    final localizations = AppLocalizations.of(context)!;
 
     overlayEntry = OverlayEntry(
       builder: (context) {
@@ -55,7 +57,7 @@ class QuizFunctions {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Result',
+                    localizations.result,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontSize: 24 * textScaleFactor,
                     ),
@@ -89,7 +91,7 @@ class QuizFunctions {
                     onPressed: () {
                       closeQuiz();
                     },
-                    child: Text('Close'),
+                    child: Text(localizations.close),
                   ),
                 ],
               ),

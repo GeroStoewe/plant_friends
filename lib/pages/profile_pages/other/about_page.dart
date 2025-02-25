@@ -6,6 +6,8 @@ import '../../../themes/colors.dart';
 import '../../../themes/theme_provider.dart';
 import '../../../widgets/custom_card.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
 
@@ -24,6 +26,7 @@ class _AboutPage extends State<AboutPage> {
       double width = MediaQuery.of(context).size.width;
       return width > 400;
     }
+    final localizations = AppLocalizations.of(context)!;
 
     return ScrollbarTheme(
       data: ScrollbarThemeData(
@@ -44,7 +47,7 @@ class _AboutPage extends State<AboutPage> {
                   color: isDarkMode ? dmLightGrey : lmLightGrey),
             ),
             title: Text(
-              "About",
+              localizations.about,
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: isDarkMode
                         ? Colors.white
@@ -95,15 +98,15 @@ class _AboutPage extends State<AboutPage> {
                             children: [
                               SizedBox(height: size.height * 0.0025),
                               CustomCard(
-                                headline: "About Us",
+                                headline: localizations.aboutUs,
                                 icon: Icons.info_outline_rounded,
-                                text: "We (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) are \nstudying computer science in the \n3rd semester. We developed this \nplant app as part of the “Software \nEngineering” course. Our vision is to \nsupport plant lovers in the planning, \nselection and care of houseplants.",
+                                text: localizations.aboutUsDescription,
                               ),
                               SizedBox(height: size.height * 0.01),
                               CustomCard(
-                                headline: "App Version",
+                                headline: localizations.appVersion,
                                 icon: Icons.build_circle,
-                                text: "1.0.0",
+                                text: "2.0.0",
                               ),
                             ]),
                       ),

@@ -10,6 +10,8 @@ import '../../../widgets/custom_button_outlined_small.dart';
 import '../../wiki_pages/other/wiki_new_plant_request_form.dart';
 import '../../wiki_pages/wiki_plant_details_page.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AddNewPlantWithWiki extends StatefulWidget {
   const AddNewPlantWithWiki({super.key});
 
@@ -23,6 +25,8 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
   String _identifiedPlant = '';
 
   Future<void> _identifyPlantWithApi(String imagePath) async {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       barrierDismissible: false, // Der Nutzer kann den Dialog nicht schließen
@@ -52,7 +56,7 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
       final responseData = await response.stream.bytesToString();
       final data = json.decode(responseData);
 
-      final identifiedPlant = data['results'][0]['species']['scientificName'] ?? 'Unknown Plant';
+      final identifiedPlant = data['results'][0]['species']['scientificName'] ?? localizations.unknownPlant;
 
       setState(() {
         _identifiedPlant = identifiedPlant;
@@ -76,6 +80,7 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
   Future<void> _pickImage(BuildContext context) async {
     File? _plantImage;
     final ImagePicker picker = ImagePicker();
+    final localizations = AppLocalizations.of(context)!;
 
     final selectedSource = await showModalBottomSheet<ImageSource>(
       context: context,
@@ -90,8 +95,8 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Take or pick a plant photo",
+              Text(
+                localizations.takeOrPickPhoto,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -103,12 +108,12 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
                 children: [
                   _buildOptionCard(
                     icon: Icons.camera_alt_rounded,
-                    label: "Camera",
+                    label: localizations.camera,
                     onTap: () => Navigator.of(context).pop(ImageSource.camera),
                   ),
                   _buildOptionCard(
                     icon: Icons.photo_library_rounded,
-                    label: "Gallery",
+                    label: localizations.gallery,
                     onTap: () => Navigator.of(context).pop(ImageSource.gallery),
                   ),
                 ],
@@ -177,11 +182,12 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "My Plants",
+          localizations.myPlants,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: isDarkMode ? Colors.white : Colors.black,
@@ -194,8 +200,8 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
               Icons.search,
               color: seaGreen,
             ),
-            label: const Text(
-              'AI-Recognition',
+            label: Text(
+              localizations.aiRecognition,
               style: TextStyle(
                 color: seaGreen,
                 fontSize: 12,
@@ -254,6 +260,7 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
   }
 
   Future<void> fetchAndFilterPlantData() async {
+    final localizations = AppLocalizations.of(context)!;
     final response = await http.get(Uri.parse('https://laura194.github.io/plant_api/plantData.json'));
 
     if (response.statusCode == 200) {
@@ -264,7 +271,7 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
         isLoading = false;
       });
     } else {
-      throw Exception('Failed to load plant data');
+      throw Exception(localizations.failedToLoadData);
     }
   }
 
@@ -281,6 +288,8 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         Padding(
@@ -289,7 +298,7 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
             controller: widget.searchController,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
-              hintText: 'Search by name or scientific name',
+              hintText: localizations.searchByName,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -316,8 +325,8 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'No plants match this filter.',
+                Text(
+                  localizations.noPlantsMatch,
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 16),
@@ -326,7 +335,7 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5, // Set button width to 50% of screen width
                     child: CustomButtonOutlinedSmall(
-                      text: 'Request to Add a Plant',
+                      text: localizations.request,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -375,7 +384,7 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
                   )
                       : const Icon(Icons.image_not_supported),
                 ),
-                title: Text(plant['name'] ?? 'No name'),
+                title: Text(plant['name'] ?? localizations.noName),
                 subtitle: Text(
                   plant['scientifical_name'] ?? 'N/A',
                   style: const TextStyle(color: Colors.grey),

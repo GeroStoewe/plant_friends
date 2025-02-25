@@ -14,6 +14,7 @@ import 'package:plant_friends/themes/theme_provider.dart';
 import 'package:plant_friends/widgets/custom_profile_button.dart';
 import 'package:plant_friends/widgets/profile_menu_button.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({
@@ -48,6 +49,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> loadUserData() async {
+    final localizations = AppLocalizations.of(context)!;
+
     setState(() {
       isLoading = true;
     });
@@ -62,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
         await Future.delayed(Duration(seconds: 1));
 
         setState(() {
-          displayName = user!.displayName ?? 'Anonymous';
+          displayName = user!.displayName ?? localizations.anonymous;
           email = user.email;
           photoURL = user.photoURL;
           isLoading = false;
@@ -88,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
       double width = MediaQuery.of(context).size.width;
       return width > 400;
     }
-
+    final localizations = AppLocalizations.of(context)!;
 
     return ScrollbarTheme(
       data: ScrollbarThemeData(
@@ -104,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
           elevation: 0,
           // Entfernt den Schatten der AppBar
           title: Text(
-            "Profile",
+            localizations.profile,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: isDarkMode
                       ? Colors.white
@@ -211,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                               width: 150 * textScaleFactor,
                               height: 45 * textScaleFactor,
-                              text: "Edit Profile",
+                              text: localizations.editProfile,
                               color: Theme.of(context).primaryColor),
                           SizedBox(height: size.height * 0.025),
                           Divider(
@@ -228,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   MaterialPageRoute(
                                       builder: (context) => UserInformationPage()));
                             },
-                            text: "User Information",
+                            text: localizations.userInformation,
                             icon: LineAwesomeIcons.user_circle,
                           ),
                           ProfileMenuButton(
@@ -241,7 +244,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       builder: (context) =>
                                       const QuizTestPage()));
                             },
-                            text: "Plant Quiz",
+                            text: localizations.plantQuiz,
                             icon: LineAwesomeIcons.question_circle,
                           ),
                           SizedBox(height: size.height * 0.005),
@@ -261,12 +264,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                               loadUserData();
                             },
-                            text: "About",
+                            text: localizations.about,
                             icon: LineAwesomeIcons.info_circle_solid,
                           ),
                           ProfileMenuButton(
                             onTap: isLoading ? null : logout,
-                            text: "Logout",
+                            text: localizations.logout,
                             icon: Icons.logout_rounded,
                             endIcon: false,
                             textColor: isDarkMode ? Colors.red : Colors.redAccent,

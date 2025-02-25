@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../themes/colors.dart';
 import '../../widgets/custom_info_card.dart';
 import '../my_plants_pages/add_new_plant_pages/add_new_plant_with_prefilled_data.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlantWikiDetailPage extends StatelessWidget {
   final dynamic plant;
@@ -12,6 +13,7 @@ class PlantWikiDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SizedBox(
@@ -39,9 +41,9 @@ class PlantWikiDetailPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 20),
-                        nameAndScientificName(),
+                        nameAndScientificName(context),
                         const SizedBox(height: 30),
-                        plantInfo(),
+                        plantInfo(context),
                         const SizedBox(height: 20), // Space for the description if needed
                       ],
                     ),
@@ -75,8 +77,8 @@ class PlantWikiDetailPage extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text(
-                  'Add plant to \n"My Plants"',
+                child: Text(
+                  '${localizations.addPlantTo} ${localizations.myPlantsWiki}',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
@@ -132,12 +134,14 @@ class PlantWikiDetailPage extends StatelessWidget {
     );
   }
 
-  Widget nameAndScientificName() {
+  Widget nameAndScientificName(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          plant['name'] ?? 'No name',
+          plant['name'] ?? localizations.noName,
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -155,7 +159,9 @@ class PlantWikiDetailPage extends StatelessWidget {
     );
   }
 
-  Column plantInfo() {
+  Column plantInfo(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         Row(
@@ -164,7 +170,7 @@ class PlantWikiDetailPage extends StatelessWidget {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.wb_sunny,
-                title: 'Light',
+                title: localizations.light,
                 value: plant['light'] ?? 'N/A',
               ),
             ),
@@ -172,7 +178,7 @@ class PlantWikiDetailPage extends StatelessWidget {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.water_drop,
-                title: 'Water',
+                title: localizations.water,
                 value: plant['water'] ?? 'N/A',
               ),
             ),
@@ -185,7 +191,7 @@ class PlantWikiDetailPage extends StatelessWidget {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.star,
-                title: 'Difficulty',
+                title: localizations.difficulty,
                 value: plant['difficulty'] ?? 'N/A',
               ),
             ),
@@ -193,7 +199,7 @@ class PlantWikiDetailPage extends StatelessWidget {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.local_florist,
-                title: 'Plant Type',
+                title: localizations.plantType,
                 value: plant['type'] ?? 'N/A',
               ),
             ),
@@ -205,6 +211,7 @@ class PlantWikiDetailPage extends StatelessWidget {
 
   void _showFullImageDialog(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     final imageUrl = plant['image_url'] ?? '';
 
@@ -245,7 +252,7 @@ class PlantWikiDetailPage extends StatelessWidget {
                         return AlertDialog(
                           backgroundColor: isDarkMode ? dmCardBG : lmCardBG,
                           title:  Text(
-                            'Image URL',
+                            localizations.imageUrl,
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           content: Text(
@@ -255,7 +262,7 @@ class PlantWikiDetailPage extends StatelessWidget {
                           actions: [
                             TextButton(
                               child: Text(
-                                'Close',
+                                localizations.close,
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               onPressed: () {
@@ -270,12 +277,12 @@ class PlantWikiDetailPage extends StatelessWidget {
                   child: Container(
                     color: Colors.black.withOpacity(0.7),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Icon(Icons.link, color: Colors.white),
                         SizedBox(width: 8),
                         Text(
-                          'View URL',
+                          localizations.viewUrl,
                           style: TextStyle(color: Colors.white),
                         ),
                       ],

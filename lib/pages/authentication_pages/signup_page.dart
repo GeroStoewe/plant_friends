@@ -9,6 +9,8 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/square_tile.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class SignupPage extends StatefulWidget {
   final Function()? onTap;
 
@@ -32,6 +34,7 @@ class _SignupPageState extends State<SignupPage> {
     Size size = MediaQuery.of(context).size;
     double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return ScrollbarTheme(
         data: ScrollbarThemeData(
@@ -78,7 +81,7 @@ class _SignupPageState extends State<SignupPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(height: size.height * 0.0025),
-                            Text("Create your Account",
+                            Text(localizations.signUpTitle,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                   fontSize: 28 * textScaleFactor
@@ -87,19 +90,19 @@ class _SignupPageState extends State<SignupPage> {
                             CustomTextField(
                                 controller: fullnameController,
                                 icon: Icons.person_outline_rounded,
-                                hintText: "Full Name",
+                                hintText: localizations.fullName,
                                 obscureText: false),
                             SizedBox(height: size.height * 0.02),
                             CustomTextField(
                                 controller: usernameController,
                                 icon: Icons.alternate_email_rounded,
-                                hintText: "Email Address",
+                                hintText: localizations.email,
                                 obscureText: false),
                             SizedBox(height: size.height * 0.02),
                             CustomTextField(
                               controller: passwordController,
                               icon: Icons.lock_outline_rounded,
-                              hintText: "Password",
+                              hintText: localizations.password,
                               obscureText: !isPasswordVisible,
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -116,7 +119,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
                             SizedBox(height: size.height * 0.025),
-                            CustomButton(onTap: signup, text: "SIGN UP"),
+                            CustomButton(onTap: signup, text: localizations.signUp),
                             SizedBox(height: size.height * 0.025),
                             Row(
                               children: [
@@ -131,7 +134,7 @@ class _SignupPageState extends State<SignupPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12.0),
                                   child: Text(
-                                    "Or continue with",
+                                    localizations.continueWithQuestion,
                                     style: TextStyle(
                                         color: isDarkMode
                                             ? dmLightGrey
@@ -164,14 +167,14 @@ class _SignupPageState extends State<SignupPage> {
                               child: Center(
                                 child: Text.rich(TextSpan(children: [
                                   TextSpan(
-                                      text: "Already have an Account? ",
+                                      text: localizations.alreadyQuestion,
                                       style: TextStyle(
                                           fontSize: 16 * textScaleFactor,
                                           color: isDarkMode
                                               ? dmLightGrey
                                               : lmDarkGrey)),
                                   TextSpan(
-                                      text: "Login",
+                                      text: localizations.loginSmall,
                                       style: TextStyle(
                                           fontSize: 18 * textScaleFactor,
                                           color: Theme.of(context).hintColor))
@@ -200,22 +203,24 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void signup() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final emailRegex = RegExp(
       r'^[^@]+@[^@]+\.[^@]+$',
       caseSensitive: false,
     );
 
     if (fullnameController.text.isEmpty) {
-      showErrorMessage('Full name cannot be empty');
+      showErrorMessage(localizations.fullNameEmptyErrorMessage);
       return;
     } else if (usernameController.text.isEmpty) {
-      showErrorMessage('Email address cannot be empty');
+      showErrorMessage(localizations.emailEmptyErrorMessage);
       return;
     } else if (!emailRegex.hasMatch(usernameController.text)) {
-      showErrorMessage('Invalid email address format');
+      showErrorMessage(localizations.emailInvalidErrorMessage);
       return;
     } else if (passwordController.text.isEmpty) {
-      showErrorMessage('Password cannot be empty');
+      showErrorMessage(localizations.passwordEmptyErrorMessage);
       return;
     }
 
@@ -249,6 +254,8 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void showErrorMessage(String message) {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
         context: context,
         builder: (context) {
@@ -262,7 +269,7 @@ class _SignupPageState extends State<SignupPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text("OK",
+                  child: Text(localizations.ok,
                       style: Theme.of(context).textTheme.displaySmall))
             ],
           );
@@ -270,6 +277,8 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   signUpWithGoogle() async {
+    final localizations = AppLocalizations.of(context)!;
+
     setState(() {
       isLoading = true; // Show loading indicator
     });
@@ -279,14 +288,14 @@ class _SignupPageState extends State<SignupPage> {
       final GoogleSignInAccount? gUser = await googleSignIn.signIn();
 
     if (gUser == null) {
-      showErrorMessage("Google Sign-In was cancelled.");
+      showErrorMessage(localizations.googleSignInCancelled);
       return;
     }
 
     final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
       if (gAuth.accessToken == null || gAuth.idToken == null) {
-        showErrorMessage("Failed to get Google authentication tokens.");
+        showErrorMessage(localizations.googleSignInNoTokens);
         return;
       }
 
@@ -308,12 +317,12 @@ class _SignupPageState extends State<SignupPage> {
 
         // Show success message
         CustomSnackbar snackbar = CustomSnackbar(context);
-        snackbar.showMessage('Signed up as ${gUser.email}', MessageType.success);
+        snackbar.showMessage('${localizations.signUpMessage} ${gUser.email}', MessageType.success);
       }
     } catch (e) {
       // Handle errors
       debugPrint('Google Sign-Up Error: $e');
-      showErrorMessage('Failed to sign up with Google: ${e.toString()}');
+      showErrorMessage('${localizations.googleSignUpError} ${e.toString()}');
     } finally {
       setState(() {
         isLoading = false; // Hide loading indicator

@@ -6,6 +6,7 @@ import 'filter_pages/wiki_page_filter_light.dart';
 import 'filter_pages/wiki_page_filter_type.dart';
 import 'filter_pages/wiki_page_filter_water.dart';
 import 'other/wiki_page_filter_result_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WikiPage extends StatelessWidget {
   const WikiPage({super.key});
@@ -13,11 +14,12 @@ class WikiPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Plant Wiki',
+          localizations.plantWiki,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: isDarkMode ? Colors.white : Colors.black,
@@ -39,7 +41,7 @@ class WikiPage extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(), // Deaktiviert das Scrollen des GridView
             children: [
               FilterCard(
-                title: 'All Plants',
+                title: localizations.allPlants,
                 imagePath: 'lib/images/wiki/category/Wiki-Category-1.png',
                 onTap: () => Navigator.push(
                   context,
@@ -49,7 +51,7 @@ class WikiPage extends StatelessWidget {
                 ),
               ),
               FilterCard(
-                title: 'By Type',
+                title: localizations.byType,
                 imagePath: 'lib/images/wiki/category/Wiki-Category-2.png',
                 onTap: () => Navigator.push(
                   context,
@@ -59,7 +61,7 @@ class WikiPage extends StatelessWidget {
                 ),
               ),
               FilterCard(
-                title: 'By Water Needs',
+                title: localizations.byWaterNeeds,
                 imagePath: 'lib/images/wiki/category/Wiki-Category-3.png',
                 onTap: () => Navigator.push(
                   context,
@@ -69,7 +71,7 @@ class WikiPage extends StatelessWidget {
                 ),
               ),
               FilterCard(
-                title: 'By Light Needs',
+                title: localizations.byLightNeeds,
                 imagePath: 'lib/images/wiki/category/Wiki-Category-4.png',
                 onTap: () => Navigator.push(
                   context,
@@ -79,7 +81,7 @@ class WikiPage extends StatelessWidget {
                 ),
               ),
               FilterCard(
-                title: 'By Difficulty',
+                title: localizations.byDifficulty,
                 imagePath: 'lib/images/wiki/category/Wiki-Category-5.png',
                 onTap: () => Navigator.push(
                   context,

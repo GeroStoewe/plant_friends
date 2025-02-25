@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/quiz_pages/quiz_functions.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class QuizTestPage extends StatefulWidget {
   const QuizTestPage({super.key});
 
@@ -21,6 +23,7 @@ class _QuizTestPageState extends State<QuizTestPage> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -69,7 +72,7 @@ class _QuizTestPageState extends State<QuizTestPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome to the Quiz!",
+                      localizations.welcomeQuiz,
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         color: isDarkMode ? Colors.white : Colors.black,
                         fontWeight: FontWeight.bold,
@@ -77,14 +80,14 @@ class _QuizTestPageState extends State<QuizTestPage> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      "Here we will ask about your room conditions and plant care habits. Based on your answers, we will recommend the best plants that suit you.",
+                      localizations.quizDescription,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: isDarkMode ? Colors.white70 : Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 30),
                     Text(
-                      "Let's get started!",
+                      localizations.letsGetStarted,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: isDarkMode ? Colors.white70 : Colors.black87,
                       ),
@@ -109,7 +112,7 @@ class _QuizTestPageState extends State<QuizTestPage> {
                 }
               },
               label: Text(
-                'Start Quiz',
+                localizations.startQuizButton,
                 style: Theme.of(context).textTheme.labelMedium,
               ),
               icon: const Icon(

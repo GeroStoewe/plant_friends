@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/themes/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WelcomePage1 extends StatelessWidget {
   const WelcomePage1({Key? key}) : super(key: key);
@@ -8,6 +9,7 @@ class WelcomePage1 extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: GestureDetector(
@@ -57,7 +59,7 @@ class WelcomePage1 extends StatelessWidget {
                         children: [
                           SizedBox(height: size.height * 0.002),
                           Text(
-                            "Welcome to Plant Friends!",
+                            localizations.welcome,
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontSize: 26 * textScaleFactor,
                             ),
@@ -66,7 +68,7 @@ class WelcomePage1 extends StatelessWidget {
                           Expanded(
                             child: SingleChildScrollView(
                               child: Text(
-                                "Hello plant lover! ❤️ \n\nWhether you're a green thumb or just starting out, Plant Friends is your ultimate companion. With customized plant care, timely reminders, and helpful information, you'll keep your houseplants happy and healthy. \n\nLet’s make your indoor jungle thrive together! 🌿",
+                                localizations.greetings,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                   fontSize: 18 * textScaleFactor, // Dynamische Schriftgröße

@@ -11,6 +11,8 @@ import 'my_plants_details_page_edit.dart';
 import 'other/my_plants_photo_journal_page.dart';
 import 'other/plant.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class MyPlantsDetailsPage extends StatefulWidget {
   final Plant plant;
   final DatabaseReference dbRef;
@@ -55,13 +57,15 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
   }
 
   void plantWasWateredToday() async {
+    final localizations = AppLocalizations.of(context)!;
+
     bool eventExists = await CalenderFunctions().checkIfTodaysWateringEventExists(widget.plant.key!);
 
     if (eventExists) {
       await CalenderFunctions().setTodaysWateringEventToDone(widget.plant.key!);
       if (mounted) {
         CustomSnackbar snackbar = CustomSnackbar(context);
-        snackbar.showMessage('Watering event marked as done', MessageType.success);
+        snackbar.showMessage(localizations.wateringDoneMessage, MessageType.success);
         _checkWateringStatus();
       }
       return;
@@ -71,10 +75,8 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Confirm Watering Event Update'),
-          content: const Text(
-            "You've marked your plant as watered today, even though it's not scheduled for watering. All previous watering records for this plant will be deleted, and a new cycle will start from today. Do you want to proceed?",
-          ),
+          title: Text(localizations.confirmWateringEventUpdate),
+          content: Text(localizations.markedWatered),
           actions: [
             TextButton(
               onPressed: () {
@@ -82,7 +84,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                   Navigator.of(dialogContext, rootNavigator: true).pop();
                 }
               },
-              child: const Text('Cancel', style: TextStyle(color: Color(0xFF388E3C))),
+              child: Text(localizations.cancel, style: const TextStyle(color: Color(0xFF388E3C))),
             ),
             TextButton(
               onPressed: () async {
@@ -108,7 +110,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                 try {
                   await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
 
-                  if (widget.plant.plantData?.water == "Custom") {
+                  if (widget.plant.plantData?.water == localizations.custom) {
                     await CalenderFunctions().createNewEventsWateringCustom(
                       widget.plant.key!,
                       widget.plant.plantData?.name ?? 'N/A',
@@ -118,19 +120,19 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                     await CalenderFunctions().createNewEventsWatering(
                       widget.plant.key!,
                       widget.plant.plantData?.name ?? 'N/A',
-                      widget.plant.plantData?.water ?? "Low",
+                      widget.plant.plantData?.water ?? localizations.low,
                     );
                   }
 
                   CalenderFunctions().setTodaysWateringEventToDone(widget.plant.key!);
                   if (mounted) {
                     CustomSnackbar snackbar = CustomSnackbar(context);
-                    snackbar.showMessage('Watering events updated successfully', MessageType.success);
+                    snackbar.showMessage(localizations.wateringEventsUpdatedSuccessfully, MessageType.success);
                   }
                 } catch (e) {
                   if (mounted) {
                     CustomSnackbar snackbar = CustomSnackbar(context);
-                    snackbar.showMessage('Error updating events: $e', MessageType.error);
+                    snackbar.showMessage('${localizations.updatingEventsError} $e', MessageType.error);
                   }
                 } finally {
                   if (mounted) {
@@ -138,7 +140,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                   }
                 }
               },
-              child: const Text('Proceed', style: TextStyle(color: Color(0xFF388E3C))),
+              child: Text(localizations.proceed, style: const TextStyle(color: Color(0xFF388E3C))),
             ),
           ],
         );
@@ -259,6 +261,8 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
   }
 
   Widget nameAndScientificName() {
+    final localizations = AppLocalizations.of(context)!;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -267,7 +271,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.plant.plantData!.name ?? 'No name',
+                widget.plant.plantData!.name ?? localizations.noName,
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -329,9 +333,9 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                         color: Colors.orange,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
-                        "Water me!",
-                        style: TextStyle(
+                      child: Text(
+                        localizations.waterMe,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -369,6 +373,8 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
 
 
   Column plantInfo() {
+    final localizations = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         Row(
@@ -377,7 +383,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.wb_sunny,
-                title: 'Light',
+                title: localizations.light,
                 value: widget.plant.plantData!.light ?? 'N/A',
               ),
             ),
@@ -385,7 +391,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.eco_sharp,
-                title: 'Plant Type',
+                title: localizations.plantType,
                 value: widget.plant.plantData!.type ?? 'N/A',
               ),
             ),
@@ -399,7 +405,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.water_drop,
-                title: 'Water',
+                title: localizations.water,
                 value: widget.plant.plantData?.water ?? 'N/A',
               ),
             ),
@@ -407,13 +413,13 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             Expanded(
               child: CustomInfoCard(
                 icon: Icons.water_drop_outlined,
-                title: 'Watering Interval',
+                title: localizations.wateringInterval,
                 value: (widget.plant.plantData != null)
-                    ? (widget.plant.plantData!.water == 'Custom'
+                    ? (widget.plant.plantData!.water == localizations.custom
                     ? (widget.plant.plantData!.customWaterInterval != null
-                    ? '${widget.plant.plantData!.customWaterInterval} day(s)'
+                    ? '${widget.plant.plantData!.customWaterInterval} ${localizations.days}'
                     : 'N/A')
-                    : '${_calendarFunctions.getWateringInterval(widget.plant.plantData!.water ?? 'Low')} day(s)')
+                    : '${_calendarFunctions.getWateringInterval(widget.plant.plantData!.water ?? localizations.low)} ${localizations.days}')
                     : 'N/A',
               ),
             ),
@@ -430,7 +436,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),);
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Text('${localizations.error} ${snapshot.error}');
             } else {
               DateTime? nextWateringDate = snapshot.data?['watering'];
               //DateTime? nextFertilizingDate = snapshot.data?['fertilizing'];
@@ -441,7 +447,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                   Expanded(
                     child: EventCardNextDate(
                       icon: Icons.calendar_month_outlined,
-                      title: 'Next Watering',
+                      title: localizations.nextWatering,
                       date: nextWateringDate,
                     ),
                   ),
@@ -463,7 +469,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
         const SizedBox(height: 15),
         Center(
           child: CustomButtonOutlinedSmall(
-            text: 'Show photo journal',
+            text: localizations.showPhotoJournal,
             onTap: () {
               Navigator.push(
                 context,

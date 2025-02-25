@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:plant_friends/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:plant_friends/pages/calendar_pages/calendar_page.dart';
@@ -48,13 +47,20 @@ class MyApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
       supportedLocales: L10n.all,
-      locale: const Locale('en'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate
       ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
 
       home: const TestAuthPage(),
 
@@ -88,6 +94,7 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: _pages[_selectedIndex],
@@ -102,7 +109,7 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           CurvedNavigationBarItem(
             child: Icon(FluentIcons.leaf_three_24_regular,
                 color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
-            label: 'My Plants',
+            label: localizations.myPlants,
               labelStyle: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
               ),
@@ -110,7 +117,7 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           CurvedNavigationBarItem(
             child: Icon(LineIcons.calendarWithWeekFocus,
                 color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
-            label: 'Calendar',
+            label: localizations.calendar,
               labelStyle: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
               ),
@@ -118,7 +125,7 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           CurvedNavigationBarItem(
             child: Icon(LineIcons.bookOpen,
                 color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
-            label: 'Plant-Wiki',
+            label: localizations.plantWiki,
               labelStyle: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
               ),
@@ -126,7 +133,7 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           CurvedNavigationBarItem(
             child: Icon(FluentIcons.person_accounts_20_regular,
                 color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5)),
-            label: 'Account',
+            label: localizations.profile,
               labelStyle: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.5),
               ),

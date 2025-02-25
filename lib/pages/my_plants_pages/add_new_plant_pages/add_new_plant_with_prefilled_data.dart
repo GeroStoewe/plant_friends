@@ -13,6 +13,8 @@ import '../../../widgets/custom_snackbar.dart';
 import '../../calendar_pages/calendar_functions.dart';
 import '../other/plant.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AddNewPlantWithPrefilledData extends StatefulWidget {
   final dynamic plant;
 
@@ -49,6 +51,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
     'Medium',
     'High',
   ];
+
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL:
@@ -182,6 +185,8 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
 
+    final localizations = AppLocalizations.of(context)!;
+
     final selectedSource = await showModalBottomSheet<ImageSource>(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -194,8 +199,8 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Take or pick a plant photo",
+                Text(
+                  localizations.takeOrPickPhoto,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -207,13 +212,13 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                   children: [
                     _buildOptionCard(
                       icon: Icons.camera_alt_rounded,
-                      label: "Camera",
+                      label: localizations.camera,
                       onTap: () =>
                           Navigator.of(context).pop(ImageSource.camera),
                     ),
                     _buildOptionCard(
                       icon: Icons.photo_library_rounded,
-                      label: "Gallery",
+                      label: localizations.gallery,
                       onTap: () =>
                           Navigator.of(context).pop(ImageSource.gallery),
                     ),
@@ -336,10 +341,12 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add New Plant",
+          localizations.addNewPlant,
           style: Theme
               .of(context)
               .textTheme
@@ -363,6 +370,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     CalenderFunctions calenderFunctions = CalenderFunctions();
+    final localizations = AppLocalizations.of(context)!;
 
     return DraggableScrollableSheet(
       expand: true,
@@ -402,7 +410,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                   ),
                 )
                     : Text(
-                  "No photo selected yet.\nTap the camera icon to upload a photo.",
+                  localizations.noPhotoSelected,
                   style: TextStyle(
                     fontSize: 17.0,
                     color: isDarkMode ? Colors.grey : Colors.black,
@@ -413,7 +421,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Text(
-                      'Identified Plant: $_identifiedPlant',
+                      '${localizations.identifiedPlant} $_identifiedPlant',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
@@ -424,7 +432,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                 TextField(
                   controller: _edtNameController,
                   decoration: InputDecoration(
-                    labelText: "Name",
+                    labelText: localizations.name,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold, // Bold label for modern feel
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -439,7 +447,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                 TextField(
                   controller: _edtScienceNameController,
                   decoration: InputDecoration(
-                    labelText: "Scientific Name",
+                    labelText: localizations.scientificName,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -457,7 +465,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     child: TextField(
                       controller: _edtDateController,
                       decoration: InputDecoration(
-                        labelText: "Date of purchase",
+                        labelText: localizations.dateOfPurchase,
                         labelStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: isDarkMode ? Colors.white : Colors.black,
@@ -481,7 +489,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                 DropdownButtonFormField<String>(
                   value: widget.plant['type'],
                   hint: Text(
-                    'Select Plant Type',
+                    localizations.selectPlantType,
                     style: TextStyle(
                         color: isDarkMode ? Colors.grey : Colors.black),
                   ),
@@ -506,7 +514,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.green, width: 2.0),
                     ),
-                    labelText: "Plant Type",
+                    labelText: localizations.plantType,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -555,7 +563,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                 DropdownButtonFormField<String>(
                   value: widget.plant['light'],
                   hint: Text(
-                    'Select Light Requirement',
+                    localizations.selectLightRequirement,
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
                   items: lightRequirements.map((String light) {
@@ -577,7 +585,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.green, width: 2.0),
                     ),
-                    labelText: "Light Requirement",
+                    labelText: localizations.lightRequirement,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -588,9 +596,9 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
 
                 // Dropdown Menu für Wasseranforderungen
                 DropdownButtonFormField<String>(
-                  value: _isCustomWaterInterval ? "Custom" : widget.plant['water'],
+                  value: _isCustomWaterInterval ? localizations.custom : widget.plant['water'],
                   hint: Text(
-                    'Select Water Requirement',
+                    localizations.selectWaterRequirement,
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
                   items: [
@@ -604,18 +612,18 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                       );
                     }).toList(),
                     DropdownMenuItem<String>(
-                      value: "Custom",
+                      value: localizations.custom,
                       child: Text(
-                        "Custom",
+                        localizations.custom,
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     ),
                   ],
                   onChanged: (String? newValue) {
                     setState(() {
-                      if (newValue == "Custom") {
+                      if (newValue == localizations.custom) {
                         _isCustomWaterInterval = true;
-                        _selectedWaterRequirement = "Custom";
+                        _selectedWaterRequirement = localizations.custom;
                       } else {
                         _isCustomWaterInterval = false;
                         _selectedWaterRequirement = newValue;
@@ -627,7 +635,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.green, width: 2.0),
                     ),
-                    labelText: "Water Requirement",
+                    labelText: localizations.waterRequirement,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -641,7 +649,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                       controller: _customWaterIntervalController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: "Enter Watering Interval (Days)",
+                        labelText: localizations.enterWateringInterval,
                         labelStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: isDarkMode ? Colors.white : Colors.black,
@@ -701,7 +709,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
 
                               // Show warning banner if any required field is missing
                               CustomSnackbar snackbar = CustomSnackbar(context);
-                              snackbar.showMessage('Please fill in all required fields.', MessageType.error);
+                              snackbar.showMessage(localizations.fillRequiredFields, MessageType.error);
                               return; // Exit the function early
                             }
                             // Show loading indicator while saving the data
@@ -800,7 +808,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                                 CustomSnackbar snackbar = CustomSnackbar(
                                     context);
                                 snackbar.showMessage(
-                                    'Plant details saved successfully!',
+                                    localizations.plantDetailsUpdatedSuccessfully,
                                     MessageType.success);
                                 // Reset the form fields after successfully saving the plant
                                 _resetForm();
@@ -812,7 +820,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                                 CustomSnackbar snackbar = CustomSnackbar(
                                     context);
                                 snackbar.showMessage(
-                                    'Failed to get userId. Please sign in again.',
+                                    localizations.failedToGetUserId,
                                     MessageType.error);
                               }
                             }
@@ -821,7 +829,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                               Navigator.pop(context);
                               CustomSnackbar snackbar = CustomSnackbar(context);
                               snackbar.showMessage(
-                                  'Failed to save plant details: $error',
+                                  '${localizations.failedToUpdatePlantDetails} $error',
                                   MessageType.error);
                             }
                           }
@@ -840,8 +848,8 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                               : Colors.green,
                           elevation: 5, // Button color adapted to theme
                         ),
-                        child: const Text(
-                          "Save",
+                        child: Text(
+                          localizations.save,
                           style: TextStyle(fontSize: 16.0),
                           textAlign: TextAlign.center,
                         ),

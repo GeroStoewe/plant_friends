@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/pages/quiz_pages/quiz_functions.dart';
+import 'package:plant_friends/pages/tutorial_pages/tutorial_functions.dart';
 
 class TutorialPage extends StatefulWidget {
   const TutorialPage({super.key});
@@ -9,14 +9,15 @@ class TutorialPage extends StatefulWidget {
 }
 
 class _TutorialPageState extends State<TutorialPage> {
-  final QuizFunctions quizFunctions = QuizFunctions();
+  final TutorialFunctions tutorialFunctions = TutorialFunctions();
 
   @override
   void dispose() {
     // Beim Verlassen der Seite wird das Quiz automatisch geschlossen
-    quizFunctions.closeQuiz();
+    tutorialFunctions.closeTutorial();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class _TutorialPageState extends State<TutorialPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome to the Quiz!",
+                      "Welcome to the Tutorial!",
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         color: isDarkMode ? Colors.white : Colors.black,
                         fontWeight: FontWeight.bold,
@@ -77,7 +78,7 @@ class _TutorialPageState extends State<TutorialPage> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      "Here we will ask about your room conditions and plant care habits. Based on your answers, we will recommend the best plants that suit you.",
+                      "We’re here to guide you through the app with a quick walkthrough, making sure you discover all the key features and don’t miss out on anything important. By the end, you'll be using the app like a pro!",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: isDarkMode ? Colors.white70 : Colors.black87,
                       ),
@@ -103,13 +104,16 @@ class _TutorialPageState extends State<TutorialPage> {
             child: FloatingActionButton.extended(
               onPressed: () {
                 // Quiz wird nur gestartet, wenn noch kein aktives Quiz läuft
-                if (!QuizFunctions.isQuizActive) {
+                if (!TutorialFunctions.isTutorialActive) {
                   OverlayState overlayState = Overlay.of(context)!;
-                  quizFunctions.showQuestion(context, overlayState);
+
+                  TutorialFunctions tutorialFunctions = TutorialFunctions();
+
+                  tutorialFunctions.showStep(context, overlayState);
                 }
               },
               label: Text(
-                'Start Quiz',
+                'Start Tutorial',
                 style: Theme.of(context).textTheme.labelMedium,
               ),
               icon: const Icon(

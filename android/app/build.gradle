@@ -46,10 +46,10 @@ android {
             keyPassword "android"
         }
         release {
-            storeFile file("$rootDir/keystore.jks")
-            storePassword "plantfriends"
-            keyAlias "my-release-key"
-            keyPassword "plantfriends"
+            storeFile rootProject.file("/app/signkey.jks")
+            storePassword "moskau194"
+            keyAlias "upload-key"
+            keyPassword "moskau194"
         }
     }
 

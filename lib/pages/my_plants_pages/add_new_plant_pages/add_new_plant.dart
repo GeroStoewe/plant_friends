@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -159,12 +160,13 @@ if(mounted){
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                AutoSizeText(
                   localizations.takeOrPickPhoto,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
+                  maxLines: 1,
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -296,7 +298,7 @@ if(mounted){
     final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: AutoSizeText(
           localizations.addNewPlant,
           style: Theme
               .of(context)
@@ -305,6 +307,7 @@ if(mounted){
             fontWeight: FontWeight.bold,
             color: isDarkMode ? Colors.white : Colors.black,
           ),
+          maxFontSize: 26,
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),

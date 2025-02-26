@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "about": MessageLookupByLibrary.simpleMessage("About"),
     "aboutUs": MessageLookupByLibrary.simpleMessage("About Us"),
     "aboutUsDescription": MessageLookupByLibrary.simpleMessage(
-      "We (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) are \nstudying computer science in the \n3rd semester. We developed this \nplant app as part of the “Software \nEngineering” course. Our vision is to \nsupport plant lovers in the planning, \nselection and care of houseplants.",
+      "We (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) are \nstudying computer science in the \n4 semester. We developed this \nplant app as part of the “Software \nEngineering 2” course. Our vision is to \nsupport plant lovers in the planning, \nselection and care of houseplants.",
     ),
     "addNewPhoto": MessageLookupByLibrary.simpleMessage(
       "Add a new plant photo",

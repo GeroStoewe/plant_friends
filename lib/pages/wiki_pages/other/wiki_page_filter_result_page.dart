@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,8 +43,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchAndFilterPlantData();
     searchController.addListener(() {
       updateSearch(searchController.text);
@@ -68,37 +69,39 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         final data = snapshot.value as Map<dynamic, dynamic>;
         final wishlistData = data.keys.cast<String>().toSet(); // Extract plant names from the map
 
-        setState(() {
-          wishlist = wishlistData; // Update the local wishlist state
-        });
+        if (mounted) {
+          setState(() {
+            wishlist = wishlistData; // Update the local wishlist state
+          });
+        }
       }
     } catch (e) {
       _showSnackbar(context, '${localizations.failedToFetchWishlist} ${e.toString()}');
     }
   }
 
+  StreamSubscription? _wishlistSubscription;
+
   void _listenForWishlistUpdates() {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) return;
 
-    dbRef
-        .child("Wishlists")
-        .child(userId)
-        .onValue
-        .listen((event) {
+    _wishlistSubscription = dbRef.child("Wishlists").child(userId).onValue.listen((event) {
       final data = event.snapshot.value;
       if (data != null) {
         final wishlistData = (data as Map<dynamic, dynamic>).keys.cast<String>().toSet();
-
-        setState(() {
-          wishlist = wishlistData; // Update the local wishlist state
-        });
+        if (mounted) {
+          setState(() {
+            wishlist = wishlistData;
+          });
+        }
       }
     });
   }
 
   @override
   void dispose() {
+    _wishlistSubscription?.cancel();  // Wichtig: Listener beenden!
     searchController.dispose();
     super.dispose();
   }

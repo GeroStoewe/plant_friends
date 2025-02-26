@@ -22,10 +22,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "about": MessageLookupByLibrary.simpleMessage("Über"),
+    "about": MessageLookupByLibrary.simpleMessage("Über Uns"),
     "aboutUs": MessageLookupByLibrary.simpleMessage("Über uns"),
     "aboutUsDescription": MessageLookupByLibrary.simpleMessage(
-      "Wir (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) studieren Informatik im \n3. Semester. Wir haben diese Pflanzen-App im Rahmen des Kurses „Software Engineering“ entwickelt. Unsere Vision ist es, Pflanzenliebhabern bei der Planung, Auswahl und Pflege von Zimmerpflanzen zu unterstützen.",
+      "Wir (Laura Voß, Lisa Kütemeier, Aylin \nOymak, Gero Stöwe) studieren Informatik\nim 4. Semester. Wir haben diese Pflanzen-\nApp im Rahmen des Kurses „Software\nEngineering II“ entwickelt.\nUnsere Vision ist es, Pflanzenliebhabern\nbei der Planung, Auswahl und Pflege\nvon Zimmerpflanzen zu unterstützen.",
     ),
     "addNewPhoto": MessageLookupByLibrary.simpleMessage(
       "Neues Pflanzenfoto hinzufügen",
@@ -209,7 +209,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Fehler bei der Registrierung mit Google: ",
     ),
     "greetings": MessageLookupByLibrary.simpleMessage(
-      "Hallo Pflanzenfreund! ❤️ \n\nOb du einen grünen Daumen hast oder gerade erst anfängst, Plant Friends ist dein ultimativer Begleiter. Mit individueller Pflanzenpflege, rechtzeitigen Erinnerungen und hilfreichen Informationen hältst du deine Zimmerpflanzen glücklich und gesund. \n\nLass uns gemeinsam deinen Indoor-Dschungel zum Erblühen bringen! 🌿",
+      "Hallo Pflanzenfreund*in! ❤️ \n\nOb du einen grünen Daumen hast oder gerade erst anfängst, Plant Friends ist dein ultimativer Begleiter. Mit individueller Pflanzenpflege, rechtzeitigen Erinnerungen und hilfreichen Informationen hältst du deine Zimmerpflanzen glücklich und gesund. \n\nLass uns gemeinsam deinen Indoor-Dschungel zum Erblühen bringen! 🌿",
     ),
     "growPlantDatabase": MessageLookupByLibrary.simpleMessage(
       "Hilf uns, unsere Pflanzendatenbank zu erweitern!",
@@ -253,7 +253,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Bitte bestätige die E-Mail, um die Aktualisierung abzuschließen.",
     ),
     "month": MessageLookupByLibrary.simpleMessage("Monat"),
-    "myPlants": MessageLookupByLibrary.simpleMessage("Meine Pflanzen"),
+    "myPlants": MessageLookupByLibrary.simpleMessage("Pflanzen"),
     "myPlantsTitle": MessageLookupByLibrary.simpleMessage("Meine Pflanzen"),
     "myPlantsWiki": MessageLookupByLibrary.simpleMessage("\"Meine Pflanzen\""),
     "myWishlist": MessageLookupByLibrary.simpleMessage("Meine Wunschliste"),
@@ -307,9 +307,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pflanzendetails erfolgreich aktualisiert",
     ),
     "plantName": MessageLookupByLibrary.simpleMessage("Pflanzenname"),
-    "plantQuiz": MessageLookupByLibrary.simpleMessage("Pflanzenquiz"),
+    "plantQuiz": MessageLookupByLibrary.simpleMessage("Pflanzen Quiz"),
     "plantType": MessageLookupByLibrary.simpleMessage("Pflanzentyp"),
-    "plantWiki": MessageLookupByLibrary.simpleMessage("Pflanzen-Wiki"),
+    "plantWiki": MessageLookupByLibrary.simpleMessage("Wiki"),
     "plantsByDifficulty": MessageLookupByLibrary.simpleMessage(
       "Pflanzen nach Schwierigkeit",
     ),
@@ -362,7 +362,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Wissenschaftlicher Name",
     ),
     "searchByName": MessageLookupByLibrary.simpleMessage(
-      "Suche nach Name oder wissenschaftlichem Namen",
+      "Suche nach Name oder wiss. Name",
     ),
     "selectDate": MessageLookupByLibrary.simpleMessage(
       "Bitte wähle ein Datum aus, bevor du es hinzufügst.",

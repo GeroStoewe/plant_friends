@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -58,16 +59,17 @@ class WelcomePage1 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: size.height * 0.002),
-                          Text(
+                          AutoSizeText(
                             localizations.welcome,
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontSize: 26 * textScaleFactor,
                             ),
+                            maxLines: 1
                           ),
                           SizedBox(height: size.height * 0.03),
                           Expanded(
                             child: SingleChildScrollView(
-                              child: Text(
+                              child: AutoSizeText(
                                 localizations.greetings,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(

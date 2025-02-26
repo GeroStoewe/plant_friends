@@ -46,10 +46,9 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   String _selectedPlantType = "Cacti/Succulents"; // Default value for plant type
   int? previousWaterInterval;
 
-
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     final localizations = AppLocalizations.of(context)!;
 

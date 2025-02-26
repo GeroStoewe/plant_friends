@@ -371,6 +371,54 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
     );
   }
 
+  String _getLocalizedPlantLight(String? light, AppLocalizations localizations) {
+    switch (light) {
+      case "Direct Light":
+        return localizations.directLight;
+      case "Indirect Light":
+        return localizations.indirectLight;
+      case "Partial Shade":
+        return localizations.partialShade;
+      case "Low Light":
+        return localizations.lowLight;
+      default:
+        return "N/A";
+    }
+  }
+
+  String _getLocalizedPlantType(String? type, AppLocalizations localizations) {
+    switch (type) {
+      case "Cacti/Succulents":
+        return localizations.cacti;
+      case "Tropical Plants":
+        return localizations.tropicalPlants;
+      case "Climbing Plants":
+        return localizations.climbingPlants;
+      case "Flowering Plants":
+        return localizations.floweringPlants;
+      case "Trees/Palms":
+        return localizations.trees;
+      case "Herbs":
+        return localizations.herbs;
+      case "Others":
+        return localizations.others;
+      default:
+        return "N/A";
+    }
+  }
+
+  String _getLocalizedPlantWater(String? water, AppLocalizations localizations) {
+    switch (water) {
+      case "Low":
+        return localizations.low;
+      case "Medium":
+        return localizations.medium;
+      case "High":
+        return localizations.high;
+      default:
+        return "N/A";
+    }
+  }
 
   Column plantInfo() {
     final localizations = AppLocalizations.of(context)!;
@@ -384,7 +432,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
               child: CustomInfoCard(
                 icon: Icons.wb_sunny,
                 title: localizations.light,
-                value: widget.plant.plantData!.light ?? 'N/A',
+                value: _getLocalizedPlantLight(widget.plant.plantData!.light, localizations),
               ),
             ),
             const SizedBox(width: 16),
@@ -392,7 +440,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
               child: CustomInfoCard(
                 icon: Icons.eco_sharp,
                 title: localizations.plantType,
-                value: widget.plant.plantData!.type ?? 'N/A',
+                value: _getLocalizedPlantType(widget.plant.plantData!.type, localizations),
               ),
             ),
 
@@ -406,7 +454,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
               child: CustomInfoCard(
                 icon: Icons.water_drop,
                 title: localizations.water,
-                value: widget.plant.plantData?.water ?? 'N/A',
+                value: _getLocalizedPlantWater(widget.plant.plantData!.water, localizations),
               ),
             ),
             const SizedBox(width: 16),

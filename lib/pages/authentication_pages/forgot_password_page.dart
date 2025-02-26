@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -69,12 +70,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   child: Column(
                     children: [
                       SizedBox(height: size.height * 0.0025),
-                      Text(
+                      AutoSizeText(
                         localizations.resetYourPassword,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontSize: 28 * textScaleFactor
                         ),
+                        maxLines: 1,
                       ),
                       Expanded(
                         child: Center(

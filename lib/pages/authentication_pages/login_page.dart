@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -80,11 +81,12 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(height: size.height * 0.0025),
-                            Text(localizations.loginTitle,
+                            AutoSizeText(localizations.loginTitle,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                   fontSize: 28 * textScaleFactor,
                                 ),
+                                maxLines: 1,
                             ),
                             SizedBox(height: size.height * 0.025),
                             CustomTextField(

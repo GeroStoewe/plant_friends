@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -95,12 +96,13 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              AutoSizeText(
                 localizations.takeOrPickPhoto,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
+                maxLines: 1,
               ),
               const SizedBox(height: 20),
               Row(
@@ -240,8 +242,8 @@ class _FilteredPlantListState extends State<_FilteredPlantList> {
   bool isLoading = true;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchAndFilterPlantData();
 
     // Hinzufügen eines Listeners zu `widget.searchController`

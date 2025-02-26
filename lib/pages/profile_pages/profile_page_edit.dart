@@ -40,8 +40,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   File? plantImage;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchJoinDate();
     loadCurrentUser();
   }

@@ -36,8 +36,8 @@ class _ProfilePageState extends State<ProfilePage> {
   ScrollController scrollController = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     loadUserData();
     scrollController.addListener(onScroll);
   }
@@ -128,6 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
         body: Stack(children: [
           RefreshIndicator(
             onRefresh: loadUserData,
+            color: seaGreen,
             child: Scrollbar(
               child: SingleChildScrollView(
                 controller: scrollController,
@@ -212,8 +213,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
                                 loadUserData();
                               },
-                              width: 150 * textScaleFactor,
-                              height: 45 * textScaleFactor,
+                              width: 160 * textScaleFactor,
+                              height: 50 * textScaleFactor,
                               text: localizations.editProfile,
                               color: Theme.of(context).primaryColor),
                           SizedBox(height: size.height * 0.025),
@@ -247,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             text: localizations.plantQuiz,
                             icon: LineAwesomeIcons.question_circle,
                           ),
-                          SizedBox(height: size.height * 0.005),
+                          SizedBox(height: size.height * 0.01),
                           Divider(
                               thickness: 0.5,
                               color: isDarkMode ? dmDarkGrey : lmLightGrey),
@@ -284,7 +285,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           if (isLoading)
             Container(
-              color: Colors.black.withOpacity(0.7),
+              color: isDarkMode ? Colors.black : Colors.white,
               child: Center(
                 child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(

@@ -26,7 +26,6 @@ class ProfileMenuButton extends StatelessWidget {
 
     return ListTile(
       onTap: onTap,
-      visualDensity: VisualDensity(vertical: -2 * textScaleFactor),
       leading: Container(
         width: 30 * textScaleFactor,
         height: 30 * textScaleFactor,

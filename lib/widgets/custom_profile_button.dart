@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomProfileButton extends StatelessWidget {
@@ -28,9 +29,10 @@ class CustomProfileButton extends StatelessWidget {
             side: BorderSide.none,
             shape: const StadiumBorder()
           ),
-          child: Text(
+          child: AutoSizeText(
               text,
-              style: Theme.of(context).textTheme.displayMedium
+              style: Theme.of(context).textTheme.displayMedium,
+              maxLines: 1
           )
       ),
     );

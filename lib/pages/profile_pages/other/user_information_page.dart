@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -30,8 +31,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
   bool isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchJoinDate();
     loadUserData();
   }
@@ -123,13 +124,14 @@ class _UserInformationPageState extends State<UserInformationPage> {
           icon: Icon(LineAwesomeIcons.angle_left_solid,
               color: isDarkMode ? dmLightGrey : lmLightGrey),
         ),
-        title: Text(
+        title: AutoSizeText(
           localizations.userInformation,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             color: isDarkMode
                 ? Colors.white
                 : Colors.black, // Dynamic color for dark and light mode
           ),
+          maxFontSize: 26,
         ),
         actions: [
           IconButton(
@@ -209,7 +211,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
           ),
           if (isLoading)
             Container(
-              color: Colors.black.withOpacity(0.7),
+              color: isDarkMode ? Colors.black : Colors.white,
               child: Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(

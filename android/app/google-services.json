@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "545786364087-dvjmli0059b6esokk3tukefm5ebqc3ch.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "b51e0c0bce88becc8bdf875a9aa7ea7db469b5b7"
+          }
+        },
+        {
           "client_id": "545786364087-mibgfd0nu010focnr50ei55qpi9osdd8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -44,6 +52,14 @@
           "android_info": {
             "package_name": "com.hwr.plant_friends",
             "certificate_hash": "aad40c7732ff1cb54d68f7a33371f73b954bc893"
+          }
+        },
+        {
+          "client_id": "545786364087-u7q6hcd0hl9int46b7rklbfkre07h40p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwr.plant_friends",
+            "certificate_hash": "d0024edeeacd4c2fd3be106500ba55fedd614f34"
           }
         },
         {

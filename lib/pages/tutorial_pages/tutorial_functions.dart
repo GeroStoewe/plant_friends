@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:plant_friends/widgets/custom_button.dart';
 import 'package:plant_friends/widgets/custom_button_outlined_small.dart';
 
 class TutorialFunctions {
@@ -11,6 +10,10 @@ class TutorialFunctions {
     {
       'image': 'lib/images/tutorial/1_profile.png',
       'text': 'Click on icon in the top right corner to switch to light/dark mode. You can edit your information, take the plant quiz, and start the tutorial.',
+    },
+    {
+      'image': 'lib/images/tutorial/1_1_quiz.png',
+      'text': 'If you want to know which plants suit your conditions take the quiz!',
     },
     {
       'image': 'lib/images/tutorial/2_plant_wiki.png',
@@ -94,25 +97,26 @@ class TutorialFunctions {
 
   void showStep(BuildContext context, OverlayState overlayState) {
     isTutorialActive = true;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     overlayEntry = OverlayEntry(
       builder: (context) {
         return GestureDetector(
-          onTap: closeTutorial, // Schließt das Tutorial, wenn außerhalb getippt wird
-          behavior: HitTestBehavior.opaque, // Stellt sicher, dass der Tap erfasst wird
+          onTap: closeTutorial,
+          behavior: HitTestBehavior.opaque,
           child: Stack(
             children: [
               Positioned(
-                bottom: 20.0,
-                left: 50.0,
-                right: 50.0,
-                height: 850,
+                bottom: screenHeight * 0.05,
+                left: screenWidth * 0.05,
+                right: screenWidth * 0.05,
                 child: Material(
                   color: Colors.transparent,
                   child: GestureDetector(
-                    onTap: () {}, // Verhindert, dass das Overlay schließt, wenn in das Fenster getippt wird
+                    onTap: () {},
                     child: Container(
-                      padding: EdgeInsets.all(20.0),
+                      padding: EdgeInsets.all(screenWidth * 0.05),
                       decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(10),
@@ -125,10 +129,9 @@ class TutorialFunctions {
                         ],
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Bild mit grauem Rand
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey, width: 2),
@@ -138,24 +141,26 @@ class TutorialFunctions {
                               borderRadius: BorderRadius.circular(15),
                               child: Image.asset(
                                 tutorialSteps[currentStepIndex]['image']!,
-                                height: 600,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
+                                height: screenHeight * 0.5,
+                                width: null, // Entfernt die feste Breite
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center, // Zentriert das Bild innerhalb der Umrandung
                               ),
                             ),
-                          ),
-                          SizedBox(height: 20),
+                          )
+                          ,
+                          SizedBox(height: screenHeight * 0.03),
                           Text(
                             tutorialSteps[currentStepIndex]['text']!,
                             style: Theme.of(context).textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: screenHeight * 0.03),
                           Row(
                             mainAxisAlignment: currentStepIndex == 0
                                 ? MainAxisAlignment.end
                                 : MainAxisAlignment.spaceBetween,
                             children: [
-                              // "Back"-Button (wird nur angezeigt, wenn nicht auf der ersten Seite)
                               if (currentStepIndex > 0)
                                 CustomButtonOutlinedSmall(
                                   text: 'Back',

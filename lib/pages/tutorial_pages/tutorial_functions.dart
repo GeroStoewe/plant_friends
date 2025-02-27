@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:plant_friends/widgets/custom_button.dart';
+import 'package:plant_friends/widgets/custom_button_outlined_small.dart';
 
 class TutorialFunctions {
   OverlayEntry? overlayEntry;
@@ -20,11 +22,19 @@ class TutorialFunctions {
     },
     {
       'image': 'lib/images/tutorial/4_plant_wiki_wishlist.png',
-      'text': '... to get to your wishlist. You can remove wishes with the bin icon.',
+      'text': '...to get to your wishlist. You can remove wishes with the bin icon.',
+    },
+    {
+      'image': 'lib/images/tutorial/4_1_plant_wiki_plant_request.png',
+      'text': 'If you cannot find a plant in the wiki you can request its addition by clicking here.',
+    },
+    {
+      'image': 'lib/images/tutorial/4_2_my_plants_empty.png',
+      'text': 'This space shows a list of your personal plants. It is currently empty. To add a plant...',
     },
     {
       'image': 'lib/images/tutorial/5_add_new_plant_decision_help_1.png',
-      'text': 'To add a new plant click on the plus button in the bottom right corner. If you need help...',
+      'text': '....click on the plus button in the bottom right corner. If you need help...',
     },
     {
       'image': 'lib/images/tutorial/7_add_new_plant_help_1.png',
@@ -55,12 +65,16 @@ class TutorialFunctions {
       'text': 'The plant is now marked as watered. This is also visible in your calendar.',
     },
     {
+      'image': 'lib/images/tutorial/12_1_photo_journal.png',
+      'text': 'This is the photo journal of your new plant. Click on the button in the right corner to add photos.',
+    },
+    {
       'image': 'lib/images/tutorial/13_my_plants_detail_edit.png',
       'text': 'If you edit information of your plant make sure to save the changes.',
     },
     {
       'image': 'lib/images/tutorial/15_calendar_unwatered.png',
-      'text': 'This is the calendar where you can see when your plants need to get watered or fertilized. The x shows that your plant is not watered yet.',
+      'text': 'This is the calendar where you can see when your plants need to get watered. The x shows that your plant is not watered yet.',
     },
     {
       'image': 'lib/images/tutorial/16_calendar_watered.png',
@@ -143,17 +157,17 @@ class TutorialFunctions {
                             children: [
                               // "Back"-Button (wird nur angezeigt, wenn nicht auf der ersten Seite)
                               if (currentStepIndex > 0)
-                                ElevatedButton(
-                                  onPressed: () {
+                                CustomButtonOutlinedSmall(
+                                  text: 'Back',
+                                  onTap: () {
                                     currentStepIndex--;
                                     closeTutorial();
                                     showStep(context, overlayState);
                                   },
-                                  child: Text('Back'),
                                 ),
-                              // "Next" oder "Finish"-Button
-                              ElevatedButton(
-                                onPressed: () {
+                              CustomButtonOutlinedSmall(
+                                text: currentStepIndex < tutorialSteps.length - 1 ? 'Next' : 'Finish',
+                                onTap: () {
                                   if (currentStepIndex < tutorialSteps.length - 1) {
                                     currentStepIndex++;
                                     closeTutorial();
@@ -162,7 +176,6 @@ class TutorialFunctions {
                                     closeTutorial();
                                   }
                                 },
-                                child: Text(currentStepIndex < tutorialSteps.length - 1 ? 'Next' : 'Finish'),
                               ),
                             ],
                           ),

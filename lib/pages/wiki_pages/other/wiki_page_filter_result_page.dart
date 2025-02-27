@@ -257,10 +257,6 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            _toTitleCase('${widget.filterType}: ${widget.filterValue ?? ''}'), // Convert to title case
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           actions: [
         Padding(

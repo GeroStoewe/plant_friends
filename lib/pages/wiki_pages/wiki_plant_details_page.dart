@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_info_card.dart';
+import '../HelpWithLocalization.dart';
 import '../my_plants_pages/add_new_plant_pages/add_new_plant_with_prefilled_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -171,7 +172,7 @@ class PlantWikiDetailPage extends StatelessWidget {
               child: CustomInfoCard(
                 icon: Icons.wb_sunny,
                 title: localizations.light,
-                value: plant['light'] ?? 'N/A',
+                value: HelpWithLocalization.getLocalizedLight(plant['light'], localizations) ?? 'N/A',
               ),
             ),
             SizedBox(width: 16), // Add spacing between cards
@@ -179,7 +180,7 @@ class PlantWikiDetailPage extends StatelessWidget {
               child: CustomInfoCard(
                 icon: Icons.water_drop,
                 title: localizations.water,
-                value: plant['water'] ?? 'N/A',
+                value: HelpWithLocalization.getLocalizedWater(plant['water'], localizations) ?? 'N/A',
               ),
             ),
           ],
@@ -192,7 +193,7 @@ class PlantWikiDetailPage extends StatelessWidget {
               child: CustomInfoCard(
                 icon: Icons.star,
                 title: localizations.difficulty,
-                value: plant['difficulty'] ?? 'N/A',
+                value: HelpWithLocalization.getLocalizedDifficulty(plant['difficulty'], localizations) ?? 'N/A',
               ),
             ),
             SizedBox(width: 16), // Add spacing between cards
@@ -200,7 +201,7 @@ class PlantWikiDetailPage extends StatelessWidget {
               child: CustomInfoCard(
                 icon: Icons.local_florist,
                 title: localizations.plantType,
-                value: plant['type'] ?? 'N/A',
+                value: HelpWithLocalization.getLocalizedPlantType(plant['type'], localizations) ?? 'N/A',
               ),
             ),
           ],

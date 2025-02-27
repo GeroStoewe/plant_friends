@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../widgets/custom_snackbar.dart';
+import '../../HelpWithLocalization.dart';
 import '../../calendar_pages/calendar_functions.dart';
 import '../other/plant.dart';
 
@@ -324,34 +325,31 @@ if(mounted){
     final localizations = AppLocalizations.of(context)!;
     bool _isLoadingImage = false; // Add a flag to manage loading state
     // Liste der Pflanzenarten (kann angepasst werden)
-    List<String> plantTypes = [
-      localizations.cacti,
-      localizations.tropicalPlants,
-      localizations.climbingPlants,
-      localizations.floweringPlants,
-      localizations.trees,
-      localizations.herbs,
-      localizations.others
+    final List<String> plantTypes = [
+      'Cacti/Succulents',
+      'Tropical Plants',
+      'Climbing Plants',
+      'Flowering Plants',
+      'Trees/Palms',
+      'Herbs',
+      'Others'
     ];
-    // Liste der Schwierigkeitsgrade
-    List<String> difficulties = [
-      localizations.easy,
-      localizations.medium,
-      localizations.hard
+    final List<String> difficulties = [
+      'Easy',
+      'Medium',
+      'Difficult',
     ];
 
-    // Liste der Lichtanforderungen
-    List<String> lightRequirements = [
-      localizations.directLight,
-      localizations.indirectLight,
-      localizations.partialShade,
-      localizations.lowLight,
+    final List<String> lightRequirements = [
+      'Direct Light',
+      'Indirect Light',
+      'Partial Shade',
+      'Low Light',
     ];
-    // Liste der Wasseranforderungen
-    List<String> waterRequirements = [
-      localizations.low,
-      localizations.medium,
-      localizations.high,
+    final List<String> waterRequirements = [
+      'Low',
+      'Medium',
+      'High',
     ];
 
 
@@ -472,7 +470,7 @@ if(mounted){
                     return DropdownMenuItem<String>(
                       value: type,
                       child: Text(
-                        type,
+                        HelpWithLocalization.getLocalizedPlantType(type, localizations),
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     );
@@ -494,6 +492,7 @@ if(mounted){
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 15),
 /*
                 DropdownButtonFormField<String>(
@@ -540,7 +539,7 @@ if(mounted){
                     return DropdownMenuItem<String>(
                       value: light,
                       child: Text(
-                        light,
+                        HelpWithLocalization.getLocalizedLight(light, localizations),
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     );
@@ -576,7 +575,7 @@ if(mounted){
                       return DropdownMenuItem<String>(
                         value: water,
                         child: Text(
-                          water,
+                          HelpWithLocalization.getLocalizedWater(water, localizations),
                           style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                         ),
                       );
@@ -665,6 +664,9 @@ if(mounted){
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
+                            _selectedPlantType = HelpWithLocalization.getEnglishPlantType(_selectedPlantType!, localizations);
+                            _selectedLightRequirement = HelpWithLocalization.getEnglishLight(_selectedLightRequirement!, localizations);
+                            _selectedWaterRequirement = HelpWithLocalization.getEnglishWater(_selectedWaterRequirement!, localizations);
                             // Check if required fields are filled
                             if (_edtNameController.text.isEmpty ||
                                 _edtScienceNameController.text.isEmpty ||

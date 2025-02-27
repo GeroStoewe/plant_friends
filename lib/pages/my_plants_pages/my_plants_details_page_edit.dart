@@ -13,6 +13,7 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/custom_number_field.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
+import '../HelpWithLocalization.dart';
 import '../calendar_pages/calendar_functions.dart';
 import 'other/plant.dart';
 
@@ -47,19 +48,17 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
   int? previousWaterInterval;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final localizations = AppLocalizations.of(context)!;
+  void initState() {
+    super.initState();
 
     _edtNameController.text = widget.plant.plantData!.name!;
     _edtScienceNameController.text = widget.plant.plantData!.scienceName!;
     _customWaterIntervalController.text = widget.plant.plantData!.customWaterInterval.toString();
     _edtDateController.text = widget.plant.plantData!.date!;
-    _selectedDifficulty = widget.plant.plantData!.difficulty ?? localizations.easy;
-    _selectedLight = widget.plant.plantData!.light ?? localizations.directLight;
-    _selectedWater = widget.plant.plantData!.water ?? localizations.low;
-    _selectedPlantType = widget.plant.plantData!.type ?? localizations.cacti;
+    _selectedDifficulty = widget.plant.plantData!.difficulty ?? "Easy";
+    _selectedLight = widget.plant.plantData!.light ?? "Direct Light";
+    _selectedWater = widget.plant.plantData!.water ?? "Low";
+    _selectedPlantType = widget.plant.plantData!.type ?? "Cacti/Succulents";
     previousWaterInterval = widget.plant.plantData!.customWaterInterval ?? 5;
   }
 
@@ -74,11 +73,11 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(localizations.cancel, style: TextStyle(color: seaGreen)),
+            child: Text(localizations.cancel, style: const TextStyle(color: seaGreen)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(localizations.delete, style: TextStyle(color: seaGreen)),
+            child: Text(localizations.delete, style: const TextStyle(color: seaGreen)),
           ),
         ],
       ),
@@ -193,7 +192,6 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
   Future<void> _updatePlant(BuildContext context) async {
     final localizations = AppLocalizations.of(context)!;
-
     String originalWaterNeeds = widget.plant.plantData!.water ?? localizations.low; // Original water needs
     bool waterNeedsChanged = originalWaterNeeds != _selectedWater;
     int? originalCustomWaterInterval = widget.plant.plantData!.customWaterInterval ?? 5;
@@ -256,8 +254,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
     }
 
     try {
-      // Update the plant data in the database
-      await dbRef.child("Plants").child(widget.plant.key!).update(data);
+
 
       if (waterNeedsChanged || customWaterIntervalChanged) {
         // Show a dialog that informs the user about the event changes
@@ -271,13 +268,13 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 onPressed: () {
                   Navigator.of(context).pop(false); // Close only the dialog
                 },
-                child: Text(localizations.cancel, style: TextStyle(color: Color(0xFF388E3C))),
+                child: Text(localizations.cancel, style: const TextStyle(color: Color(0xFF388E3C))),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true); // Proceed with updating events
                 },
-                child: Text(localizations.proceed, style: TextStyle(color: Color(0xFF388E3C))),
+                child: Text(localizations.proceed, style: const TextStyle(color: Color(0xFF388E3C))),
               ),
             ],
           ),
@@ -306,21 +303,28 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           // Delete existing events
           await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
           int? currentWaterInterval = int.tryParse(_customWaterIntervalController.text);
-          print(currentWaterInterval);
+          print("Current water interval: ${currentWaterInterval ?? 'not set'}");
+          print("Selected water : ${_selectedWater ?? 'not set'}");
 
-          if(customWaterIntervalChanged || _selectedWater == localizations.custom ){
+
+          if (customWaterIntervalChanged || _selectedWater == "Custom") {
+            int? currentWaterInterval = int.tryParse(_customWaterIntervalController.text);
+            if (currentWaterInterval == null) {
+              // Setze hier eine sinnvolle Default-Logik oder wirf eine Exception
+              print("Fehler: currentWaterInterval ist null");
+              currentWaterInterval = 5;  // Falls das ein sinnvoller Default ist
+            }
+
+
+
+
             await CalenderFunctions().createNewEventsWateringCustom(
               widget.plant.key!,
               _edtNameController.text,
-              currentWaterInterval!,
-            );
-          }else{
-            await CalenderFunctions().createNewEventsWatering(
-              widget.plant.key!,
-              _edtNameController.text,
-              _selectedWater,
+              currentWaterInterval,
             );
           }
+
 
           /*
           // Create new fertilizing events
@@ -331,6 +335,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           );
           */
 
+          // Update the plant data in the database
+          await dbRef.child("Plants").child(widget.plant.key!).update(data);
 
           // Show success message
           if (mounted) {
@@ -460,7 +466,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
       appBar: AppBar(
         title: Text(
           localizations.editPlant,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
@@ -567,7 +573,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   localizations.plantName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: seaGreen, // Green color for label
                   ),
@@ -587,7 +593,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   localizations.scientificName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: seaGreen, // Green color for label
                   ),
@@ -607,7 +613,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   localizations.dateOfPurchase,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: seaGreen, // Green color for label
                   ),
@@ -633,7 +639,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   localizations.plantCareInformation,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: seaGreen, // Green color for label
@@ -646,7 +652,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 value: _selectedPlantType,
                 decoration: InputDecoration(
                   labelText: localizations.plantType,
-                  labelStyle: const TextStyle(color: seaGreen), // Green color
+                  labelStyle: const TextStyle(color: seaGreen),
                   filled: true,
                   fillColor: isDarkMode
                       ? Colors.white.withOpacity(0.1)
@@ -663,30 +669,27 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   ),
                 ),
                 items: [
-                  DropdownMenuItem(
-                      value: "Cacti/Succulents",
-                      child: Text(localizations.cacti)),
-                  DropdownMenuItem(
-                      value: "Tropical Plants", child: Text(localizations.tropicalPlants)),
-                  DropdownMenuItem(
-                      value: "Climbing Plants", child: Text(localizations.climbingPlants)),
-                  DropdownMenuItem(
-                      value: "Flowering Plants", child: Text(localizations.floweringPlants)),
-                  DropdownMenuItem(value: "Trees/Palms", child: Text(localizations.trees)),
-                  DropdownMenuItem(value: "Herbs", child: Text(localizations.herbs)),
-                  DropdownMenuItem(value: "Others", child: Text(localizations.others)),
-                ],
+                  "Cacti/Succulents",
+                  "Tropical Plants",
+                  "Climbing Plants",
+                  "Flowering Plants",
+                  "Trees/Palms",
+                  "Herbs",
+                  "Others",
+                ].map((String type) {
+                  return DropdownMenuItem(
+                    value: type,
+                    child: Text(HelpWithLocalization.getLocalizedPlantType(type, localizations)),
+                  );
+                }).toList(),
+
                 onChanged: (String? newValue) {
                   setState(() {
-                    _selectedWater = newValue!;
-                    if (_selectedWater != localizations.custom) {
-                      _customWaterIntervalController.clear();
-                    } else if (_customWaterIntervalController.text.isEmpty) {
-                      _customWaterIntervalController.text = "5"; // Standardwert setzen
-                    }
+                    _selectedPlantType = newValue!;
                   });
                 },
               ),
+
               const SizedBox(height: 15),
 
 /*
@@ -747,20 +750,29 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 ),
 
                 items: [
-                  DropdownMenuItem(
-                      value: "Direct Light", child: Text(localizations.directLight)),
-                  DropdownMenuItem(
-                      value: "Indirect Light", child: Text(localizations.indirectLight)),
-                  DropdownMenuItem(
-                      value: "Partial Shade", child: Text(localizations.partialShade)),
-                  DropdownMenuItem(value: "Low Light", child: Text(localizations.lowLight)),
-                ],
+                  "Direct Light",
+                  "Indirect Light",
+                  "Partial Shade",
+                  "Low Light"
+                ].map((light) {
+                  return DropdownMenuItem<String>(
+                    value: light,
+                    child: Text(
+                      HelpWithLocalization.getLocalizedLight(light, localizations), // Hier die Lokalisierung
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  );
+                }).toList(),
+
                 onChanged: (String? newValue) {
                   setState(() {
-                    _selectedLight = newValue!;
+                    _selectedLight = newValue!; // Hier bleibt die technische (englische) Bezeichnung gespeichert
                   });
                 },
               ),
+
               const SizedBox(height: 15),
 
               // Water Dropdown with Green Label
@@ -768,7 +780,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                 value: _selectedWater,
                 decoration: InputDecoration(
                   labelText: localizations.waterRequirement,
-                  labelStyle: const TextStyle(color: Colors.green), // Change to your color
+                  labelStyle: const TextStyle(color: Colors.green), // Deine Farbe
                   filled: true,
                   fillColor: isDarkMode
                       ? Colors.white.withOpacity(0.1)
@@ -785,28 +797,44 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
                   ),
                 ),
                 items: [
-                  DropdownMenuItem(value: "Low", child: Text(localizations.low)),
-                  DropdownMenuItem(value: "Medium", child: Text(localizations.medium)),
-                  DropdownMenuItem(value: "High", child: Text(localizations.high)),
-                  DropdownMenuItem(value: "Custom", child: Text(localizations.custom)), // Add Custom option
-                ],
+                  'Low',
+                  'Medium',
+                  'High',
+                  'Custom',  // Custom bleibt hier im Value Englisch
+                ].map((water) {
+                  return DropdownMenuItem<String>(
+                    value: water,
+                    child: Text(
+                      HelpWithLocalization.getLocalizedWater(water, localizations), // Lokalisierung hier
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  );
+                }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedWater = newValue!;
-                    // Clear the custom interval text field when changing the selection
+                    if (_selectedWater != "Custom") {
+                      _customWaterIntervalController.clear();  // <- das sorgt dafür, dass es leer ist, wenn kein Custom
+                    } else if (_customWaterIntervalController.text.isEmpty) {
+                      _customWaterIntervalController.text = "5"; // Standardwert bei Wechsel auf Custom
+                    }
                   });
-                },
+                }
+                ,
               ),
 
 
+
               // Conditional field for custom water interval
-              if (_selectedWater == localizations.custom) ...[
+              if (_selectedWater == "Custom") ...[
                 const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     localizations.wateringIntervalDays,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: seaGreen, // Green color for label
                     ),

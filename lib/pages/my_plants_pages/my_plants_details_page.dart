@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_friends/pages/HelpWithLocalization.dart';
 
 import '../../themes/colors.dart';
 import '../../widgets/custom_button_outlined_small.dart';
@@ -110,7 +111,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                 try {
                   await CalenderFunctions().deleteAllEventsForPlant(widget.plant.key!);
 
-                  if (widget.plant.plantData?.water == localizations.custom) {
+                  if (widget.plant.plantData?.water == "Custom") {
                     await CalenderFunctions().createNewEventsWateringCustom(
                       widget.plant.key!,
                       widget.plant.plantData?.name ?? 'N/A',
@@ -454,7 +455,10 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
               child: CustomInfoCard(
                 icon: Icons.water_drop,
                 title: localizations.water,
-                value: _getLocalizedPlantWater(widget.plant.plantData!.water, localizations),
+                value: HelpWithLocalization.getLocalizedWater(
+                  widget.plant.plantData?.water ?? 'N/A', // Fallback auf 'Medium' oder was du bevorzugst
+                  localizations,
+                ),
               ),
             ),
             const SizedBox(width: 16),
@@ -463,7 +467,7 @@ class _MyPlantsDetailsPage extends State<MyPlantsDetailsPage> {
                 icon: Icons.water_drop_outlined,
                 title: localizations.wateringInterval,
                 value: (widget.plant.plantData != null)
-                    ? (widget.plant.plantData!.water == localizations.custom
+                    ? (widget.plant.plantData!.water == 'Custom'
                     ? (widget.plant.plantData!.customWaterInterval != null
                     ? '${widget.plant.plantData!.customWaterInterval} ${localizations.days}'
                     : 'N/A')

@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../widgets/custom_snackbar.dart';
+import '../../HelpWithLocalization.dart';
 import '../../calendar_pages/calendar_functions.dart';
 import '../other/plant.dart';
 
@@ -92,8 +93,8 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
   void initState() {
     super.initState();
 
+    String? currentUserId = _getUserId();
 
-    String? currentUserId = _getUserId(); // Aktuelle UserID holen
     _plantSubscription = dbRef
         .child("Plants")
         .onValue
@@ -103,29 +104,35 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
 
       if (data != null) {
         data.forEach((key, value) {
-          PlantData plantData = PlantData.fromJSON(
-              value as Map<dynamic, dynamic>);
-          // Hier prüfen, ob die user_id mit der aktuellen UserID übereinstimmt
+          PlantData plantData = PlantData.fromJSON(value as Map<dynamic, dynamic>);
           if (plantData.userId == currentUserId) {
             updatedPlantList.add(Plant(key: key, plantData: plantData));
           }
         });
       }
-      _selectedLightRequirement = lightRequirements.contains(widget.plant['light'])
-          ? widget.plant['light']
-          : null;
-      _selectedWaterRequirement = waterRequirements.contains(widget.plant['water'])
-          ? widget.plant['water']
-          : null;
-      _selectedDifficulty = difficulties.contains(widget.plant['difficulty'])
-          ? widget.plant['difficulty']
-          : null;
-      _selectedPlantType = plantTypes.contains(widget.plant['type'])
-          ? widget.plant['type']
-          : null;
+      if (mounted) {
+        setState(() {
+          _selectedLightRequirement = lightRequirements.contains(widget.plant['light'])
+              ? widget.plant['light']
+              : null;
+
+          _selectedWaterRequirement = waterRequirements.contains(widget.plant['water'])
+              ? widget.plant['water']
+              : null;
+
+          _selectedDifficulty = difficulties.contains(widget.plant['difficulty'])
+              ? widget.plant['difficulty']
+              : null;
+
+          _selectedPlantType = plantTypes.contains(widget.plant['type'])
+              ? widget.plant['type']
+              : null;
+        });
+      }
 
     });
   }
+
 
   Future<void> _selectDate(BuildContext context) async {
     final theme = Theme.of(context);
@@ -487,26 +494,27 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                 const SizedBox(height: 20),
                 // Dropdown Menu für Pflanzenart
                 DropdownButtonFormField<String>(
-                  value: widget.plant['type'],
+                  value: _selectedPlantType,
                   hint: Text(
                     localizations.selectPlantType,
                     style: TextStyle(
-                        color: isDarkMode ? Colors.grey : Colors.black),
+                      color: isDarkMode ? Colors.grey : Colors.black,
+                    ),
                   ),
                   items: plantTypes.map((String type) {
                     return DropdownMenuItem<String>(
                       value: type,
                       child: Text(
-                        type,
+                        HelpWithLocalization.getLocalizedPlantType(type, localizations),
                         style: TextStyle(
-                            color: isDarkMode ? Colors.white : Colors.black),
+                          color: isDarkMode ? Colors.white : Colors.black,
+                        ),
                       ),
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedPlantType = newValue ??
-                          plantTypes[0]; // Set default value if null
+                      _selectedPlantType = newValue ?? plantTypes[0];
                     });
                   },
                   decoration: InputDecoration(
@@ -521,6 +529,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 15),
 /*
                 DropdownButtonFormField<String>(
@@ -561,7 +570,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
 */
                 // Dropdown Menu für Lichtanforderungen
                 DropdownButtonFormField<String>(
-                  value: widget.plant['light'],
+                  value: _selectedLightRequirement, // <-- Nutze den State
                   hint: Text(
                     localizations.selectLightRequirement,
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
@@ -570,14 +579,14 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     return DropdownMenuItem<String>(
                       value: light,
                       child: Text(
-                        light,
+                        HelpWithLocalization.getLocalizedLight(light, localizations), // Optional: Lokalisierung
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedLightRequirement = newValue!;
+                      _selectedLightRequirement = newValue; // Direkt updaten, null ist auch erlaubt
                     });
                   },
                   decoration: InputDecoration(
@@ -592,11 +601,12 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 15),
 
                 // Dropdown Menu für Wasseranforderungen
                 DropdownButtonFormField<String>(
-                  value: _isCustomWaterInterval ? localizations.custom : widget.plant['water'],
+                  value: _selectedWaterRequirement,  // <- Nur noch der State-Wert
                   hint: Text(
                     localizations.selectWaterRequirement,
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
@@ -606,7 +616,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                       return DropdownMenuItem<String>(
                         value: water,
                         child: Text(
-                          water,
+                          HelpWithLocalization.getLocalizedWater(water, localizations), // Lokalisierung, falls nötig
                           style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                         ),
                       );
@@ -623,7 +633,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     setState(() {
                       if (newValue == localizations.custom) {
                         _isCustomWaterInterval = true;
-                        _selectedWaterRequirement = localizations.custom;
+                        _selectedWaterRequirement = localizations.custom; // Sicherstellen, dass auch State gesetzt wird
                       } else {
                         _isCustomWaterInterval = false;
                         _selectedWaterRequirement = newValue;
@@ -642,6 +652,7 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                     ),
                   ),
                 ),
+
                 if (_isCustomWaterInterval)
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -699,6 +710,11 @@ class _AddNewPlantWithPrefilledDataState extends State<AddNewPlantWithPrefilledD
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
+                            // Lade die englischen Strings direkt am Anfang
+                            _selectedPlantType = HelpWithLocalization.getEnglishPlantType(_selectedPlantType!, localizations);
+                            _selectedLightRequirement = HelpWithLocalization.getEnglishLight(_selectedLightRequirement!, localizations);
+                            _selectedWaterRequirement = HelpWithLocalization.getEnglishWater(_selectedWaterRequirement!, localizations);
+
                             if (_edtNameController.text.isEmpty ||
                                 _edtScienceNameController.text.isEmpty ||
                                 _edtDateController.text.isEmpty ||

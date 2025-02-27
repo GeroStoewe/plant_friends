@@ -343,7 +343,15 @@ class CalenderFunctions {
       return;
     }
 
+    int eventCount = 0;
+    const int maxEvents = 180;
+
     while (currentDate.isBefore(endDate)) {
+      if (eventCount >= maxEvents) {
+        print('Event limit of $maxEvents reached. No further events will be created.');
+        break;
+      }
+
       // Determine the season for the current date
       String season = _getCurrentSeason(currentDate);
 
@@ -358,12 +366,19 @@ class CalenderFunctions {
         'user_id': userId, // Aktuelle User-ID speichern
         'date': Timestamp.fromDate(currentDate),
       };
-      await firestore.collection('events').add(event);
 
-      // Move to the next event date
+      await firestore.collection('events').add(event);
+      print('Created Event: $event');
+
+      eventCount++; // Zähler erhöhen
+
+      // Zum nächsten Datum springen
       currentDate = currentDate.add(Duration(days: dayInterval));
     }
+
+    print('Total events created: $eventCount');
   }
+
 
   Future<void> deleteAllEventsForPlant(String plantID) async {
     final firestore = FirebaseFirestore.instance;

@@ -68,13 +68,6 @@ class QuizFunctions {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Image.asset(
-                    'lib/images/welcome/plantiesWallpaper.jpg',
-                    height: 130,
-                    width: 310,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(height: 20),
                   Text(
                     '${groups['message']}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

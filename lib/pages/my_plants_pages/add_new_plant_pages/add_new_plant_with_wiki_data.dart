@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../themes/colors.dart';
 import '../../../widgets/custom_button_outlined_small.dart';
+import '../../../widgets/custom_snackbar.dart';
 import '../../wiki_pages/other/wiki_new_plant_request_form.dart';
 import '../../wiki_pages/wiki_plant_details_page.dart';
 
@@ -36,42 +37,55 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
     );
 
     try {
+      final apiKey = '2b10i3KvRsGFF7xGiCaTQRWe';
+      final project = 'all';
+      final url = Uri.parse(
+        'https://my-api.plantnet.org/v2/identify/$project?api-key=$apiKey',
+      );
 
-    final apiKey = '2b10i3KvRsGFF7xGiCaTQRWe';
-    final project = 'all';
-    final url = Uri.parse(
-      'https://my-api.plantnet.org/v2/identify/$project?api-key=$apiKey',
-    );
+      final request = http.MultipartRequest('POST', url)
+        ..files.add(await http.MultipartFile.fromPath('images', imagePath));
 
-    final request = http.MultipartRequest('POST', url)
-      ..files.add(await http.MultipartFile.fromPath('images', imagePath));
+      final response = await request.send();
 
-    final response = await request.send();
+      if (response.statusCode == 200) {
+        final responseData = await response.stream.bytesToString();
+        final data = json.decode(responseData);
 
-    if (response.statusCode == 200) {
-      final responseData = await response.stream.bytesToString();
-      final data = json.decode(responseData);
+        if (data['results'] == null || data['results'].isEmpty) {
+          throw Exception('Keine Pflanze gefunden.');
+        }
 
-      final identifiedPlant = data['results'][0]['species']['scientificName'] ?? 'Unknown Plant';
+        final identifiedPlant = data['results'][0]['species']['scientificName'] ?? 'Unknown Plant';
 
-      setState(() {
-        _identifiedPlant = identifiedPlant;
-        searchController.text = identifiedPlant.split(' ')[0]; // Automatisch in die Suchzeile einfügen
-      });
+        setState(() {
+          _identifiedPlant = identifiedPlant;
+          searchController.text = identifiedPlant.split(' ')[0]; // Automatisch in die Suchzeile einfügen
+        });
 
-      print('Plant identified: $data');
-    } else {
-      final errorData = await response.stream.bytesToString();
-      print('Error by plant identification: ${response.statusCode}');
-      print('Error Details: $errorData');
+        print('Plant identified: $data');
+
+        CustomSnackbar(context).showMessage(
+          'Plant successfully identified.',
+          MessageType.success,
+        );
+      } else {
+        throw Exception('No plant could be identified.');
+      }
+    } catch (e) {
+      CustomSnackbar(context).showMessage(
+        e.toString(),
+        MessageType.error,
+      );
+    } finally {
+      // Ladebalken entfernen
+      if (Navigator.canPop(context)) {
+        Navigator.of(context).pop();
+      }
     }
-  } catch (e) {
-  print('Error during identification: $e');
-  } finally {
-  // Entferne den Ladebalken
-  Navigator.of(context).pop();
   }
-}
+
+
 
   Future<void> _pickImage(BuildContext context) async {
     File? _plantImage;
@@ -203,7 +217,6 @@ class _AddNewPlantWithWikiState extends State<AddNewPlantWithWiki> {
             ),
             onPressed: () async {
               await _pickImage(context);
-              print('Plant Recognition AI button pressed');
             },
           ),
         ],

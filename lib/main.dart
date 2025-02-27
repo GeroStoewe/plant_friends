@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:plant_friends/pages/calendar_pages/calendar_page.dart';
 import 'package:plant_friends/pages/my_plants_pages/my_plants_page.dart';
+import 'package:plant_friends/pages/profile_pages/other/locale_provider.dart';
 import 'package:plant_friends/pages/profile_pages/profile_page.dart';
 import 'package:plant_friends/pages/welcome_pages/test_auth_page.dart';
 import 'package:plant_friends/pages/wiki_pages/wiki_page.dart';
@@ -25,8 +26,11 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
     await FirebaseApi().initNotifications();
 
-  runApp(ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider())
+      ],
       child: const MyApp()
   )
   );
@@ -39,6 +43,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp(
       title: 'Plant Friends',
@@ -47,6 +52,7 @@ class MyApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
       supportedLocales: L10n.all,
+      locale: localeProvider.locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

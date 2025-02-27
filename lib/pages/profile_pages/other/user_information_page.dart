@@ -147,6 +147,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
         children: [
           RefreshIndicator(
             onRefresh: loadUserData,
+            color: seaGreen,
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Container(

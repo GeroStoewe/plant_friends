@@ -68,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "calendar": MessageLookupByLibrary.simpleMessage("Kalender"),
     "camera": MessageLookupByLibrary.simpleMessage("Kamera"),
     "cancel": MessageLookupByLibrary.simpleMessage("Abbrechen"),
+    "changeLanguage": MessageLookupByLibrary.simpleMessage("Sprache ändern"),
     "changeYour": MessageLookupByLibrary.simpleMessage("Ändere dein(e) "),
     "chooseImageSource": MessageLookupByLibrary.simpleMessage(
       "Bildquelle auswählen",

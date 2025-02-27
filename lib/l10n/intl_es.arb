@@ -214,5 +214,6 @@
   "emailProfile": "Correo electrónico",
   "userId": "ID de usuario",
   "joinedAt": "Registrado en",
-  "deleteAccount": "Eliminar cuenta"
+  "deleteAccount": "Eliminar cuenta",
+  "changeLanguage": "Cambiar idioma"
 }

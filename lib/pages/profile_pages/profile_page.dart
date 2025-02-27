@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:plant_friends/pages/profile_pages/other/about_page.dart';
+import 'package:plant_friends/pages/profile_pages/other/change_language_page.dart';
 import 'package:plant_friends/pages/profile_pages/profile_page_edit.dart';
 import 'package:plant_friends/pages/profile_pages/other/user_information_page.dart';
 import 'package:plant_friends/pages/quiz_pages/quiz_test_page.dart';
@@ -234,6 +235,18 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                             text: localizations.userInformation,
                             icon: LineAwesomeIcons.user_circle,
+                          ),
+                          ProfileMenuButton(
+                            onTap: isLoading
+                                ? null
+                                : () async {
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChangeLanguagePage()));
+                            },
+                            text: localizations.changeLanguage,
+                            icon: Icons.language,
                           ),
                           ProfileMenuButton(
                             onTap: isLoading

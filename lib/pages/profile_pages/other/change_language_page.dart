@@ -143,6 +143,13 @@ class _ChangeLanguagePageState extends State<ChangeLanguagePage> {
                           onTap: () => changeLanguage('es'),
                         ),
                       ),
+                      Expanded(
+                        child: CustomCardButton(
+                          image: Image.asset("lib/images/profile/turkey.png"),
+                          text: "Türkçe",
+                          onTap: () => changeLanguage('tr'),
+                        ),
+                      ),
                     ],
                   )
         ],

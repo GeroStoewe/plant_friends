@@ -13,7 +13,14 @@ class QuizFunctions {
     overlayEntry?.remove();
     overlayEntry = null;
     isQuizActive = false; // Quiz wird geschlossen, kann wieder gestartet werden
+
+    // Zurücksetzen der Quiz-Werte
+    currentQuestionIndex = 0;
+    careScore = 0;
+    environmentScore = 0;
+    userAnswers.clear();
   }
+
 
   bool hasPets() {
     if (userAnswers.isNotEmpty && userAnswers.length == questions.length) {
@@ -61,13 +68,6 @@ class QuizFunctions {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Image.asset(
-                    'lib/images/welcome/plantiesWallpaper.jpg',
-                    height: 130,
-                    width: 310,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(height: 20),
                   Text(
                     '${groups['message']}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -104,17 +104,18 @@ class QuizFunctions {
   void checkAnswer(int carePoints, int environmentPoints, BuildContext context, OverlayState overlayState, int answerIndex) {
     careScore += carePoints;
     environmentScore += environmentPoints;
-    userAnswers.add(answerIndex); // Antworten speichern
+    userAnswers.add(answerIndex); // Antwort speichern
 
-    closeQuiz();
+    overlayEntry?.remove(); // Entfernt nur das aktuelle Overlay (nicht das ganze Quiz)
 
     if (currentQuestionIndex < questions.length - 1) {
       currentQuestionIndex++;
-      showQuestion(context, overlayState); // Zeigt nächste Frage
+      showQuestion(context, overlayState); // Zeigt nächste Frage an
     } else {
-      showResult(context, overlayState); // Zeigt Ergebnis, wenn alle Fragen beantwortet wurden
+      showResult(context, overlayState); // Zeigt das Ergebnis, wenn alle Fragen beantwortet wurden
     }
   }
+
 
   void showQuestion(BuildContext context, OverlayState overlayState) {
     isQuizActive = true; // Quiz ist aktiv, Button sperren
@@ -123,63 +124,76 @@ class QuizFunctions {
       builder: (context) {
         double textScaleFactor = MediaQuery.of(context).size.width / 375; // Dynamische Schriftgröße basierend auf Bildschirmgröße
 
-        return Positioned(
-          bottom: 50.0,
-          left: 50.0,
-          right: 50.0,
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              padding: EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    questions[currentQuestionIndex].question,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontSize: 20 * textScaleFactor,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Column(
-                    children: List.generate(questions[currentQuestionIndex].answers.length, (index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            checkAnswer(
-                              questions[currentQuestionIndex].carePoints[index],
-                              questions[currentQuestionIndex].environmentPoints[index],
-                              context,
-                              overlayState,
-                              index,
-                            );
-                          },
-                          child: Text(
-                            questions[currentQuestionIndex].answers[index],
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: 16 * textScaleFactor, // Dynamische Schriftgröße
+        return GestureDetector(
+          onTap: () {
+            closeQuiz(); // Schließt das Quiz, wenn außerhalb getippt wird
+          },
+          behavior: HitTestBehavior.opaque, // Erlaubt das Erkennen von Taps auf leere Flächen
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 50.0,
+                left: 50.0,
+                right: 50.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: GestureDetector(
+                    onTap: () {}, // Verhindert, dass der innere Container das Quiz schließt
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(2, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            questions[currentQuestionIndex].question,
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontSize: 20 * textScaleFactor,
                             ),
                           ),
-                        ),
-                      );
-                    }),
+                          SizedBox(height: 20),
+                          Column(
+                            children: List.generate(questions[currentQuestionIndex].answers.length, (index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    checkAnswer(
+                                      questions[currentQuestionIndex].carePoints[index],
+                                      questions[currentQuestionIndex].environmentPoints[index],
+                                      context,
+                                      overlayState,
+                                      index,
+                                    );
+                                  },
+                                  child: Text(
+                                    questions[currentQuestionIndex].answers[index],
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      fontSize: 16 * textScaleFactor, // Dynamische Schriftgröße
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         );
       },
@@ -187,4 +201,5 @@ class QuizFunctions {
 
     overlayState.insert(overlayEntry!);
   }
+
 }

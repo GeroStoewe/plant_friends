@@ -39,28 +39,35 @@ follow these steps:
 
 Plant Friends is a Flutter-based mobile app developed to help users manage their plants
 and improve plant care. The app offers a user-friendly interface where users can add,
-track, and receive reminders for their plants’ watering schedules and care needs.
+track, and receive reminders for their plants’ watering schedules.
 It aims to simplify plant care for both beginners and experienced plant enthusiasts.
-Additionally, the app features a plant wiki, and plant care suggestions,
-such as light and water needs tailored to each plant type. Throughout the development process,
-the group gained hands-on experience with Flutter, Dart programming language, working with
-state management, and backend services (i.e. Firebase).
+Additionally, the app features a plant wiki, plant suggestions via a quiz and a plant 
+recognition AI.
+Throughout the development process, the group gained hands-on experience with Flutter, 
+Dart programming language, working with state management, and backend services (i.e. Firebase).
 
 
 ## 📱 Features Overview
 
 The key features of the Plant Friends app include:
 
-| Feature                  | Description                                                                                        |
-|--------------------------|----------------------------------------------------------------------------------------------------|
-| 🌿 Add Plant             | Allows users to add a new plant by providing its name, scientific name, and photo                  |
-| ⏰ Plant Care Reminders   | Notifies users when their plants need watering                                      |
-| 📚 Plant Wiki            | Includes a library of popular houseplants with detailed care instructions                          |
-| 📅 Watering Log          | Tracks watering history for each plant on Calendar Page                                            |
-| 👤 User Profiles         | Users can create profiles and sync their plant data across devices using Firebase                  |
-| 🔍 Search Plants         | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page   |
-| 🌱 Plant Quiz            | Asks questions about room conditions of user and recommends the best plants based on user answers  |
-| 🌞🌚 Light and Dark Mode | Offers both light and dark themes for a better user experience                                     |
+| Feature                        | Description                                                                                        |
+|--------------------------------|----------------------------------------------------------------------------------------------------|
+| 🌿 Add Plant                   | Allows users to add a new plant by providing its name, scientific name, and photo.                 |
+| ⏰ Plant Care Reminders         | Notifies users when their plants need watering.                                                    |
+| 📚 Plant Wiki                  | Includes a library of popular houseplants with detailed care instructions.                         |
+| 📅 Watering Log                | Tracks watering history for each plant on Calendar Page.                                           |
+| 👤 User Profiles               | Users can create profiles and sync their plant data across devices using Firebase.                 |
+| 🔍 Search Plants               | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page.  |
+| 🌱 Plant Quiz                  | Asks questions about room conditions of user and recommends the best plants based on user answers. |
+| 🌞🌚 Light and Dark Mode       | Offers both light and dark themes for a better user experience.                                    |
+| 🔍 Plant recognition AI        | Can identify plants from photos.                                                                   |
+| 🗣️ Different language options | Options: English, German, Turkish, Spanish, Italian, French                                        |
+| 📖️ App Tutorial               | Offers an app tutorial after first login.                                                          |
+
+
+
+
 
 
 ## 🏗️ Project Structure
@@ -71,43 +78,50 @@ lib/
 
 │── main.dart 
                
-│── authentication/  
-          
-│── calendar/
+│── firebase/
 
 │── fonts/
 
+│── images/
+
 │── pages/
 
-│── plants/
-
-│── plantWiki/
-
-│── profileImages/
-
-│── quiz/
-
-│── services/
-                 
 │── themes/
 
 │── widgets/
 
 
+
+## 🛠️ Dependencies Overview
 ## 🛠️ Dependencies Overview
 
 | Dependency                     | Description                                      | Why is it necessary?                                      |
 |--------------------------------|--------------------------------------------------|-----------------------------------------------------------|
-| 🔥 `firebase_core`             | Integrates the Firebase SDK                      | Enables cloud data storage and authentication             |
-| 🔐 `firebase_auth`             | Allows user authentication                       | Enables users to sign in and sync data                    |
-| 📦 `cloud_firestore`           | Cloud-based NoSQL database                       | Stores and syncs plant data in real-time                  |
-| 📷 `firebase_storage`          | Enables cloud storage for media files            | Stores and retrieves plant photos from the cloud          |
+| 🔥 firebase_core              | Integrates the Firebase SDK                     | Enables cloud data storage and authentication            |
+| 🔐 firebase_auth              | Allows user authentication                      | Enables users to sign in and sync data                   |
+| 📦 cloud_firestore            | Cloud-based NoSQL database                      | Stores and syncs plant data in real-time                 |
+| 📷 firebase_storage           | Enables cloud storage for media files           | Stores and retrieves plant photos from the cloud         |
+| 🔄 firebase_database          | Real-time database service                      | Allows real-time syncing of structured data              |
+| 🔑 google_sign_in             | Google authentication support                   | Enables sign-in with Google accounts                     |
+| 🎨 line_awesome_flutter       | Icon library for Flutter                        | Provides stylish icons for UI                            |
+| 💾 shared_preferences         | Persistent key-value storage                    | Saves user preferences locally                           |
+| ⚙️ provider                  | State management solution                       | Manages app-wide state efficiently                      |
+| 🌍 intl                       | Internationalization package                    | Supports date formatting and localization                |
+| 📅 table_calendar             | Calendar widget for Flutter                     | Displays and manages plant care schedules                |
+| 📷 image_picker               | Select images from gallery or camera           | Allows users to upload plant photos                     |
+| 🔐 permission_handler         | Handles app permissions                         | Manages permissions for accessing device features        |
+| 🔗 http                       | HTTP client for Dart                            | Enables network requests for fetching data               |
+| 📌 curved_labeled_navigation_bar | Navigation bar package                     | Provides a customizable bottom navigation bar           |
+| 🎨 line_icons                 | Another icon library for Flutter                | Enhances UI with additional icon styles                 |
+| 📱 fluentui_system_icons      | Fluent UI icons from Microsoft                  | Provides modern and sleek UI icons                      |
+| 🔔 firebase_messaging         | Firebase push notifications                     | Enables real-time notifications                         |
+| 🔠 auto_size_text             | Auto-sizing text widget                         | Adjusts text size dynamically                           |
 
 
 ## 🧪 Testing
 
 Due to time constraints during the project development phase, comprehensive tests have not been
-implemented in this app.
+implemented in this app. We used exploratory testing to ensure the usability.
 
 
 ## 📸 Sample of Views

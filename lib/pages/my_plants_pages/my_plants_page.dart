@@ -353,23 +353,27 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
             child: filteredPlantList.isEmpty
                 ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-                  Image.asset(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
                     'lib/images/my_plants/plant_not_found.png',
                     width: 150,
                     height: 150,
                     fit: BoxFit.contain,
-                    ),
-                    const SizedBox(height: 16),
-                Text(
-                localizations.noPlantsFound,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: isDarkMode ? Colors.white : Colors.black,
-                  fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
-           )
+                const SizedBox(height: 16),
+                Text(
+                  localizations.noPlantsFound,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+
+            )
 
                 : ListView.builder(
               itemCount: filteredPlantList.length,

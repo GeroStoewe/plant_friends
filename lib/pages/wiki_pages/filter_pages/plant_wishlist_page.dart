@@ -102,22 +102,26 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                    localizations.wishlistEmpty,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
+                      localizations.wishlistEmpty,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Image.asset(
-                    'lib/images/wiki/category/wish-list.png',
-                    width: 300,
-                    height: 300,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 16),
-                ])) : ListView(
+                    const SizedBox(height: 16),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16), // Abrundung der Ecken
+                      child: Image.asset(
+                        'lib/images/wiki/category/wish-list.png',
+                        width: 300,
+                        height: 300,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ]
+              )) : ListView(
           children: wishlistPlants.map((plant) {
           return Card(
             elevation: 4,

@@ -13,6 +13,7 @@ import '../../themes/colors.dart';
 import '../../themes/theme_provider.dart';
 import '../../widgets/custom_profile_button.dart';
 import '../../widgets/custom_text_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum MessageType { success, error, info }
 
@@ -39,13 +40,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
   File? plantImage;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchJoinDate();
     loadCurrentUser();
   }
 
   Future<void> fetchJoinDate() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final prefs = await SharedPreferences.getInstance();
     String? dateString = prefs.getString('joinDate');
 
@@ -56,7 +59,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
     } else {
       setState(() {
-        joinDate = 'Not available';
+        joinDate = localizations.notAvailable;
       });
     }
   }
@@ -72,13 +75,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
-    bool isDarkMode = Theme
-        .of(context)
-        .brightness == Brightness.dark;
     final themeProvider = Provider.of<ThemeProvider>(context);
+    Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isLargePhone(BuildContext context) {
+      double width = MediaQuery.of(context).size.width;
+      return width > 400;
+    }
+    final localizations = AppLocalizations.of(context)!;
 
     return ScrollbarTheme(
         data: ScrollbarThemeData(
@@ -97,7 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     color: isDarkMode ? dmLightGrey : lmLightGrey),
               ),
               title: Text(
-                "Edit Profile",
+                localizations.editProfile,
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                   color: isDarkMode ? Colors.white : Colors.black,  // Dynamische Farbe für Dark und Light Mode
                 ),
@@ -106,7 +111,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 IconButton(
                     onPressed: isLoading ? null : themeProvider.toggleTheme,
                     color: isDarkMode ? Colors.white : Colors.black,  // Farbe des Icons dynamisch
-                    iconSize: 30,
+                    iconSize: 28 * textScaleFactor,
                     icon: Icon(
                         isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon)),
               ],
@@ -123,13 +128,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           padding: EdgeInsets.all(size.width * 0.05),
                           child: Column(
                               children: [
-                                const SizedBox(height: 25),
                                 GestureDetector(
                                   onTap: pickImage,
                                   child: Stack(children: [
                                     SizedBox(
-                                      width: 160,
-                                      height: 160,
+                                      width: isLargePhone(context) ? 160 : 110,
+                                      height: isLargePhone(context) ? 160 : 110,
                                       child: Container(
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
@@ -159,8 +163,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       bottom: 5,
                                       right: 5,
                                       child: Container(
-                                        width: 45,
-                                        height: 45,
+                                        width: isLargePhone(context) ? 45 : 35,
+                                        height: isLargePhone(context) ? 45 : 35,
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(30.0),
                                             color: isDarkMode
@@ -168,7 +172,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                                 : darkGreyGreen),
                                         child: Icon(
                                           LineAwesomeIcons.camera_solid,
-                                          size: 28.0,
+                                          size: 28.0 * textScaleFactor,
                                           color: isDarkMode ? Colors.black87 : Colors
                                               .white70,
                                         ),
@@ -176,7 +180,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     )
                                   ]),
                                 ),
-                                const SizedBox(height: 40),
+                                SizedBox(height: size.height * 0.05),
                                 Form(
                                   child: Column(
                                     children: [
@@ -184,14 +188,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         alignment: Alignment.centerLeft,
                                         child: RichText(
                                           text: TextSpan(
-                                            text: "Change Your ",
+                                            text: localizations.changeYour,
                                             style: Theme
                                                 .of(context)
                                                 .textTheme
-                                                .displayLarge,
+                                                .labelSmall,
                                             children: <TextSpan>[
                                               TextSpan(
-                                                text: "Full Name",
+                                                text: localizations.fullName,
                                                 style: TextStyle(
                                                   color: Theme
                                                       .of(context)
@@ -203,25 +207,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      SizedBox(height: size.height * 0.02),
                                       CustomTextField(
                                           controller: fullnameController,
                                           icon: Icons.person_outline_rounded,
-                                          hintText: "New Full Name",
+                                          hintText: localizations.newFullName,
                                           obscureText: false),
-                                      const SizedBox(height: 30),
+                                      SizedBox(height: size.height * 0.04),
                                       Container(
                                         alignment: Alignment.centerLeft,
                                         child: RichText(
                                           text: TextSpan(
-                                            text: "Change Your ",
+                                            text: localizations.changeYour,
                                             style: Theme
                                                 .of(context)
                                                 .textTheme
-                                                .displayLarge,
+                                                .labelSmall,
                                             children: <TextSpan>[
                                               TextSpan(
-                                                text: "Email Address",
+                                                text: localizations.email,
                                                 style: TextStyle(
                                                   color: Theme
                                                       .of(context)
@@ -233,17 +237,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      SizedBox(height: size.height * 0.02),
                                       CustomTextField(
                                           controller: usernameController,
                                           icon: Icons.alternate_email_rounded,
-                                          hintText: "New Email Address",
+                                          hintText: localizations.newEmail,
                                           obscureText: false),
-                                      const SizedBox(height: 15),
+                                      SizedBox(height: size.height * 0.025),
                                       CustomTextField(
                                         controller: currPasswordController,
                                         icon: Icons.lock_outline_rounded,
-                                        hintText: "Current Password",
+                                        hintText: localizations.currentPassword,
                                         obscureText: !isPasswordVisible,
                                         suffixIcon: IconButton(
                                           icon: Icon(
@@ -262,19 +266,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           },
                                         ),
                                       ),
-                                      const SizedBox(height: 30),
+                                      SizedBox(height: size.height * 0.04),
                                       Container(
                                         alignment: Alignment.centerLeft,
                                         child: RichText(
                                           text: TextSpan(
-                                            text: "Change Your ",
+                                            text: localizations.changeYour,
                                             style: Theme
                                                 .of(context)
                                                 .textTheme
-                                                .displayLarge,
+                                                .labelSmall,
                                             children: <TextSpan>[
                                               TextSpan(
-                                                text: "Password",
+                                                text: localizations.password,
                                                 style: TextStyle(
                                                   color: Theme
                                                       .of(context)
@@ -286,11 +290,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      SizedBox(height: size.height * 0.02),
                                       CustomTextField(
                                         controller: currPasswordController,
                                         icon: Icons.lock_outline_rounded,
-                                        hintText: "Current Password",
+                                        hintText: localizations.currentPassword,
                                         obscureText: !isPasswordVisible,
                                         suffixIcon: IconButton(
                                           icon: Icon(
@@ -309,11 +313,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           },
                                         ),
                                       ),
-                                      const SizedBox(height: 15),
+                                      SizedBox(height: size.height * 0.025),
                                       CustomTextField(
                                         controller: newPasswordController,
                                         icon: Icons.lock_outline_rounded,
-                                        hintText: "New Password",
+                                        hintText: localizations.newPassword,
                                         obscureText: !isPasswordVisible,
                                         suffixIcon: IconButton(
                                           icon: Icon(
@@ -332,20 +336,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           },
                                         ),
                                       ),
-                                      const SizedBox(height: 35),
+                                      SizedBox(height: size.height * 0.06),
                                       CustomProfileButton(
                                           onPressed: saveChanges,
-                                          width: 180,
-                                          height: 80,
-                                          text: "SAVE",
+                                          width: isLargePhone(context) ? 180 : 120,
+                                          height: isLargePhone(context) ? 80 : 50,
+                                          text: localizations.saveBig,
                                           color: Theme.of(context).primaryColor,
                                       ),
-                                      const SizedBox(height: 30),
+                                      SizedBox(height: size.height * 0.05),
                                       Text.rich(
                                           TextSpan(
-                                              text: "Joined: ",
+                                              text: localizations.joined,
                                               style: TextStyle(
-                                                  fontSize: 20,
+                                                  fontSize: 20 * textScaleFactor,
                                                   color: isDarkMode
                                                       ? dmLightGrey
                                                       : lmDarkGrey
@@ -354,7 +358,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                                 TextSpan(
                                                     text: joinDate,
                                                     style: TextStyle(
-                                                        fontSize: 22,
+                                                        fontSize: 22 * textScaleFactor,
                                                         color: Theme
                                                             .of(context)
                                                             .hintColor
@@ -397,6 +401,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> saveChanges() async {
+    final localizations = AppLocalizations.of(context)!;
+
     setState(() {
       isLoading = true;
     });
@@ -432,7 +438,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         if (fullnameController.text.isNotEmpty) {
           await user.updateDisplayName(fullnameController.text);
           showMessage(
-            "Your full name was changed successfully.",
+            localizations.fullNameChanged,
             MessageType.success,
           );
         }
@@ -443,7 +449,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           // Ensure that the current password field is filled
           if (currPasswordController.text.isEmpty) {
             showMessage(
-              "Please enter your password to change your email.",
+              localizations.enterPassword,
               MessageType.error,
             );
             setState(() {
@@ -463,7 +469,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
           // Notify the user to verify their email
           showMessage(
-            "A verification email has been sent to $updatedEmail. Please verify the email to complete the update.",
+            "${localizations.messageProfile1} $updatedEmail. ${localizations.messageProfile2}",
             MessageType.info,
           );
         }
@@ -473,7 +479,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           // Validate new password
           if (currPasswordController.text.isEmpty) {
             showMessage(
-              "Please enter a new password to change your current password.",
+              localizations.newPassword,
               MessageType.error,
             );
             setState(() {
@@ -484,7 +490,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
           if (currPasswordController.text == newPasswordController.text) {
             showMessage(
-              "You entered the same password!? The new password must be different from the current password.",
+              localizations.samePassword,
               MessageType.error,
             );
             setState(() {
@@ -498,7 +504,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           await user.updatePassword(newPasswordController.text);
 
           showMessage(
-            "Your password was changed successfully.",
+            localizations.passwordChanged,
             MessageType.success,
           );
         }
@@ -520,7 +526,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           });
         } else {
           showMessage(
-            "No changes made...",
+            localizations.noChanges,
             MessageType.info,
           );
           setState(() {
@@ -529,7 +535,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       } on FirebaseAuthException catch (e) {
         showMessage(
-          e.message ?? "An error occurred!",
+          e.message ?? localizations.errorOccurred,
           MessageType.error,
         );
         setState(() {
@@ -537,7 +543,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         });
       } catch (e) {
         showMessage(
-          "An error occurred while updating profile! Please contact the support for help.",
+          localizations.contactSupport,
           MessageType.error);
         setState(() {
           isLoading = false;
@@ -593,7 +599,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: Icon(
               iconClose,
               color: Colors.white,
-              size: 30,
+              size: 30 ,
             ),
           ),
         ],
@@ -611,6 +617,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
+    final localizations = AppLocalizations.of(context)!;
 
     final selectedSource = await showModalBottomSheet<ImageSource>(
         context: context,
@@ -623,8 +630,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Choose image source",
+                Text(
+                  localizations.chooseImageSource,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -636,12 +643,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   children: [
                     buildOptionCard(
                       icon: Icons.camera_alt_rounded,
-                      label: "Camera",
+                      label: localizations.camera,
                       onTap: () => Navigator.of(context).pop(ImageSource.camera),
                     ),
                     buildOptionCard(
                       icon: Icons.photo_library_rounded,
-                      label: "Gallery",
+                      label: localizations.gallery,
                       onTap: () => Navigator.of(context).pop(ImageSource.gallery),
                     ),
                   ],

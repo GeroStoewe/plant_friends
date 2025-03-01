@@ -9,6 +9,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../themes/colors.dart';
 import 'calendar_event_pages/calendar_event.dart';
 import 'calendar_event_pages/calendar_event_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -89,11 +90,12 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Calendar',
+          localizations.calendar,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: isDarkMode ? Colors.white : Colors.black,
@@ -106,8 +108,8 @@ class _CalendarPageState extends State<CalendarPage> {
           TableCalendar(
             eventLoader: _getEventsForTheDay,
             calendarFormat: _calendarFormat,
-            availableCalendarFormats: const {
-              CalendarFormat.month: 'Month',
+            availableCalendarFormats: {
+              CalendarFormat.month: localizations.month,
             },
             onFormatChanged: (format) {
               setState(() {
@@ -179,13 +181,13 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           Expanded(
             child: _selectedDay == null
-                ? const Padding(
+                ? Padding(
               padding: EdgeInsets.all(45.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Please select a date to see the events.",
+                    localizations.selectDateForEvents,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 16, fontStyle: FontStyle.italic),
@@ -200,13 +202,13 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             )
                 : _getEventsForTheDay(_selectedDay!).isEmpty
-                ? const Padding(
+                ? Padding(
               padding: EdgeInsets.all(45.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "All your plants are happy. \nThere is nothing for you to do on this day.",
+                    localizations.allPlantsHappy,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 16, fontStyle: FontStyle.italic),

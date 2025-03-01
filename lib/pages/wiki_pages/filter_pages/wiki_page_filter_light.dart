@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/card_filter.dart';
 import '../other/wiki_page_filter_result_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LightFilterPage extends StatelessWidget {
   const LightFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Plants by Light Needs',
+        title: Text(
+          localizations.byLightNeeds,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -25,7 +28,7 @@ class LightFilterPage extends StatelessWidget {
         ),
         children: [
           FilterCard(
-            title: 'Low Light',
+            title: localizations.lowLight,
             imagePath: 'lib/images/wiki/light/Wiki-Light-1.png',
             onTap: () => Navigator.push(
               context,
@@ -38,7 +41,7 @@ class LightFilterPage extends StatelessWidget {
             ),
           ),
           FilterCard(
-            title: 'Partial Shade',
+            title: localizations.partialShade,
             imagePath: 'lib/images/wiki/light/Wiki-Light-2.png',
             onTap: () => Navigator.push(
               context,
@@ -51,7 +54,7 @@ class LightFilterPage extends StatelessWidget {
             ),
           ),
           FilterCard(
-            title: 'Indirect Light',
+            title: localizations.indirectLight,
             imagePath: 'lib/images/wiki/light/Wiki-Light-3.png',
             onTap: () => Navigator.push(
               context,
@@ -64,7 +67,7 @@ class LightFilterPage extends StatelessWidget {
             ),
           ),
           FilterCard(
-            title: 'Direct Light',
+            title: localizations.directLight,
             imagePath: 'lib/images/wiki/light/Wiki-Light-4.png',
             onTap: () => Navigator.push(
               context,

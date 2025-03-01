@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +6,8 @@ import '../../themes/colors.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 import 'auth_page.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -26,7 +29,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: GestureDetector(
@@ -39,7 +44,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               children: [
                 SizedBox(
                   width: size.width,
-                  height: size.height * 0.45,
+                  height: size.height * 0.5,
                   child: Image.asset(
                     'lib/images/authentication/forgotpassword_wallpaper.jpeg',
                     fit: BoxFit.cover,
@@ -49,66 +54,76 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
             backButton(size, context),
             Positioned(
-              top: size.height * 0.42,
+              top: size.height * 0.4,
               child: Container(
                 width: size.width,
-                height: size.height * 0.58,
+                height: size.height * 0.6,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(height: 5),
-                        Text(
-                          "Reset your Password",
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineMedium,
+                  padding: EdgeInsets.all(size.width * 0.04),
+                  child: Column(
+                    children: [
+                      SizedBox(height: size.height * 0.0025),
+                      AutoSizeText(
+                        localizations.resetYourPassword,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontSize: 28 * textScaleFactor
                         ),
-                        const SizedBox(height: 40),
-                        CustomTextField(
-                          controller: usernameController,
-                          icon: Icons.alternate_email_rounded,
-                          hintText: "Please enter your Email Address",
-                          obscureText: false,
-                        ),
-                        const SizedBox(height: 30),
-                        CustomButton(
-                          onTap: resetPassword,
-                          text: "RESET PASSWORD",
-                        ),
-                        const SizedBox(height: 260),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AuthPage(),
+                        maxLines: 1,
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomTextField(
+                                controller: usernameController,
+                                icon: Icons.alternate_email_rounded,
+                                hintText: localizations.pleaseEnterEmail,
+                                obscureText: false,
                               ),
-                            );
-                          },
+                              SizedBox(height: size.height * 0.03),
+                              CustomButton(
+                                onTap: resetPassword,
+                                text: localizations.resetPasswordButton,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AuthPage(),
+                            ),
+                          );
+                        },
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
                           child: Center(
                             child: Text.rich(
                               TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: "Already have an Account? ",
+                                    text: localizations.alreadyQuestion,
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16 * textScaleFactor,
                                       color: isDarkMode ? dmLightGrey : lmDarkGrey,
                                     ),
                                   ),
                                   TextSpan(
-                                    text: "Login",
+                                    text: localizations.loginSmall,
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 18 * textScaleFactor,
                                       color: Theme.of(context).hintColor,
                                     ),
                                   ),
@@ -117,8 +132,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -130,16 +145,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future resetPassword() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final emailRegex = RegExp(
       r'^[^@]+@[^@]+\.[^@]+$',
       caseSensitive: false,
     );
 
     if (usernameController.text.isEmpty) {
-      showErrorMessage('Email address cannot be empty');
+      showErrorMessage(localizations.emailEmptyErrorMessage);
       return;
     } else if (!emailRegex.hasMatch(usernameController.text)) {
-      showErrorMessage('Invalid email address format');
+      showErrorMessage(localizations.emailInvalidErrorMessage);
       return;
     }
 
@@ -171,6 +188,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   void showErrorMessage(String message) {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (context) {
@@ -184,7 +203,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK", style: Theme.of(context).textTheme.displaySmall),
+              child: Text(localizations.ok, style: Theme.of(context).textTheme.displaySmall),
             ),
           ],
         );
@@ -196,11 +215,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Positioned(
       top: MediaQuery.of(context).padding.top, // Adjust for safe area
-      left: 20,
+      left: size.width * 0.075,
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(24),
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
         child: GestureDetector(

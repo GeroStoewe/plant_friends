@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/card_filter.dart';
 import '../other/wiki_page_filter_result_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WaterFilterPage extends StatelessWidget {
   const WaterFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Plants by Water Needs',
+        title: Text(
+          localizations.plantsByWaterNeeds,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -25,7 +28,7 @@ class WaterFilterPage extends StatelessWidget {
         ),
         children: [
           FilterCard(
-            title:'Low',
+            title: localizations.low,
             imagePath: 'lib/images/wiki/water/Wiki-Water-1.png',
             onTap:
                 () => Navigator.push(
@@ -36,7 +39,7 @@ class WaterFilterPage extends StatelessWidget {
             ),
           ),
           FilterCard(
-            title: 'Medium',
+            title: localizations.medium,
             imagePath: 'lib/images/wiki/water/Wiki-Water-2.png',
             onTap:
                 () => Navigator.push(
@@ -47,7 +50,7 @@ class WaterFilterPage extends StatelessWidget {
             ),
           ),
           FilterCard(
-            title: 'High',
+            title: localizations.high,
             imagePath: 'lib/images/wiki/water/Wiki-Water-3.png',
             onTap:
                 () => Navigator.push(

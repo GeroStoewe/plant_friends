@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,8 @@ import '../../../themes/colors.dart';
 import '../../../widgets/custom_button_outlined_small.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../wiki_plant_details_page.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlantFilterResultPage extends StatefulWidget {
   final String filterType;
@@ -40,8 +43,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchAndFilterPlantData();
     searchController.addListener(() {
       updateSearch(searchController.text);
@@ -51,6 +54,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
   }
 
   void _fetchWishlist() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) return;
 
@@ -64,43 +69,47 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         final data = snapshot.value as Map<dynamic, dynamic>;
         final wishlistData = data.keys.cast<String>().toSet(); // Extract plant names from the map
 
-        setState(() {
-          wishlist = wishlistData; // Update the local wishlist state
-        });
+        if (mounted) {
+          setState(() {
+            wishlist = wishlistData; // Update the local wishlist state
+          });
+        }
       }
     } catch (e) {
-      _showSnackbar(context, 'Failed to fetch wishlist: ${e.toString()}');
+      _showSnackbar(context, '${localizations.failedToFetchWishlist} ${e.toString()}');
     }
   }
+
+  StreamSubscription? _wishlistSubscription;
 
   void _listenForWishlistUpdates() {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) return;
 
-    dbRef
-        .child("Wishlists")
-        .child(userId)
-        .onValue
-        .listen((event) {
+    _wishlistSubscription = dbRef.child("Wishlists").child(userId).onValue.listen((event) {
       final data = event.snapshot.value;
       if (data != null) {
         final wishlistData = (data as Map<dynamic, dynamic>).keys.cast<String>().toSet();
-
-        setState(() {
-          wishlist = wishlistData; // Update the local wishlist state
-        });
+        if (mounted) {
+          setState(() {
+            wishlist = wishlistData;
+          });
+        }
       }
     });
   }
 
   @override
   void dispose() {
+    _wishlistSubscription?.cancel();  // Wichtig: Listener beenden!
     searchController.dispose();
     super.dispose();
   }
 
   // Fetch plant data from the API
   Future<void> fetchAndFilterPlantData() async {
+    final localizations = AppLocalizations.of(context)!;
+
     final response = await http.get(Uri.parse('https://laura194.github.io/plant_api/plantData.json'));
 
     if (response.statusCode == 200) {
@@ -127,7 +136,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         isLoading = false;
       });
     } else {
-      throw Exception('Failed to load plant data');
+      throw Exception(localizations.failedToLoadData);
     }
   }
 
@@ -146,6 +155,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
 
   // Helper function to show a Snackbar
   void _showSnackbar(BuildContext context, String message, {VoidCallback? onUndo}) {
+    final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
@@ -158,7 +168,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         action: onUndo != null
             ? SnackBarAction(
-          label: 'Undo',
+          label: localizations.undo,
           backgroundColor: Colors.green,
           textColor: Colors.white,
           onPressed: onUndo,
@@ -172,6 +182,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
 
 // Toggle a plant in the wishlist with Snackbar notification
   void toggleWishlist(String plantName) {
+    final localizations = AppLocalizations.of(context)!;
     final isAdding = !wishlist.contains(plantName);
 
     setState(() {
@@ -185,7 +196,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
     // Show Snackbar with undo option
     _showSnackbar(
       context,
-      isAdding ? '$plantName added to wishlist 🌱 ' : '$plantName removed from wishlist :(',
+      isAdding ? '$plantName ${localizations.addedToWishlist} 🌱 ' : '$plantName ${localizations.removedFromWishlist}',
       onUndo: () {
         setState(() {
           if (isAdding) {
@@ -203,6 +214,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
 
 // Sync wishlist with Firebase
   void _syncWishlistWithFirebase(String plantName, bool isAdding) async {
+    final localizations = AppLocalizations.of(context)!;
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) return;
 
@@ -222,7 +234,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
       }
     } catch (e) {
       // Handle errors (e.g., show an error Snackbar)
-      _showSnackbar(context, 'Failed to update wishlist: ${e.toString()}');
+      _showSnackbar(context, '${localizations.failedToUpdateWishlist} ${e.toString()}');
     }
   }
 
@@ -236,6 +248,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return ScrollbarTheme(
       data: ScrollbarThemeData(
         thumbColor: WidgetStateProperty.all(seaGreen), // Set scrollbar thumb color to green
@@ -243,10 +257,6 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            _toTitleCase('${widget.filterType}: ${widget.filterValue ?? ''}'), // Convert to title case
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           actions: [
         Padding(
@@ -258,8 +268,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
           color: Colors.red,
           size: 28.0,
         ),
-        label: const Text(
-          'Wishlist',
+        label: Text(
+          localizations.wishlistTitle,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -298,7 +308,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
               child: CustomTextField(
                 controller: searchController,
                 icon: Icons.search,
-                hintText: 'Search by name or scientific name',
+                hintText: localizations.searchByName,
                 obscureText: false,
               ),
             ),
@@ -308,8 +318,8 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'No plants match this filter.',
+                    Text(
+                      localizations.noPlantsMatch,
                       style: TextStyle(fontSize: 18),
                     ),
                     const SizedBox(height: 16),
@@ -318,7 +328,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5, // Set button width to 50% of screen width
                         child: CustomButtonOutlinedSmall(
-                          text: 'Request to Add a Plant',
+                          text: localizations.request,
                           onTap: () {
                             Navigator.push(
                               context,
@@ -338,7 +348,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                   itemCount: filteredPlantData.length,
                   itemBuilder: (context, index) {
                     final plant = filteredPlantData[index];
-                    final plantName = plant['name'] ?? 'No name';
+                    final plantName = plant['name'] ?? localizations.noName;
 
                     return ListTile(
                       leading: ClipRRect(
@@ -373,7 +383,7 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
                         )
                             : const Icon(Icons.image_not_supported),
                       ),
-                      title: Text(plant['name'] ?? 'No name'),
+                      title: Text(plant['name'] ?? localizations.noName),
                       subtitle: Text(
                         '${plant['scientifical_name'] ?? 'N/A'}',
                         style: const TextStyle(color: Colors.grey),

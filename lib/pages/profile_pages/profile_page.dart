@@ -6,15 +6,17 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:plant_friends/pages/profile_pages/other/about_page.dart';
+import 'package:plant_friends/pages/profile_pages/other/change_language_page.dart';
 import 'package:plant_friends/pages/profile_pages/profile_page_edit.dart';
 import 'package:plant_friends/pages/profile_pages/other/user_information_page.dart';
 import 'package:plant_friends/pages/quiz_pages/quiz_test_page.dart';
+import 'package:plant_friends/pages/tutorial_pages/tutorial_page.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/themes/theme_provider.dart';
 import 'package:plant_friends/widgets/custom_profile_button.dart';
 import 'package:plant_friends/widgets/profile_menu_button.dart';
 import 'package:provider/provider.dart';
-import 'package:plant_friends/pages/tutorial_pages/tutorial_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({
@@ -36,8 +38,8 @@ class _ProfilePageState extends State<ProfilePage> {
   ScrollController scrollController = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     loadUserData();
     scrollController.addListener(onScroll);
   }
@@ -49,6 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> loadUserData() async {
+    final localizations = AppLocalizations.of(context)!;
+
     setState(() {
       isLoading = true;
     });
@@ -63,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
         await Future.delayed(Duration(seconds: 1));
 
         setState(() {
-          displayName = user!.displayName ?? 'Anonymous';
+          displayName = user!.displayName ?? localizations.anonymous;
           email = user.email;
           photoURL = user.photoURL;
           isLoading = false;
@@ -81,16 +85,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     final themeProvider = Provider.of<ThemeProvider>(context);
+    Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    bool isLargePhone(BuildContext context) {
+      double width = MediaQuery.of(context).size.width;
+      return width > 400;
+    }
+    final localizations = AppLocalizations.of(context)!;
 
     return ScrollbarTheme(
       data: ScrollbarThemeData(
         thumbColor: WidgetStateProperty.all(seaGreen),
         // Set scrollbar thumb color to green
         trackColor:
-            WidgetStateProperty.all(Colors.grey.shade300), // Set track color
+        WidgetStateProperty.all(Colors.grey.shade300), // Set track color
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -99,20 +109,20 @@ class _ProfilePageState extends State<ProfilePage> {
           elevation: 0,
           // Entfernt den Schatten der AppBar
           title: Text(
-            "Profile",
+            localizations.profile,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: isDarkMode
-                      ? Colors.white
-                      : Colors
-                          .black, // Dynamische Farbe für Dark und Light Mode
-                ),
+              color: isDarkMode
+                  ? Colors.white
+                  : Colors
+                  .black, // Dynamische Farbe für Dark und Light Mode
+            ),
           ),
           actions: [
             IconButton(
                 onPressed: isLoading ? null : themeProvider.toggleTheme,
                 color: isDarkMode ? Colors.white : Colors.black,
                 // Farbe des Icons dynamisch
-                iconSize: 28,
+                iconSize: 28 * textScaleFactor,
                 icon: Icon(
                     isDarkMode ? LineAwesomeIcons.sun : LineAwesomeIcons.moon)),
           ],
@@ -120,29 +130,28 @@ class _ProfilePageState extends State<ProfilePage> {
         body: Stack(children: [
           RefreshIndicator(
             onRefresh: loadUserData,
+            color: seaGreen,
             child: Scrollbar(
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: Container(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
+                child: Column(
                     children: [
                       GestureDetector(
                         onTap: isLoading
                             ? null
                             : () async {
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => EditProfilePage()));
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfilePage()));
 
-                                loadUserData();
-                              },
+                          loadUserData();
+                        },
                         child: Stack(children: [
                           SizedBox(
-                            width: 120,
-                            height: 120,
+                            width: isLargePhone(context) ? 120 : 80,
+                            height: isLargePhone(context) ? 120 : 80,
                             child: Container(
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -155,12 +164,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 borderRadius: BorderRadius.circular(100.0),
                                 child: photoURL != null
                                     ? Image.network(
-                                        photoURL!,
-                                        // Show the network image if available
-                                        fit: BoxFit.cover,
-                                      )
+                                  photoURL!,
+                                  // Show the network image if available
+                                  fit: BoxFit.cover,
+                                )
                                     : Image.asset(
-                                        "lib/images/profile/1_plant_profile.jpg"), // Default image
+                                    "lib/images/profile/1_plant_profile.jpg"), // Default image
                               ),
                             ),
                           ),
@@ -168,129 +177,142 @@ class _ProfilePageState extends State<ProfilePage> {
                             bottom: 5,
                             right: 5,
                             child: Container(
-                              width: 35,
-                              height: 35,
+                              width: isLargePhone(context) ? 35 : 25,
+                              height: isLargePhone(context) ? 35 : 25,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30.0),
                                   color:
-                                      isDarkMode ? darkSeaGreen : darkGreyGreen),
+                                  isDarkMode ? darkSeaGreen : darkGreyGreen),
                               child: Icon(
                                 LineAwesomeIcons.pencil_alt_solid,
-                                size: 26.0,
+                                size: 24.0 * textScaleFactor,
                                 color:
-                                    isDarkMode ? Colors.black87 : Colors.white70,
+                                isDarkMode ? Colors.black87 : Colors.white70,
                               ),
                             ),
                           )
                         ]),
                       ),
-                      const SizedBox(height: 20),
-                      Text("$displayName",
-                          style: Theme.of(context).textTheme.headlineMedium),
-                      const SizedBox(height: 2),
-                      Text("$email",
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      const SizedBox(height: 25),
-                      CustomProfileButton(
-                          onPressed: isLoading
-                              ? null
-                              : () async {
+                      Padding(
+                          padding: isLargePhone(context) ? const EdgeInsets.all(20.0) : const EdgeInsets.all(15.0),
+                          child: Column(
+                            children: [
+                              Text("$displayName",
+                                  style: Theme.of(context).textTheme.headlineSmall),
+                              SizedBox(height: size.height * 0.0001),
+                              Text("$email",
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              SizedBox(height: size.height * 0.03),
+                              CustomProfileButton(
+                                  onPressed: isLoading
+                                      ? null
+                                      : () async {
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditProfilePage()));
+
+                                    loadUserData();
+                                  },
+                                  width: 160 * textScaleFactor,
+                                  height: 50 * textScaleFactor,
+                                  text: localizations.editProfile,
+                                  color: Theme.of(context).primaryColor),
+                              SizedBox(height: size.height * 0.025),
+                              Divider(
+                                  thickness: 0.5,
+                                  color: isDarkMode ? dmDarkGrey : lmLightGrey),
+
+                              // MENU
+                              ProfileMenuButton(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UserInformationPage()));
+                                },
+                                text: localizations.userInformation,
+                                icon: LineAwesomeIcons.user_circle,
+                              ),
+                              ProfileMenuButton(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChangeLanguagePage()));
+                                },
+                                text: localizations.changeLanguage,
+                                icon: Icons.language,
+                              ),
+                              ProfileMenuButton(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
                                   await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              EditProfilePage()));
+                                          const QuizTestPage()));
+                                },
+                                text: localizations.plantQuiz,
+                                icon: LineAwesomeIcons.question_circle,
+                              ),
+                              ProfileMenuButton(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const TutorialPage()));
+                                },
+                                text: localizations.tutorial,
+                                icon: LineAwesomeIcons.play_circle,
+                              ),
+                              SizedBox(height: size.height * 0.01),
+                              Divider(
+                                  thickness: 0.5,
+                                  color: isDarkMode ? dmDarkGrey : lmLightGrey),
+                              SizedBox(height: size.height * 0.005),
+                              ProfileMenuButton(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AboutPage()));
 
                                   loadUserData();
                                 },
-                          width: 140,
-                          height: 40,
-                          text: "Edit Profile",
-                          color: Theme.of(context).primaryColor),
-                      const SizedBox(height: 20),
-                      Divider(
-                          thickness: 0.5,
-                          color: isDarkMode ? dmDarkGrey : lmLightGrey),
-                      const SizedBox(height: 5),
-
-                      // MENU
-                      ProfileMenuButton(
-                        onTap: isLoading
-                            ? null
-                            : () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UserInformationPage()));
-                        },
-                        text: "User Information",
-                        icon: LineAwesomeIcons.user_circle,
-                      ),
-                      const SizedBox(height: 2),
-                      ProfileMenuButton(
-                        onTap: isLoading
-                            ? null
-                            : () async {
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const QuizTestPage()));
-                              },
-                        text: "Plant Quiz",
-                        icon: LineAwesomeIcons.question_circle,
-                      ),
-                      const SizedBox(height: 2),
-                      ProfileMenuButton(
-                        onTap: isLoading
-                            ? null
-                            : () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const TutorialPage()));
-                        },
-                        text: "App Tutorial",
-                        icon: LineAwesomeIcons.question_circle,
-                      ),
-                      const SizedBox(height: 5),
-                      Divider(
-                          thickness: 0.5,
-                          color: isDarkMode ? dmDarkGrey : lmLightGrey),
-                      const SizedBox(height: 5),
-                      ProfileMenuButton(
-                        onTap: isLoading
-                            ? null
-                            : () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AboutPage()));
-
-                          loadUserData();
-                        },
-                        text: "About",
-                        icon: LineAwesomeIcons.info_circle_solid,
-                      ),
-                      const SizedBox(height: 2),
-                      ProfileMenuButton(
-                        onTap: isLoading ? null : logout,
-                        text: "Logout",
-                        icon: Icons.logout_rounded,
-                        endIcon: false,
-                        textColor: isDarkMode ? Colors.red : Colors.redAccent,
-                      ),
-                    ],
-                  ),
+                                text: localizations.about,
+                                icon: LineAwesomeIcons.info_circle_solid,
+                              ),
+                              ProfileMenuButton(
+                                onTap: isLoading ? null : logout,
+                                text: localizations.logout,
+                                icon: Icons.logout_rounded,
+                                endIcon: false,
+                                textColor: isDarkMode ? Colors.red : Colors.redAccent,
+                              ),
+                            ],
+                          )
+                      )
+                    ]
                 ),
               ),
             ),
           ),
           if (isLoading)
             Container(
-              color: Colors.black.withOpacity(0.7),
+              color: isDarkMode ? Colors.black : Colors.white,
               child: Center(
                 child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(

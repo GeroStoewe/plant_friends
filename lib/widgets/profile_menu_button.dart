@@ -21,19 +21,21 @@ class ProfileMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Size size = MediaQuery.of(context).size;
+    double textScaleFactor = size.width / 400;
 
     return ListTile(
       onTap: onTap,
       leading: Container(
-        width: 30,
-        height: 30,
+        width: 30 * textScaleFactor,
+        height: 30 * textScaleFactor,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           color: isDarkMode ? darkSeaGreen.withOpacity(0.1) : lightSeaGreen.withOpacity(0.2)
         ),
         child: Icon(
             icon,
-            size: 20,
+            size: 20 * textScaleFactor,
             color: isDarkMode ? seaGreen : forestGreen
         ),
       ),
@@ -42,15 +44,15 @@ class ProfileMenuButton extends StatelessWidget {
         style: Theme.of(context).textTheme.labelSmall?.apply(color: textColor),
       ),
       trailing: endIcon ? Container(
-        width: 25,
-        height: 25,
+        width: 24 * textScaleFactor,
+        height: 24 * textScaleFactor,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           color: isDarkMode ? Colors.grey.withOpacity(0.1) : Colors.grey.withOpacity(0.25)
         ),
         child: Icon(
           LineAwesomeIcons.angle_right_solid,
-          size: 16.0,
+          size: 16.0 * textScaleFactor,
           color: isDarkMode ? Colors.grey : Colors.black,
         ),
       ) : null,

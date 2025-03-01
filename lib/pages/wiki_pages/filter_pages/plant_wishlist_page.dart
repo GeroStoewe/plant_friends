@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlantWishListPage extends StatefulWidget {
   final List<dynamic> plantData;
@@ -78,6 +79,7 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     final wishlistPlants = widget.plantData
         .where((plant) => wishlist.contains(plant['name']))
@@ -86,7 +88,7 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "My Wishlist",
+          localizations.myWishlist,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isDarkMode ? Colors.white : Colors.black,
@@ -99,25 +101,27 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  const Text(
-                    'Your wishlist is empty. \n '
-                    'Go to Wiki and tap the heart \n '
-                    'button to add plants.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
+                    Text(
+                      localizations.wishlistEmpty,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Image.asset(
-                    'lib/images/wiki/category/wish-list.png',
-                    width: 300,
-                    height: 300,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 16),
-                ])) : ListView(
+                    const SizedBox(height: 16),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16), // Abrundung der Ecken
+                      child: Image.asset(
+                        'lib/images/wiki/category/wish-list.png',
+                        width: 300,
+                        height: 300,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ]
+              )) : ListView(
           children: wishlistPlants.map((plant) {
           return Card(
             elevation: 4,

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/card_filter.dart';
 import '../other/wiki_page_filter_result_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DifficultyFilterPage extends StatelessWidget {
   const DifficultyFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Plants by Difficulty',
+        title: Text(
+          localizations.plantsByDifficulty,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -25,7 +28,7 @@ class DifficultyFilterPage extends StatelessWidget {
         ),
         children: [
           FilterCard(
-            title: 'Easy',
+            title: localizations.easy,
             imagePath: 'lib/images/wiki/difficulty/Wiki-Difficulty-1.png',
             onTap: () => Navigator.push(
               context,
@@ -38,7 +41,7 @@ class DifficultyFilterPage extends StatelessWidget {
             ),
           ),
           FilterCard(
-            title: 'Medium',
+            title: localizations.medium,
             imagePath: 'lib/images/wiki/difficulty/Wiki-Difficulty-2.png',
             onTap: () => Navigator.push(
               context,
@@ -51,7 +54,7 @@ class DifficultyFilterPage extends StatelessWidget {
             ),
           ),
           FilterCard(
-            title: 'Difficult',
+            title: localizations.difficult,
             imagePath: 'lib/images/wiki/difficulty/Wiki-Difficulty-3.png',
             onTap: () => Navigator.push(
               context,

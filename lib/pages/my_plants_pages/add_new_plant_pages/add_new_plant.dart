@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -10,8 +11,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../widgets/custom_snackbar.dart';
+import '../../HelpWithLocalization.dart';
 import '../../calendar_pages/calendar_functions.dart';
 import '../other/plant.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddNewPlantPage extends StatefulWidget {
   @override
@@ -143,6 +147,8 @@ if(mounted){
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
 
+    final localizations = AppLocalizations.of(context)!;
+
     final selectedSource = await showModalBottomSheet<ImageSource>(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -155,12 +161,13 @@ if(mounted){
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Take or pick a plant photo",
+                AutoSizeText(
+                  localizations.takeOrPickPhoto,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
+                  maxLines: 1,
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -168,12 +175,12 @@ if(mounted){
                   children: [
                     _buildOptionCard(
                       icon: Icons.camera_alt_rounded,
-                      label: "Camera",
+                      label: localizations.camera,
                       onTap: () => Navigator.of(context).pop(ImageSource.camera),
                     ),
                     _buildOptionCard(
                       icon: Icons.photo_library_rounded,
-                      label: "Gallery",
+                      label: localizations.gallery,
                       onTap: () => Navigator.of(context).pop(ImageSource.gallery),
                     ),
                   ],
@@ -286,13 +293,14 @@ if(mounted){
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
 
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Add New Plant",
+        title: AutoSizeText(
+          localizations.addNewPlant,
           style: Theme
               .of(context)
               .textTheme
@@ -300,6 +308,7 @@ if(mounted){
             fontWeight: FontWeight.bold,
             color: isDarkMode ? Colors.white : Colors.black,
           ),
+          maxFontSize: 26,
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
@@ -313,9 +322,10 @@ if(mounted){
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     CalenderFunctions calenderFunctions = CalenderFunctions();
+    final localizations = AppLocalizations.of(context)!;
     bool _isLoadingImage = false; // Add a flag to manage loading state
     // Liste der Pflanzenarten (kann angepasst werden)
-    List<String> plantTypes = [
+    final List<String> plantTypes = [
       'Cacti/Succulents',
       'Tropical Plants',
       'Climbing Plants',
@@ -324,22 +334,19 @@ if(mounted){
       'Herbs',
       'Others'
     ];
-    // Liste der Schwierigkeitsgrade
-    List<String> difficulties = [
+    final List<String> difficulties = [
       'Easy',
       'Medium',
-      'Hard',
+      'Difficult',
     ];
 
-    // Liste der Lichtanforderungen
-    List<String> lightRequirements = [
+    final List<String> lightRequirements = [
       'Direct Light',
       'Indirect Light',
       'Partial Shade',
       'Low Light',
     ];
-    // Liste der Wasseranforderungen
-    List<String> waterRequirements = [
+    final List<String> waterRequirements = [
       'Low',
       'Medium',
       'High',
@@ -380,7 +387,7 @@ if(mounted){
                   ),
                 )
                     : Text(
-                  "No photo selected yet.\nTap the camera icon to upload a photo.",
+                  localizations.noPhotoSelected,
                   style: TextStyle(
                     fontSize: 17.0,
                     color: isDarkMode ? Colors.grey : Colors.black,
@@ -391,7 +398,7 @@ if(mounted){
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Text(
-                      'Identified Plant: $_identifiedPlant',
+                      '${localizations.identifiedPlant} $_identifiedPlant',
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -401,7 +408,7 @@ if(mounted){
                 TextField(
                   controller: _edtNameController,
                   decoration: InputDecoration(
-                    labelText: "Name",
+                    labelText: localizations.name,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold, // Bold label for modern feel
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -416,7 +423,7 @@ if(mounted){
                 TextField(
                   controller: _edtScienceNameController,
                   decoration: InputDecoration(
-                    labelText: "Scientific Name",
+                    labelText: localizations.scientificName,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -434,7 +441,7 @@ if(mounted){
                     child: TextField(
                       controller: _edtDateController,
                       decoration: InputDecoration(
-                        labelText: "Date of purchase",
+                        labelText: localizations.dateOfPurchase,
                         labelStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: isDarkMode ? Colors.white : Colors.black,
@@ -456,14 +463,14 @@ if(mounted){
                 DropdownButtonFormField<String>(
                   value: _selectedPlantType,
                   hint: Text(
-                    'Select Plant Type',
+                    localizations.selectPlantType,
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
                   items: plantTypes.map((String type) {
                     return DropdownMenuItem<String>(
                       value: type,
                       child: Text(
-                        type,
+                        HelpWithLocalization.getLocalizedPlantType(type, localizations),
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     );
@@ -478,13 +485,14 @@ if(mounted){
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.green, width: 2.0),
                     ),
-                    labelText: "Plant Type",
+                    labelText: localizations.plantType,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 15),
 /*
                 DropdownButtonFormField<String>(
@@ -524,14 +532,14 @@ if(mounted){
                 DropdownButtonFormField<String>(
                   value: _selectedLightRequirement,
                   hint: Text(
-                    'Select Light Requirement',
+                    localizations.selectLightRequirement,
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
                   items: lightRequirements.map((String light) {
                     return DropdownMenuItem<String>(
                       value: light,
                       child: Text(
-                        light,
+                        HelpWithLocalization.getLocalizedLight(light, localizations),
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     );
@@ -546,7 +554,7 @@ if(mounted){
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.green, width: 2.0),
                     ),
-                    labelText: "Light Requirement",
+                    labelText: localizations.lightRequirement,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -557,9 +565,9 @@ if(mounted){
 
                 // Dropdown Menu für Wasseranforderungen
                 DropdownButtonFormField<String>(
-                  value: _isCustomWaterInterval ? "Custom" : _selectedWaterRequirement,
+                  value: _isCustomWaterInterval ? localizations.custom : _selectedWaterRequirement,
                   hint: Text(
-                    'Select Water Requirement',
+                    localizations.selectWaterRequirement,
                     style: TextStyle(color: isDarkMode ? Colors.grey : Colors.black),
                   ),
                   items: [
@@ -567,24 +575,24 @@ if(mounted){
                       return DropdownMenuItem<String>(
                         value: water,
                         child: Text(
-                          water,
+                          HelpWithLocalization.getLocalizedWater(water, localizations),
                           style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                         ),
                       );
                     }).toList(),
                     DropdownMenuItem<String>(
-                      value: "Custom",
+                      value: localizations.custom,
                       child: Text(
-                        "Custom",
+                        localizations.custom,
                         style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                       ),
                     ),
                   ],
                   onChanged: (String? newValue) {
                     setState(() {
-                      if (newValue == "Custom") {
+                      if (newValue == localizations.custom) {
                         _isCustomWaterInterval = true;
-                        _selectedWaterRequirement = "Custom";
+                        _selectedWaterRequirement = localizations.custom;
                       } else {
                         _isCustomWaterInterval = false;
                         _selectedWaterRequirement = newValue;
@@ -596,7 +604,7 @@ if(mounted){
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.green, width: 2.0),
                     ),
-                    labelText: "Water Requirement",
+                    labelText: localizations.wateringIntervalDays,
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -610,7 +618,7 @@ if(mounted){
                       controller: _customWaterIntervalController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: "Enter Watering Interval (Days)",
+                        labelText: localizations.enterWateringInterval,
                         labelStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: isDarkMode ? Colors.white : Colors.black,
@@ -656,6 +664,9 @@ if(mounted){
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
+                            _selectedPlantType = HelpWithLocalization.getEnglishPlantType(_selectedPlantType!, localizations);
+                            _selectedLightRequirement = HelpWithLocalization.getEnglishLight(_selectedLightRequirement!, localizations);
+                            _selectedWaterRequirement = HelpWithLocalization.getEnglishWater(_selectedWaterRequirement!, localizations);
                             // Check if required fields are filled
                             if (_edtNameController.text.isEmpty ||
                                 _edtScienceNameController.text.isEmpty ||
@@ -663,11 +674,11 @@ if(mounted){
                                 _selectedPlantType == null ||
                                 //_selectedDifficulty == null ||
                                 _selectedLightRequirement == null ||
-                                _selectedWaterRequirement == null || (_selectedWaterRequirement == "Custom" && int.tryParse(_customWaterIntervalController.text)== null)) {
+                                _selectedWaterRequirement == null || (_selectedWaterRequirement == localizations.custom && int.tryParse(_customWaterIntervalController.text)== null)) {
 
                               // Show warning banner if any required field is missing
                               CustomSnackbar snackbar = CustomSnackbar(context);
-                              snackbar.showMessage('Please fill in all required fields.', MessageType.error);
+                              snackbar.showMessage(localizations.fillRequiredFields, MessageType.error);
                               return; // Exit the function early
                             }
 
@@ -748,7 +759,7 @@ if(mounted){
                               if (mounted) {
                                 Navigator.pop(context); // Close loading dialog
                                 CustomSnackbar snackbar = CustomSnackbar(context);
-                                snackbar.showMessage('Plant details saved successfully!', MessageType.success);
+                                snackbar.showMessage(localizations.plantDetailsUpdatedSuccessfully, MessageType.success);
                                 _resetForm();
                                 Navigator.pop(context);
                               }
@@ -756,14 +767,14 @@ if(mounted){
                               if (mounted) {
                                 Navigator.pop(context); // Close loading dialog
                                 CustomSnackbar snackbar = CustomSnackbar(context);
-                                snackbar.showMessage('Failed to get userId. Please sign in again.', MessageType.error);
+                                snackbar.showMessage(localizations.failedToGetUserId, MessageType.error);
                               }
                             }
                           } catch (error) {
                             if (mounted) {
                               Navigator.pop(context); // Close loading dialog
                               CustomSnackbar snackbar = CustomSnackbar(context);
-                              snackbar.showMessage('Failed to save plant details: $error', MessageType.error);
+                              snackbar.showMessage('${localizations.failedToUpdatePlantDetails} $error', MessageType.error);
                             }
                           }
                         },
@@ -779,8 +790,8 @@ if(mounted){
                               : Colors.green,
                           elevation: 5, // Button color adapted to theme
                         ),
-                        child: const Text(
-                          "Save",
+                        child: Text(
+                          localizations.save,
                           style: TextStyle(fontSize: 16.0),
                           textAlign: TextAlign.center,
                         ),

@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import '../../../themes/colors.dart';
 import '../../../widgets/card_filter.dart';
 import '../other/wiki_page_filter_result_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TypeFilterPage extends StatelessWidget {
   const TypeFilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Plants by Type',
+        title: Text(
+          localizations.plantsByType,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -34,7 +37,7 @@ class TypeFilterPage extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(), // Deaktiviert das Scrollen des GridView
               children: [
                 FilterCard(
-                  title: 'Cacti/Succulents',
+                  title: localizations.cacti,
                   imagePath: 'lib/images/wiki/corner plant/succulent.png',
                   onTap: () => Navigator.push(
                     context,
@@ -44,7 +47,7 @@ class TypeFilterPage extends StatelessWidget {
                   ),
                 ),
                 FilterCard(
-                  title: 'Tropical Plants',
+                  title: localizations.tropicalPlants,
                   imagePath: 'lib/images/wiki/corner plant/alocasia.png',
                   onTap: () => Navigator.push(
                     context,
@@ -54,7 +57,7 @@ class TypeFilterPage extends StatelessWidget {
                   ),
                 ),
                 FilterCard(
-                  title: 'Climbing Plants',
+                  title: localizations.climbingPlants,
                   imagePath: 'lib/images/wiki/corner plant/pothos.png',
                   onTap: () => Navigator.push(
                     context,
@@ -64,7 +67,7 @@ class TypeFilterPage extends StatelessWidget {
                   ),
                 ),
                 FilterCard(
-                  title: 'Flowering Plants',
+                  title: localizations.floweringPlants,
                   imagePath: 'lib/images/wiki/corner plant/peace-lily.png',
                   onTap: () => Navigator.push(
                     context,
@@ -74,7 +77,7 @@ class TypeFilterPage extends StatelessWidget {
                   ),
                 ),
                 FilterCard(
-                  title: 'Trees/Palms',
+                  title: localizations.trees,
                   imagePath: 'lib/images/wiki/corner plant/bonsai.png',
                   onTap: () => Navigator.push(
                     context,
@@ -84,7 +87,7 @@ class TypeFilterPage extends StatelessWidget {
                   ),
                 ),
                 FilterCard(
-                  title: 'Herbs',
+                  title: localizations.herbs,
                   imagePath: 'lib/images/wiki/corner plant/basil.png',
                   onTap: () => Navigator.push(
                     context,
@@ -94,7 +97,7 @@ class TypeFilterPage extends StatelessWidget {
                   ),
                 ),
                 FilterCard(
-                  title: 'Others',
+                  title: localizations.others,
                   imagePath: 'lib/images/wiki/corner plant/hanging-pot.png',
                   onTap: () => Navigator.push(
                     context,

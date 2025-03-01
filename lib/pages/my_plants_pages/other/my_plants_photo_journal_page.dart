@@ -11,6 +11,7 @@ import 'package:plant_friends/pages/my_plants_pages/other/zoomable_photo.dart';
 import '../../../themes/colors.dart';
 import '../../../widgets/custom_snackbar.dart';
 import 'zoomable_photo.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PhotoJournalPage extends StatefulWidget {
   List<Map<String, String?>> photoJournal = [];
@@ -108,6 +109,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     DateTime? selectedDate;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     String? imageUrl = "";
+    final localizations = AppLocalizations.of(context)!;
 
     _edtDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -124,7 +126,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                   _plantImage != null
                       ? Image.file(_plantImage!, height: 200)
                       : Text(
-                    "No photo selected yet",
+                    localizations.noPhotoSelected,
                     style: TextStyle(
                       fontSize: 16.0,
                       color: isDarkMode ? Colors.grey : Colors.black,
@@ -142,7 +144,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                       child: TextField(
                         controller: _edtDateController,
                         decoration: InputDecoration(
-                          labelText: "Date",
+                          labelText: localizations.date,
                           labelStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: isDarkMode ? Colors.white : Colors.black,
@@ -169,8 +171,8 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                       setDialogState(() {}); // Update Dialog UI
                     },
                     icon: const Icon(Icons.camera_alt_rounded, color: Colors.green),
-                    label: const Text(
-                      "Add a new plant photo",
+                    label: Text(
+                      localizations.addNewPhoto,
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.green, // Ensures color visibility
@@ -191,14 +193,14 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                     if (_plantImage == null) {
                       // Show error if no image is selected
                       CustomSnackbar snackbar = CustomSnackbar(context);
-                      snackbar.showMessage('Please select an image before adding.', MessageType.info);
+                      snackbar.showMessage(localizations.selectImage, MessageType.info);
                       return; // Prevent further execution
                     }
 
                     if (_edtDateController.text.isEmpty) {
                       // Show error if no date is selected
                       CustomSnackbar snackbar = CustomSnackbar(context);
-                      snackbar.showMessage('Please select a date before adding.', MessageType.info);
+                      snackbar.showMessage(localizations.selectDate, MessageType.info);
 
                       return; // Prevent further execution
                     }
@@ -228,7 +230,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
 
                     Navigator.of(context).pop();  // Close the main dialog after saving
                   },
-                  child: const Text('Add Photo', style: TextStyle(color: seaGreen)),
+                  child: Text(localizations.addPhoto, style: TextStyle(color: seaGreen)),
                 ),
               ],
             );
@@ -242,14 +244,13 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
   // Separate Firebase save logic into its own method
   Future<void> _saveEntryToFirebase(String imageUrl, DateTime selectedDate) async {
     String formattedDate = DateFormat('dd MMM yyyy').format(selectedDate);
-
-
+    final localizations = AppLocalizations.of(context)!;
 
     // New entry map
     Map<String, String?> newEntry = {
       'url': imageUrl,
       'date': formattedDate,
-      'plantID': widget.plantID ?? 'Unknown Plant ID',
+      'plantID': widget.plantID ?? localizations.unknownPlantId,
     };
 
     try {
@@ -269,6 +270,8 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
   }
 
   void _deletePhoto(int index) {
+    final localizations = AppLocalizations.of(context)!;
+
     String? entryKey = widget.photoJournal[index]['key'];
     String? imageUrl = widget.photoJournal[index]['url'];  // Bild-URL extrahieren
 
@@ -287,15 +290,15 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
           });
         } catch (e) {
           CustomSnackbar snackbar = CustomSnackbar(context);
-          snackbar.showMessage('Error deleting photo from storage: $e', MessageType.error);
+          snackbar.showMessage('${localizations.errorDeletingPhotoStorage} $e', MessageType.error);
         }
       }).catchError((error) {
         CustomSnackbar snackbar = CustomSnackbar(context);
-        snackbar.showMessage('Error deleting photo from database: $error', MessageType.error);
+        snackbar.showMessage('${localizations.errorDeletingPhotoDatabase} $error', MessageType.error);
       });
     } else {
       CustomSnackbar snackbar = CustomSnackbar(context);
-      snackbar.showMessage('Error: Missing key or image URL for this photo entry.', MessageType.error);
+      snackbar.showMessage(localizations.errorMissingKey, MessageType.error);
     }
   }
 
@@ -338,6 +341,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
+    final localizations = AppLocalizations.of(context)!;
 
     final selectedSource = await showModalBottomSheet<ImageSource>(
       context: context,
@@ -350,8 +354,8 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Choose image source",
+              Text(
+                localizations.chooseImageSource,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -363,12 +367,12 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                 children: [
                   _buildOptionCard(
                     icon: Icons.camera_alt_rounded,
-                    label: "Camera",
+                    label: localizations.camera,
                     onTap: () => Navigator.of(context).pop(ImageSource.camera),
                   ),
                   _buildOptionCard(
                     icon: Icons.photo_library_rounded,
-                    label: "Gallery",
+                    label: localizations.gallery,
                     onTap: () => Navigator.of(context).pop(ImageSource.gallery),
                   ),
                 ],
@@ -430,11 +434,12 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Photo Journal',
+        title: Text(
+          localizations.photoJournal,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -442,7 +447,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: widget.photoJournal.isEmpty
-            ? const Center(
+            ? Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -453,7 +458,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
               ),
               SizedBox(height: 16),
               Text(
-                'No photos yet. \nAdd some photos to document \nyour plant\'s progress.',
+                localizations.noPhotos,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -492,6 +497,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
   bool isLoading = true; // Zustandsvariable, die verfolgt, ob das Bild geladen wird
 
   Widget _buildTimelineTile({
+
     required String date,
     required String imageUrl,
     required bool isFirst,
@@ -500,6 +506,8 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
     required bool isDarkMode,
     required VoidCallback onDelete,
   }) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -530,7 +538,7 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Photo taken on $date',
+                              '${localizations.photoTaken} $date',
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             IconButton(
@@ -660,25 +668,27 @@ class _PhotoJournalPageState extends State<PhotoJournalPage> {
 
   // Confirm deletion of photo
   void _confirmDelete(int index) {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Are you sure?'),
-          content: const Text('Do you really want to delete this photo entry?'),
+          title: Text(localizations.sureDeleting),
+          content: Text(localizations.reallyDeleting),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel', style: TextStyle(color: seaGreen)),
+              child: Text(localizations.cancel, style: TextStyle(color: seaGreen)),
             ),
             TextButton(
               onPressed: () {
                 _deletePhoto(index); // Delete the photo if confirmed
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Yes', style: TextStyle(color: seaGreen)),
+              child: Text(localizations.yes, style: TextStyle(color: seaGreen)),
             ),
           ],
         );

@@ -6,6 +6,8 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/custom_text_field.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class RequestPlantFormPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController plantNameController = TextEditingController();
@@ -22,10 +24,11 @@ class RequestPlantFormPage extends StatelessWidget {
     final email = emailController.text;
     final plantName = plantNameController.text;
     final notes = notesController.text;
+    final localizations = AppLocalizations.of(context)!;
 
     if (email.isEmpty || plantName.isEmpty) {
       CustomSnackbar snackbar = CustomSnackbar(context);
-      snackbar.showMessage('Email and Plant name are required', MessageType.info);
+      snackbar.showMessage('', MessageType.info);
       return;
     }
 
@@ -37,7 +40,7 @@ class RequestPlantFormPage extends StatelessWidget {
         'notes': notes,
       });
       CustomSnackbar snackbar = CustomSnackbar(context);
-      snackbar.showMessage('Request submitted successfully', MessageType.success);
+      snackbar.showMessage(localizations.requestSuccessfully, MessageType.success);
 
       // Clear the form fields
       emailController.clear();
@@ -45,16 +48,18 @@ class RequestPlantFormPage extends StatelessWidget {
       notesController.clear();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to submit request')),
+        SnackBar(content: Text(localizations.failedToSubmitRequest)),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Request Plant Addition'),
+        title: Text(localizations.requestPlant),
         backgroundColor: Colors.green,
       ),
       body: LayoutBuilder(
@@ -64,8 +69,8 @@ class RequestPlantFormPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Help us grow our plant database!',
+                Text(
+                  localizations.growPlantDatabase,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -73,35 +78,35 @@ class RequestPlantFormPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'If a plant you know is missing, please submit the form below and we will consider adding it.',
+                Text(
+                  localizations.ifPlantMissing,
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 24),
                 CustomTextField(
                   controller: emailController,
                   icon: Icons.email,
-                  hintText: 'Your Email',
+                  hintText: localizations.yourEmail,
                   obscureText: false,
                 ),
                 const SizedBox(height: 24),
                 CustomTextField(
                   controller: plantNameController,
                   icon: Icons.local_florist,
-                  hintText: 'Plant Name',
+                  hintText: localizations.plantName,
                   obscureText: false,
                 ),
                 const SizedBox(height: 24),
                 CustomTextField(
                   controller: notesController,
                   icon: Icons.note,
-                  hintText: 'Additional Notes (Optional)',
+                  hintText: localizations.additionalNotes,
                   obscureText: false,
                 ),
                 const SizedBox(height: 32),
                 Center(
                   child: CustomButton(
-                    text: 'Submit Request',
+                    text: localizations.submitRequest,
                     onTap: () => _submitRequest(context),
                   ),
                 ),

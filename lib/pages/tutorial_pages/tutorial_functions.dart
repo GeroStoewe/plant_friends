@@ -1,93 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/widgets/custom_button_outlined_small.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TutorialFunctions {
   OverlayEntry? overlayEntry;
   int currentStepIndex = 0;
   static bool isTutorialActive = false;
 
-  final List<Map<String, String>> tutorialSteps = [
-    {
-      'image': 'lib/images/tutorial/1_profile.png',
-      'text': 'Click on icon in the top right corner to switch to light/dark mode. You can edit your information, take the plant quiz, and start the tutorial.',
-    },
-    {
-      'image': 'lib/images/tutorial/1_1_quiz.png',
-      'text': 'If you want to know which plants suit your conditions take the quiz!',
-    },
-    {
-      'image': 'lib/images/tutorial/2_plant_wiki.png',
-      'text': 'This is a wiki with the most common house plants. You can filter your search with different options. After clicking on All Plants...'
-    },
-    {
-      'image': 'lib/images/tutorial/3_plant_wiki_wishes.png',
-      'text': '...you can see the list of all plants in the wiki. Click on the heart next to a plant to mark it as a wish. Click on wishlist...',
-    },
-    {
-      'image': 'lib/images/tutorial/4_plant_wiki_wishlist.png',
-      'text': '...to get to your wishlist. You can remove wishes with the bin icon.',
-    },
-    {
-      'image': 'lib/images/tutorial/4_1_plant_wiki_plant_request.png',
-      'text': 'If you cannot find a plant in the wiki you can request its addition by clicking here.',
-    },
-    {
-      'image': 'lib/images/tutorial/4_2_my_plants_empty.png',
-      'text': 'This space shows a list of your personal plants. It is currently empty. To add a plant...',
-    },
-    {
-      'image': 'lib/images/tutorial/5_add_new_plant_decision_help_1.png',
-      'text': '....click on the plus button in the bottom right corner. If you need help...',
-    },
-    {
-      'image': 'lib/images/tutorial/7_add_new_plant_help_1.png',
-      'text': '...you can use information from the wiki to fill out the form. You can use AI recognition for your new plant as well.',
-    },
-    {
-      'image': 'lib/images/tutorial/8_add_new_plant_help_2.png',
-      'text': 'To let AI recognize your new plant you can use a photo from your gallery or take a new one.',
-    },
-    {
-      'image': 'lib/images/tutorial/9_add_new_plant_decision_no_help.png',
-      'text': 'If you do not need help with information about your new plant choose the other option.',
-    },
-    {
-      'image': 'lib/images/tutorial/10_add_plant_2.png',
-      'text': 'Fill out the form, upload a picture if you like and save the information.',
-    },
-    {
-      'image': 'lib/images/tutorial/14_my_plants.png',
-      'text': 'You can now see your new plant in the list of your plants. By clicking on it you get to the detail page of your plant.',
-    },
-    {
-      'image': 'lib/images/tutorial/11_my_plants_detail.png',
-      'text': 'You can edit information or add photos to the journal. By clicking the orange icon you can signify that you watered your plant.',
-    },
-    {
-      'image': 'lib/images/tutorial/12_my_plants_detail_watering_done.png',
-      'text': 'The plant is now marked as watered. This is also visible in your calendar.',
-    },
-    {
-      'image': 'lib/images/tutorial/12_1_photo_journal.png',
-      'text': 'This is the photo journal of your new plant. Click on the button in the right corner to add photos.',
-    },
-    {
-      'image': 'lib/images/tutorial/13_my_plants_detail_edit.png',
-      'text': 'If you edit information of your plant make sure to save the changes.',
-    },
-    {
-      'image': 'lib/images/tutorial/15_calendar_unwatered.png',
-      'text': 'This is the calendar where you can see when your plants need to get watered. The x shows that your plant is not watered yet.',
-    },
-    {
-      'image': 'lib/images/tutorial/16_calendar_watered.png',
-      'text': 'By clicking on the x you can mark it was watered. It is now marked as watered.',
-    },
-    {
-      'image': 'lib/images/tutorial/windowsill.webp',
-      'text': 'Congratulations! You have completed the tutorial. Enjoy using the app!',
-    },
+  // Liste der Bildpfade (die Texte kommen über die Localization)
+  final List<String> tutorialImages = [
+    'lib/images/tutorial/1_profile.png',
+    'lib/images/tutorial/1_1_quiz.png',
+    'lib/images/tutorial/2_plant_wiki.png',
+    'lib/images/tutorial/3_plant_wiki_wishes.png',
+    'lib/images/tutorial/4_plant_wiki_wishlist.png',
+    'lib/images/tutorial/4_1_plant_wiki_plant_request.png',
+    'lib/images/tutorial/4_2_my_plants_empty.png',
+    'lib/images/tutorial/5_add_new_plant_decision_help_1.png',
+    'lib/images/tutorial/7_add_new_plant_help_1.png',
+    'lib/images/tutorial/8_add_new_plant_help_2.png',
+    'lib/images/tutorial/9_add_new_plant_decision_no_help.png',
+    'lib/images/tutorial/10_add_plant_2.png',
+    'lib/images/tutorial/14_my_plants.png',
+    'lib/images/tutorial/11_my_plants_detail.png',
+    'lib/images/tutorial/12_my_plants_detail_watering_done.png',
+    'lib/images/tutorial/12_1_photo_journal.png',
+    'lib/images/tutorial/13_my_plants_detail_edit.png',
+    'lib/images/tutorial/15_calendar_unwatered.png',
+    'lib/images/tutorial/16_calendar_watered.png',
+    'lib/images/tutorial/windowsill.webp',
   ];
+
+  // Hilfsfunktion, die basierend auf dem aktuellen Schritt den entsprechenden Text zurückgibt.
+  String getTutorialText(BuildContext context, int stepIndex) {
+    final localizations = AppLocalizations.of(context)!;
+    switch (stepIndex) {
+      case 0:
+        return localizations.tutorialStep1;
+      case 1:
+        return localizations.tutorialStep2;
+      case 2:
+        return localizations.tutorialStep3;
+      case 3:
+        return localizations.tutorialStep4;
+      case 4:
+        return localizations.tutorialStep5;
+      case 5:
+        return localizations.tutorialStep6;
+      case 6:
+        return localizations.tutorialStep7;
+      case 7:
+        return localizations.tutorialStep8;
+      case 8:
+        return localizations.tutorialStep9;
+      case 9:
+        return localizations.tutorialStep10;
+      case 10:
+        return localizations.tutorialStep11;
+      case 11:
+        return localizations.tutorialStep12;
+      case 12:
+        return localizations.tutorialStep13;
+      case 13:
+        return localizations.tutorialStep14;
+      case 14:
+        return localizations.tutorialStep15;
+      case 15:
+        return localizations.tutorialStep16;
+      case 16:
+        return localizations.tutorialStep17;
+      case 17:
+        return localizations.tutorialStep18;
+      case 18:
+        return localizations.tutorialStep19;
+      case 19:
+        return localizations.tutorialStep20;
+      default:
+        return "";
+    }
+  }
 
   void closeTutorial() {
     overlayEntry?.remove();
@@ -99,6 +90,7 @@ class TutorialFunctions {
     isTutorialActive = true;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final localizations = AppLocalizations.of(context)!;
 
     overlayEntry = OverlayEntry(
       builder: (context) {
@@ -140,18 +132,16 @@ class TutorialFunctions {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.asset(
-                                tutorialSteps[currentStepIndex]['image']!,
+                                tutorialImages[currentStepIndex],
                                 height: screenHeight * 0.5,
-                                width: null, // Entfernt die feste Breite
                                 fit: BoxFit.contain,
-                                alignment: Alignment.center, // Zentriert das Bild innerhalb der Umrandung
+                                alignment: Alignment.center,
                               ),
                             ),
-                          )
-                          ,
+                          ),
                           SizedBox(height: screenHeight * 0.03),
                           Text(
-                            tutorialSteps[currentStepIndex]['text']!,
+                            getTutorialText(context, currentStepIndex),
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,
                           ),
@@ -163,7 +153,7 @@ class TutorialFunctions {
                             children: [
                               if (currentStepIndex > 0)
                                 CustomButtonOutlinedSmall(
-                                  text: 'Back',
+                                  text: localizations.back,
                                   onTap: () {
                                     currentStepIndex--;
                                     closeTutorial();
@@ -171,9 +161,11 @@ class TutorialFunctions {
                                   },
                                 ),
                               CustomButtonOutlinedSmall(
-                                text: currentStepIndex < tutorialSteps.length - 1 ? 'Next' : 'Finish',
+                                text: currentStepIndex < tutorialImages.length - 1
+                                    ? localizations.next
+                                    : localizations.finish,
                                 onTap: () {
-                                  if (currentStepIndex < tutorialSteps.length - 1) {
+                                  if (currentStepIndex < tutorialImages.length - 1) {
                                     currentStepIndex++;
                                     closeTutorial();
                                     showStep(context, overlayState);
@@ -204,7 +196,7 @@ void showTutorialOverlay(BuildContext context) {
     return;
   }
 
-  TutorialFunctions tutorialFunctions = TutorialFunctions();
-  OverlayState overlayState = Overlay.of(context)!;
+  final TutorialFunctions tutorialFunctions = TutorialFunctions();
+  final OverlayState overlayState = Overlay.of(context)!;
   tutorialFunctions.showStep(context, overlayState);
 }

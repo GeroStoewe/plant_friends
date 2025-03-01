@@ -87,6 +87,7 @@ flutter:
     - lib/images/authentication/
     - lib/images/my_plants/
     - lib/images/profile/
+    - lib/images/tutorial/
     - lib/images/welcome/
     - lib/images/welcome/images/
     - lib/images/wiki/category/

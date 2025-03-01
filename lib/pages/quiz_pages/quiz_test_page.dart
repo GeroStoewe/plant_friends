@@ -32,7 +32,7 @@ class _QuizTestPageState extends State<QuizTestPage> {
           // Hintergrundbild mit stärkerer Transparenz (blasser)
           Positioned.fill(
             child: Image.asset(
-              'lib/images/welcome/plantpots.jpg', // Ersetze durch dein Bild
+              'lib/images/tutorial/wallpaper_quiz.png', //Hintergundbild
               fit: BoxFit.cover,
               color: isDarkMode ? Colors.black.withOpacity(0.6) : Colors.black.withOpacity(0.0),
               colorBlendMode: BlendMode.darken,

@@ -356,8 +356,8 @@ class _MyPlantsPageState extends State<MyPlantsPage> {
           children: [
                   Image.asset(
                     'lib/images/my_plants/plant_not_found.png',
-                    width: 200,
-                    height: 200,
+                    width: 150,
+                    height: 150,
                     fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 16),

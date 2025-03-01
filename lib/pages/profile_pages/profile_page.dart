@@ -16,6 +16,8 @@ import 'package:plant_friends/widgets/custom_profile_button.dart';
 import 'package:plant_friends/widgets/profile_menu_button.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:plant_friends/pages/tutorial_pages/tutorial_page.dart';
+
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({
@@ -214,6 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                                 loadUserData();
                               },
+
                               width: 160 * textScaleFactor,
                               height: 50 * textScaleFactor,
                               text: localizations.editProfile,
@@ -222,6 +225,38 @@ class _ProfilePageState extends State<ProfilePage> {
                           Divider(
                               thickness: 0.5,
                               color: isDarkMode ? dmDarkGrey : lmLightGrey),
+
+                        text: "Plant Quiz",
+                        icon: LineAwesomeIcons.question_circle,
+                      ),
+                      const SizedBox(height: 2),
+                      ProfileMenuButton(
+                        onTap: isLoading
+                            ? null
+                            : () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const TutorialPage()));
+                        },
+                        text: "App Tutorial",
+                        icon: LineAwesomeIcons.question_circle,
+                      ),
+                      const SizedBox(height: 5),
+                      Divider(
+                          thickness: 0.5,
+                          color: isDarkMode ? dmDarkGrey : lmLightGrey),
+                      const SizedBox(height: 5),
+                      ProfileMenuButton(
+                        onTap: isLoading
+                            ? null
+                            : () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AboutPage()));
 
                           // MENU
                           ProfileMenuButton(

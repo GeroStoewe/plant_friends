@@ -5,7 +5,7 @@
   },
   "myPlants": "Le mie piante",
   "calendar": "Calendario",
-  "plantWiki": "Wiki delle Piante",
+  "plantWiki": "Catalogo",
   "profile": "Profilo",
   "welcome": "Benvenuto su Plant Friends!",
   "greetings": "Ciao amante delle piante! ❤️ \n\nChe tu sia un esperto giardiniere o che stia iniziando, Plant Friends è il tuo compagno ideale. Con cure personalizzate per le tue piante, promemoria puntuali e informazioni utili, manterrai le tue piante d'appartamento felici e in salute. \n\nFacciamo fiorire insieme la tua giungla interna! 🌿",
@@ -209,11 +209,12 @@
   "errorOccurred": "Si è verificato un errore!",
   "contactSupport": "Si è verificato un errore durante l'aggiornamento del profilo! Per favore, contatta l'assistenza per aiuto.",
   "aboutUs": "Chi siamo",
-  "aboutUsDescription": "Noi (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) studiamo informatica al 3° semestre. Abbiamo sviluppato questa app per piante come parte del corso “Ingegneria del Software”. La nostra visione è supportare gli amanti delle piante nella pianificazione, selezione e cura delle piante d'appartamento.",
+  "aboutUsDescription": "Noi (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) studiamo \ninformatica al 3° semestre. Abbiamo\nsviluppato questa app per piante come \nparte del corso “Ingegneria del \nSoftware”. La nostra visione è \nsupportare gli amanti delle piante nella \npianificazione, selezione e cura delle \npiante d'appartamento.",
   "appVersion": "Versione dell'app",
   "emailProfile": "Email",
   "userId": "ID utente",
   "joinedAt": "Iscritto il",
   "deleteAccount": "Elimina account",
-  "changeLanguage": "Cambiare lingua"
+  "changeLanguage": "Cambiare lingua",
+  "tutorial": "Tutorial dell'app"
 }

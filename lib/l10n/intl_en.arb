@@ -215,5 +215,6 @@
   "userId": "User ID",
   "joinedAt": "Joined At",
   "deleteAccount": "Delete Account",
-  "changeLanguage": "Change Language"
+  "changeLanguage": "Change Language",
+  "tutorial": "App Tutorial"
 }

@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "about": MessageLookupByLibrary.simpleMessage("Hakkında"),
     "aboutUs": MessageLookupByLibrary.simpleMessage("Hakkımızda"),
     "aboutUsDescription": MessageLookupByLibrary.simpleMessage(
-      "Biz (Laura Voß, Lisa Kütemeier, Aylin \nOymak, Gero Stöwe), Bilgisayar Bilimleri \n4. dönem öğrencileriyiz. Bu bitki \nuygulamasını \'Yazılım Mühendisliği II\' \nkapsamında geliştirdik.\nVizyonumuz, bitki severlere iç mekan \nbitkilerini seçme, planlama ve bakım konusunda yardımcı olmaktır.",
+      "Biz (Laura Voß, Lisa Kütemeier, Aylin \nOymak, Gero Stöwe), Bilgisayar Bilimleri \n4. dönem öğrencileriyiz. Bu uygulamayı \n\'Yazılım Mühendisliği II\' dersi kapsamında \ngeliştirdik.\nVizyonumuz, bitki severlere iç mekan \nbitkilerini seçme, planlama ve bakım \nkonusunda yardımcı olmaktır.",
     ),
     "addNewPhoto": MessageLookupByLibrary.simpleMessage(
       "Yeni bitki fotoğrafı ekle",
@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "answer1_3": MessageLookupByLibrary.simpleMessage("Aylık"),
     "answer1_4": MessageLookupByLibrary.simpleMessage("Düzensiz"),
     "appVersion": MessageLookupByLibrary.simpleMessage("Uygulama Sürümü"),
+    "back": MessageLookupByLibrary.simpleMessage("Geri"),
     "byDifficulty": MessageLookupByLibrary.simpleMessage(
       "Zorluk Derecesine Göre",
     ),
@@ -100,6 +101,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "deletePlant": MessageLookupByLibrary.simpleMessage("Bitkiyi Sil"),
     "deletedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Bitki başarıyla silindi",
+    ),
+    "descriptionTutorial": MessageLookupByLibrary.simpleMessage(
+      "Uygulama için kısa bir eğitim turu yapmak ister misiniz? Şu anda istemezseniz, eğitici turu profil sayfasında bulabilirsiniz.",
     ),
     "difficult": MessageLookupByLibrary.simpleMessage("Zor"),
     "difficulty": MessageLookupByLibrary.simpleMessage("Zorluk"),
@@ -178,6 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "findYourPlants": MessageLookupByLibrary.simpleMessage(
       "Bitkilerinizi bulun",
     ),
+    "finish": MessageLookupByLibrary.simpleMessage("Bitir"),
     "floweringPlants": MessageLookupByLibrary.simpleMessage("Çiçekli Bitkiler"),
     "forgotPasswordQuestion": MessageLookupByLibrary.simpleMessage(
       "Şifrenizi mi unuttunuz?",
@@ -225,6 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "joined": MessageLookupByLibrary.simpleMessage("Katılım tarihi: "),
     "joinedAt": MessageLookupByLibrary.simpleMessage("Katılım Tarihi"),
     "language": MessageLookupByLibrary.simpleMessage("Türkçe"),
+    "later": MessageLookupByLibrary.simpleMessage("Daha sonra"),
     "letsGetStarted": MessageLookupByLibrary.simpleMessage("Hadi başlayalım!"),
     "light": MessageLookupByLibrary.simpleMessage("Işık"),
     "lightRequirement": MessageLookupByLibrary.simpleMessage(
@@ -253,7 +259,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "myPlants": MessageLookupByLibrary.simpleMessage("Bitkilerim"),
     "myPlantsTitle": MessageLookupByLibrary.simpleMessage("Bitkilerim"),
     "myPlantsWiki": MessageLookupByLibrary.simpleMessage("\"Bitkilerim\""),
-    "myWishlist": MessageLookupByLibrary.simpleMessage("Benim İstek Listem"),
+    "myWishlist": MessageLookupByLibrary.simpleMessage("İstek Listem"),
     "name": MessageLookupByLibrary.simpleMessage("İsim"),
     "needHelp": MessageLookupByLibrary.simpleMessage("Yardıma ihtiyacım var"),
     "newEmail": MessageLookupByLibrary.simpleMessage("Yeni e-posta adresi"),
@@ -262,6 +268,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "newQuestion": MessageLookupByLibrary.simpleMessage(
       "Plant Friends\'e yeni misiniz?",
     ),
+    "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
     "nextWatering": MessageLookupByLibrary.simpleMessage("Sonraki Sulama"),
     "noChanges": MessageLookupByLibrary.simpleMessage(
       "Değişiklik yapılmadı...",
@@ -271,7 +278,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Henüz fotoğraf seçilmedi.\nFotoğraf yüklemek için kamera simgesine dokunun.",
     ),
     "noPhotos": MessageLookupByLibrary.simpleMessage(
-      "Henüz fotoğraf yok.\nBitkinizin gelişimini belgelemek için fotoğraf ekleyin.",
+      "Henüz hiç fotoğraf yok.\nBitkinizin gelişimini belgelemek için fotoğraf ekleyin.",
     ),
     "noPlantsFound": MessageLookupByLibrary.simpleMessage(
       "Aramada bitki bulunamadı",
@@ -294,7 +301,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Evcil hayvan uyarısı: Hangi bitkilerin zehirli olduğunu kontrol edin!",
     ),
     "photoJournal": MessageLookupByLibrary.simpleMessage("Fotoğraf Günlüğü"),
-    "photoTaken": MessageLookupByLibrary.simpleMessage("Fotoğraf çekildi: "),
+    "photoTaken": MessageLookupByLibrary.simpleMessage(
+      "Fotoğraf çekim tarihi: ",
+    ),
     "plantCareInformation": MessageLookupByLibrary.simpleMessage(
       "Bitki Bakım Bilgileri",
     ),
@@ -385,6 +394,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "signUpMessage": MessageLookupByLibrary.simpleMessage("Kayıt yapıldı: "),
     "signUpTitle": MessageLookupByLibrary.simpleMessage("Hesabınızı Oluşturun"),
     "startQuizButton": MessageLookupByLibrary.simpleMessage("Teste Başla"),
+    "startTutorial": MessageLookupByLibrary.simpleMessage(
+      "Eğitici Turu Başlat",
+    ),
+    "startedTutorial": MessageLookupByLibrary.simpleMessage("Hadi başlayalım!"),
     "submitRequest": MessageLookupByLibrary.simpleMessage("Talebi Gönder"),
     "sureDeleting": MessageLookupByLibrary.simpleMessage(
       "Bu bitkiyi silmek istediğinizden emin misiniz? Buna bağlı tüm sulama olayları da silinecektir.",
@@ -394,6 +407,71 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "trees": MessageLookupByLibrary.simpleMessage("Ağaçlar/Palmiye"),
     "tropicalPlants": MessageLookupByLibrary.simpleMessage("Tropikal Bitkiler"),
+    "tutorial": MessageLookupByLibrary.simpleMessage("Uygulama eğitimi"),
+    "tutorialStep1": MessageLookupByLibrary.simpleMessage(
+      "Açık/koyu moda geçmek için sağ üst köşedeki simgeye tıklayın. Bilgilerinizi düzenleyebilir, bitki quizine katılabilir ve eğitici tura başlayabilirsiniz.",
+    ),
+    "tutorialStep10": MessageLookupByLibrary.simpleMessage(
+      "Yeni bitkinizin yapay zeka tarafından tanınması için galerinizden bir fotoğraf seçebilir veya yeni bir fotoğraf çekebilirsiniz.",
+    ),
+    "tutorialStep11": MessageLookupByLibrary.simpleMessage(
+      "Yeni bitkiniz hakkında bilgiye ihtiyacınız yoksa, diğer seçeneği tercih edin.",
+    ),
+    "tutorialStep12": MessageLookupByLibrary.simpleMessage(
+      "Formu doldurun, isterseniz bir fotoğraf yükleyin ve bilgileri kaydedin.",
+    ),
+    "tutorialStep13": MessageLookupByLibrary.simpleMessage(
+      "Artık yeni bitkinizi bitkilerinizin listesinde görebilirsiniz. Üzerine tıklayarak bitkinizin detay sayfasına ulaşabilirsiniz.",
+    ),
+    "tutorialStep14": MessageLookupByLibrary.simpleMessage(
+      "Bilgileri düzenleyebilir veya günlük için fotoğraf ekleyebilirsiniz. Bitkinizi suladığınızı göstermek için turuncu simgeye tıklayın.",
+    ),
+    "tutorialStep15": MessageLookupByLibrary.simpleMessage(
+      "Bitki artık sulanmış olarak işaretlendi. Bu, takviminizde de görülüyor.",
+    ),
+    "tutorialStep16": MessageLookupByLibrary.simpleMessage(
+      "Bu, yeni bitkinizin fotoğraf günlüğüdür. Fotoğraf eklemek için sağ köşedeki butona tıklayın.",
+    ),
+    "tutorialStep17": MessageLookupByLibrary.simpleMessage(
+      "Bitkinizin bilgilerini düzenlerseniz, değişiklikleri kaydetmeyi unutmayın.",
+    ),
+    "tutorialStep18": MessageLookupByLibrary.simpleMessage(
+      "Bu, bitkilerinizin ne zaman sulanması gerektiğini görebileceğiniz takvimdir. \'X\', bitkinizin henüz sulanmadığını gösterir.",
+    ),
+    "tutorialStep19": MessageLookupByLibrary.simpleMessage(
+      "\'X\'e tıklayarak bitkinin sulandığını işaretleyebilirsiniz. Artık sulanmış olarak işaretlendi.",
+    ),
+    "tutorialStep2": MessageLookupByLibrary.simpleMessage(
+      "Koşullarınıza uygun bitkileri öğrenmek istiyorsanız, quiz\'e katılın!",
+    ),
+    "tutorialStep20": MessageLookupByLibrary.simpleMessage(
+      "Tebrikler! Eğitici turu tamamladınız. Uygulamayı kullanmanın keyfini çıkarın!",
+    ),
+    "tutorialStep3": MessageLookupByLibrary.simpleMessage(
+      "Bu, en yaygın ev bitkilerini içeren bir wiki. Aramanızı farklı seçeneklerle filtreleyebilirsiniz. \'Tüm Bitkiler\'e tıkladıktan sonra...",
+    ),
+    "tutorialStep4": MessageLookupByLibrary.simpleMessage(
+      "...wikideki tüm bitkilerin listesini görebilirsiniz. Bir bitkinin yanındaki kalbe tıklayarak onu favori olarak işaretleyin. \'İstek Listesi\'ne tıklayın...",
+    ),
+    "tutorialStep5": MessageLookupByLibrary.simpleMessage(
+      "...istek listenize ulaşmak için. İstekleri çöp kutusu simgesiyle kaldırabilirsiniz.",
+    ),
+    "tutorialStep6": MessageLookupByLibrary.simpleMessage(
+      "Wiki\'de bir bitki bulamazsanız, buraya tıklayarak eklenmesini isteyebilirsiniz.",
+    ),
+    "tutorialStep7": MessageLookupByLibrary.simpleMessage(
+      "Bu alan, kişisel bitkilerinizin listesini gösterir. Şu anda boş. Bir bitki eklemek için...",
+    ),
+    "tutorialStep8": MessageLookupByLibrary.simpleMessage(
+      "...sağ alt köşedeki artı butonuna tıklayın. Yardıma ihtiyacınız varsa...",
+    ),
+    "tutorialStep9": MessageLookupByLibrary.simpleMessage(
+      "...formu doldurmak için wiki\'deki bilgileri kullanabilirsiniz. Yeni bitkiniz için yapay zeka tanıma özelliğini de kullanabilirsiniz.",
+    ),
+    "tutorialText": MessageLookupByLibrary.simpleMessage(
+      "Uygulamadaki tüm önemli özellikleri keşfetmenizi sağlayacak hızlı bir turla sizi yönlendiriyoruz, böylece hiçbir önemli detayı kaçırmazsınız. Turun sonunda, uygulamayı profesyonel gibi kullanıyor olacaksınız!",
+    ),
+    "tutorialYes": MessageLookupByLibrary.simpleMessage("Evet!"),
     "undo": MessageLookupByLibrary.simpleMessage("Geri al"),
     "unknownPlant": MessageLookupByLibrary.simpleMessage("Bilinmeyen Bitki"),
     "unknownPlantId": MessageLookupByLibrary.simpleMessage(
@@ -430,8 +508,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Plant Friends\'e Hoş Geldiniz!",
     ),
     "welcomeQuiz": MessageLookupByLibrary.simpleMessage("Teste Hoş Geldiniz!"),
+    "welcomeToTutorial": MessageLookupByLibrary.simpleMessage(
+      "Eğitici Tura Hoşgeldiniz!",
+    ),
+    "welcomeTutorial": MessageLookupByLibrary.simpleMessage("Hoşgeldiniz! 👋"),
     "wishlistEmpty": MessageLookupByLibrary.simpleMessage(
-      "İstek listeniz boş.\nWiki\'ye gidin ve bitki eklemek için kalbe dokunun.",
+      "İstek listeniz boş.\nKatalog\'a gidin ve bitki eklemek için kalbe dokunun.",
     ),
     "wishlistTitle": MessageLookupByLibrary.simpleMessage("İstek Listesi"),
     "yes": MessageLookupByLibrary.simpleMessage("Evet"),

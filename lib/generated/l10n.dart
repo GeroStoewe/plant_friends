@@ -1829,6 +1829,296 @@ class S {
       args: [],
     );
   }
+
+  /// `App Tutorial`
+  String get tutorial {
+    return Intl.message('App Tutorial', name: 'tutorial', desc: '', args: []);
+  }
+
+  /// `Welcome! 👋`
+  String get welcomeTutorial {
+    return Intl.message(
+      'Welcome! 👋',
+      name: 'welcomeTutorial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Would you like to do a quick tutorial for the app? If not now, you can find the tutorial on the profile page.`
+  String get descriptionTutorial {
+    return Intl.message(
+      'Would you like to do a quick tutorial for the app? If not now, you can find the tutorial on the profile page.',
+      name: 'descriptionTutorial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes!`
+  String get tutorialYes {
+    return Intl.message('Yes!', name: 'tutorialYes', desc: '', args: []);
+  }
+
+  /// `Later`
+  String get later {
+    return Intl.message('Later', name: 'later', desc: '', args: []);
+  }
+
+  /// `Welcome to the Tutorial!`
+  String get welcomeToTutorial {
+    return Intl.message(
+      'Welcome to the Tutorial!',
+      name: 'welcomeToTutorial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We’re here to guide you through the app with a quick walkthrough, making sure you discover all the key features and don’t miss out on anything important. By the end, you'll be using the app like a pro!`
+  String get tutorialText {
+    return Intl.message(
+      'We’re here to guide you through the app with a quick walkthrough, making sure you discover all the key features and don’t miss out on anything important. By the end, you\'ll be using the app like a pro!',
+      name: 'tutorialText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Let's get started!`
+  String get startedTutorial {
+    return Intl.message(
+      'Let\'s get started!',
+      name: 'startedTutorial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Tutorial`
+  String get startTutorial {
+    return Intl.message(
+      'Start Tutorial',
+      name: 'startTutorial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click on the icon in the top right corner to switch to light/dark mode. You can edit your information, take the plant quiz, and start the tutorial.`
+  String get tutorialStep1 {
+    return Intl.message(
+      'Click on the icon in the top right corner to switch to light/dark mode. You can edit your information, take the plant quiz, and start the tutorial.',
+      name: 'tutorialStep1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you want to know which plants suit your conditions take the quiz!`
+  String get tutorialStep2 {
+    return Intl.message(
+      'If you want to know which plants suit your conditions take the quiz!',
+      name: 'tutorialStep2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is a wiki with the most common house plants. You can filter your search with different options. After clicking on All Plants...`
+  String get tutorialStep3 {
+    return Intl.message(
+      'This is a wiki with the most common house plants. You can filter your search with different options. After clicking on All Plants...',
+      name: 'tutorialStep3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `...you can see the list of all plants in the wiki. Click on the heart next to a plant to mark it as a wish. Click on wishlist...`
+  String get tutorialStep4 {
+    return Intl.message(
+      '...you can see the list of all plants in the wiki. Click on the heart next to a plant to mark it as a wish. Click on wishlist...',
+      name: 'tutorialStep4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `...to get to your wishlist. You can remove wishes with the bin icon.`
+  String get tutorialStep5 {
+    return Intl.message(
+      '...to get to your wishlist. You can remove wishes with the bin icon.',
+      name: 'tutorialStep5',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you cannot find a plant in the wiki you can request its addition by clicking here.`
+  String get tutorialStep6 {
+    return Intl.message(
+      'If you cannot find a plant in the wiki you can request its addition by clicking here.',
+      name: 'tutorialStep6',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This space shows a list of your personal plants. It is currently empty. To add a plant...`
+  String get tutorialStep7 {
+    return Intl.message(
+      'This space shows a list of your personal plants. It is currently empty. To add a plant...',
+      name: 'tutorialStep7',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `....click on the plus button in the bottom right corner. If you need help...`
+  String get tutorialStep8 {
+    return Intl.message(
+      '....click on the plus button in the bottom right corner. If you need help...',
+      name: 'tutorialStep8',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `...you can use information from the wiki to fill out the form. You can use AI recognition for your new plant as well.`
+  String get tutorialStep9 {
+    return Intl.message(
+      '...you can use information from the wiki to fill out the form. You can use AI recognition for your new plant as well.',
+      name: 'tutorialStep9',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To let AI recognize your new plant you can use a photo from your gallery or take a new one.`
+  String get tutorialStep10 {
+    return Intl.message(
+      'To let AI recognize your new plant you can use a photo from your gallery or take a new one.',
+      name: 'tutorialStep10',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you do not need help with information about your new plant choose the other option.`
+  String get tutorialStep11 {
+    return Intl.message(
+      'If you do not need help with information about your new plant choose the other option.',
+      name: 'tutorialStep11',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill out the form, upload a picture if you like and save the information.`
+  String get tutorialStep12 {
+    return Intl.message(
+      'Fill out the form, upload a picture if you like and save the information.',
+      name: 'tutorialStep12',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can now see your new plant in the list of your plants. By clicking on it you get to the detail page of your plant.`
+  String get tutorialStep13 {
+    return Intl.message(
+      'You can now see your new plant in the list of your plants. By clicking on it you get to the detail page of your plant.',
+      name: 'tutorialStep13',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can edit information or add photos to the journal. By clicking the orange icon you can signify that you watered your plant.`
+  String get tutorialStep14 {
+    return Intl.message(
+      'You can edit information or add photos to the journal. By clicking the orange icon you can signify that you watered your plant.',
+      name: 'tutorialStep14',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The plant is now marked as watered. This is also visible in your calendar.`
+  String get tutorialStep15 {
+    return Intl.message(
+      'The plant is now marked as watered. This is also visible in your calendar.',
+      name: 'tutorialStep15',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is the photo journal of your new plant. Click on the button in the right corner to add photos.`
+  String get tutorialStep16 {
+    return Intl.message(
+      'This is the photo journal of your new plant. Click on the button in the right corner to add photos.',
+      name: 'tutorialStep16',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you edit information of your plant make sure to save the changes.`
+  String get tutorialStep17 {
+    return Intl.message(
+      'If you edit information of your plant make sure to save the changes.',
+      name: 'tutorialStep17',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is the calendar where you can see when your plants need to get watered. The x shows that your plant is not watered yet.`
+  String get tutorialStep18 {
+    return Intl.message(
+      'This is the calendar where you can see when your plants need to get watered. The x shows that your plant is not watered yet.',
+      name: 'tutorialStep18',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By clicking on the x you can mark it was watered. It is now marked as watered.`
+  String get tutorialStep19 {
+    return Intl.message(
+      'By clicking on the x you can mark it was watered. It is now marked as watered.',
+      name: 'tutorialStep19',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Congratulations! You have completed the tutorial. Enjoy using the app!`
+  String get tutorialStep20 {
+    return Intl.message(
+      'Congratulations! You have completed the tutorial. Enjoy using the app!',
+      name: 'tutorialStep20',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next`
+  String get next {
+    return Intl.message('Next', name: 'next', desc: '', args: []);
+  }
+
+  /// `Finish`
+  String get finish {
+    return Intl.message('Finish', name: 'finish', desc: '', args: []);
+  }
+
+  /// `Back`
+  String get back {
+    return Intl.message('Back', name: 'back', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

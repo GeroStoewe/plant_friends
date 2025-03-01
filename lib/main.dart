@@ -116,7 +116,9 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
 
     if (!hasSeenTutorialHint) {
       Future.delayed(const Duration(seconds: 1), () {
-        _showTutorialHint();
+        if (mounted) {
+          _showTutorialHint();
+        }
       });
 
       // Speichert den Status pro Benutzer
@@ -126,12 +128,14 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
 
   /// Zeigt einen Dialog mit dem Hinweis auf das Tutorial an
   void _showTutorialHint() {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Welcome! 👋"),
-          content: const Text("Would you like to do a quick tutorial for the app? If not now, you can find the tutorial on the profile page."),
+          title: Text(localizations.welcomeTutorial),
+          content: Text(localizations.descriptionTutorial),
           actions: [
             CustomButtonOutlinedSmall(
               onTap: () {
@@ -141,15 +145,15 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
                   MaterialPageRoute(builder: (context) => const TutorialPage()),
                 );
               },
-              text: "Yes!",
+              text: localizations.tutorialYes,
             ),
             const SizedBox(height: 20),
             CustomButtonOutlinedSmall(
               onTap: () {
                 Navigator.pop(context); // Dialog schließen
               },
-              text: "Later",
-            ),
+              text: localizations.later,
+            )
           ],
         );
       },

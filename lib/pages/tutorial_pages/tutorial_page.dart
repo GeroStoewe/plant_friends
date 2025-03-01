@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_friends/pages/tutorial_pages/tutorial_functions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TutorialPage extends StatefulWidget {
   const TutorialPage({super.key});
@@ -23,6 +24,7 @@ class _TutorialPageState extends State<TutorialPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double paddingValue = screenWidth * 0.05;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -62,7 +64,7 @@ class _TutorialPageState extends State<TutorialPage> {
                   ),
                   SizedBox(height: screenHeight * 0.05),
                   Text(
-                    "Welcome to the Tutorial!",
+                    localizations.welcomeToTutorial,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: isDarkMode ? Colors.white : Colors.black,
                       fontWeight: FontWeight.bold,
@@ -70,14 +72,14 @@ class _TutorialPageState extends State<TutorialPage> {
                   ),
                   SizedBox(height: screenHeight * 0.02),
                   Text(
-                    "We’re here to guide you through the app with a quick walkthrough, making sure you discover all the key features and don’t miss out on anything important. By the end, you'll be using the app like a pro!",
+                    localizations.tutorialText,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: isDarkMode ? Colors.white70 : Colors.black87,
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.03),
                   Text(
-                    "Let's get started!",
+                    localizations.startedTutorial,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: isDarkMode ? Colors.white70 : Colors.black87,
                     ),
@@ -94,7 +96,7 @@ class _TutorialPageState extends State<TutorialPage> {
                         }
                       },
                       label: Text(
-                        'Start Tutorial',
+                        localizations.startTutorial,
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       icon: const Icon(Icons.quiz, color: Colors.white),

@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "about": MessageLookupByLibrary.simpleMessage("À propos"),
     "aboutUs": MessageLookupByLibrary.simpleMessage("À propos de nous"),
     "aboutUsDescription": MessageLookupByLibrary.simpleMessage(
-      "Nous (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) étudions l\'informatique en 3ème semestre. Nous avons développé cette application de plantes dans le cadre du cours « Génie logiciel ». Notre vision est de soutenir les amateurs de plantes dans la planification, la sélection et l\'entretien des plantes d\'intérieur.",
+      "Nous (Laura Voß, Lisa Kütemeier, \nAylin Oymak, Gero Stöwe) étudions \nl\'informatique en 3ème semestre.\nNous avons développé cette\napplication de plantes dans le cadre\ndu cours « Génie logiciel ». Notre vision \nest de soutenir les amateurs de plantes\ndans la planification, la sélection et\nl\'entretien des plantes d\'intérieur.",
     ),
     "addNewPhoto": MessageLookupByLibrary.simpleMessage(
       "Ajouter une nouvelle photo de la plante",
@@ -62,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appVersion": MessageLookupByLibrary.simpleMessage(
       "Version de l\'application",
     ),
+    "back": MessageLookupByLibrary.simpleMessage("Retour"),
     "byDifficulty": MessageLookupByLibrary.simpleMessage("Par difficulté"),
     "byLightNeeds": MessageLookupByLibrary.simpleMessage(
       "Par besoins en lumière",
@@ -108,6 +109,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "deletePlant": MessageLookupByLibrary.simpleMessage("Supprimer la plante"),
     "deletedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Plante supprimée avec succès",
+    ),
+    "descriptionTutorial": MessageLookupByLibrary.simpleMessage(
+      "Souhaitez-vous suivre un tutoriel rapide pour l\'application ? Sinon, vous trouverez le tutoriel sur la page de profil.",
     ),
     "difficult": MessageLookupByLibrary.simpleMessage("Difficile"),
     "difficulty": MessageLookupByLibrary.simpleMessage("Difficulté"),
@@ -190,6 +194,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "findYourPlants": MessageLookupByLibrary.simpleMessage(
       "Trouvez vos plantes",
     ),
+    "finish": MessageLookupByLibrary.simpleMessage("Terminer"),
     "floweringPlants": MessageLookupByLibrary.simpleMessage("Plantes à fleurs"),
     "forgotPasswordQuestion": MessageLookupByLibrary.simpleMessage(
       "Mot de passe oublié ? ",
@@ -235,6 +240,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "joined": MessageLookupByLibrary.simpleMessage("Inscrit : "),
     "joinedAt": MessageLookupByLibrary.simpleMessage("Inscrit le"),
     "language": MessageLookupByLibrary.simpleMessage("Français"),
+    "later": MessageLookupByLibrary.simpleMessage("Plus tard"),
     "letsGetStarted": MessageLookupByLibrary.simpleMessage("Commençons !"),
     "light": MessageLookupByLibrary.simpleMessage("Lumière"),
     "lightRequirement": MessageLookupByLibrary.simpleMessage(
@@ -274,6 +280,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "newQuestion": MessageLookupByLibrary.simpleMessage(
       "Nouveau sur PlantFriends ? ",
     ),
+    "next": MessageLookupByLibrary.simpleMessage("Suivant"),
     "nextWatering": MessageLookupByLibrary.simpleMessage("Prochain arrosage"),
     "noChanges": MessageLookupByLibrary.simpleMessage(
       "Aucun changement effectué...",
@@ -316,7 +323,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "plantName": MessageLookupByLibrary.simpleMessage("Nom de la plante"),
     "plantQuiz": MessageLookupByLibrary.simpleMessage("Quiz sur les plantes"),
     "plantType": MessageLookupByLibrary.simpleMessage("Type de plante"),
-    "plantWiki": MessageLookupByLibrary.simpleMessage("Wiki des Plantes"),
+    "plantWiki": MessageLookupByLibrary.simpleMessage("Catalogue"),
     "plantsByDifficulty": MessageLookupByLibrary.simpleMessage(
       "Plantes par difficulté",
     ),
@@ -403,6 +410,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "signUpTitle": MessageLookupByLibrary.simpleMessage("Créez votre compte"),
     "startQuizButton": MessageLookupByLibrary.simpleMessage("Démarrer le Quiz"),
+    "startTutorial": MessageLookupByLibrary.simpleMessage(
+      "Démarrer le tutoriel",
+    ),
+    "startedTutorial": MessageLookupByLibrary.simpleMessage("Commençons !"),
     "submitRequest": MessageLookupByLibrary.simpleMessage(
       "Soumettre la demande",
     ),
@@ -416,6 +427,73 @@ class MessageLookup extends MessageLookupByLibrary {
     "tropicalPlants": MessageLookupByLibrary.simpleMessage(
       "Plantes tropicales",
     ),
+    "tutorial": MessageLookupByLibrary.simpleMessage(
+      "Tutoriel sur l\'application",
+    ),
+    "tutorialStep1": MessageLookupByLibrary.simpleMessage(
+      "Cliquez sur l\'icône en haut à droite pour passer du mode clair au mode sombre. Vous pouvez modifier vos informations, passer le quiz sur les plantes et démarrer le tutoriel.",
+    ),
+    "tutorialStep10": MessageLookupByLibrary.simpleMessage(
+      "Pour permettre à l\'IA de reconnaître votre nouvelle plante, vous pouvez utiliser une photo de votre galerie ou en prendre une nouvelle.",
+    ),
+    "tutorialStep11": MessageLookupByLibrary.simpleMessage(
+      "Si vous n\'avez pas besoin d\'aide pour obtenir des informations sur votre nouvelle plante, choisissez l\'autre option.",
+    ),
+    "tutorialStep12": MessageLookupByLibrary.simpleMessage(
+      "Remplissez le formulaire, téléchargez une photo si vous le souhaitez et enregistrez les informations.",
+    ),
+    "tutorialStep13": MessageLookupByLibrary.simpleMessage(
+      "Vous pouvez désormais voir votre nouvelle plante dans la liste de vos plantes. En cliquant dessus, vous accéderez à la page de détails de votre plante.",
+    ),
+    "tutorialStep14": MessageLookupByLibrary.simpleMessage(
+      "Vous pouvez modifier les informations ou ajouter des photos au journal. En cliquant sur l\'icône orange, vous pouvez indiquer que vous avez arrosé votre plante.",
+    ),
+    "tutorialStep15": MessageLookupByLibrary.simpleMessage(
+      "La plante est désormais marquée comme arrosée. Cela est également visible dans votre calendrier.",
+    ),
+    "tutorialStep16": MessageLookupByLibrary.simpleMessage(
+      "Voici le journal photo de votre nouvelle plante. Cliquez sur le bouton dans le coin droit pour ajouter des photos.",
+    ),
+    "tutorialStep17": MessageLookupByLibrary.simpleMessage(
+      "Si vous modifiez les informations de votre plante, assurez-vous d\'enregistrer les modifications.",
+    ),
+    "tutorialStep18": MessageLookupByLibrary.simpleMessage(
+      "Voici le calendrier où vous pouvez voir quand vos plantes doivent être arrosées. Le \'x\' indique que votre plante n\'est pas encore arrosée.",
+    ),
+    "tutorialStep19": MessageLookupByLibrary.simpleMessage(
+      "En cliquant sur le \'x\', vous pouvez marquer qu\'elle a été arrosée. Elle est désormais marquée comme arrosée.",
+    ),
+    "tutorialStep2": MessageLookupByLibrary.simpleMessage(
+      "Si vous souhaitez savoir quelles plantes conviennent à vos conditions, passez le quiz !",
+    ),
+    "tutorialStep20": MessageLookupByLibrary.simpleMessage(
+      "Félicitations ! Vous avez terminé le tutoriel. Profitez de l\'application !",
+    ),
+    "tutorialStep3": MessageLookupByLibrary.simpleMessage(
+      "Voici un wiki regroupant les plantes d\'intérieur les plus courantes. Vous pouvez filtrer votre recherche avec différentes options. Après avoir cliqué sur \'Toutes les plantes\'...",
+    ),
+    "tutorialStep4": MessageLookupByLibrary.simpleMessage(
+      "...vous verrez la liste de toutes les plantes du wiki. Cliquez sur le cœur à côté d\'une plante pour l\'ajouter à vos favoris. Cliquez sur \'Liste de souhaits\'...",
+    ),
+    "tutorialStep5": MessageLookupByLibrary.simpleMessage(
+      "...pour accéder à votre liste de souhaits. Vous pouvez supprimer des éléments avec l\'icône de la corbeille.",
+    ),
+    "tutorialStep6": MessageLookupByLibrary.simpleMessage(
+      "Si vous ne trouvez pas une plante dans le wiki, vous pouvez demander son ajout en cliquant ici.",
+    ),
+    "tutorialStep7": MessageLookupByLibrary.simpleMessage(
+      "Cet espace affiche la liste de vos plantes personnelles. Elle est actuellement vide. Pour ajouter une plante...",
+    ),
+    "tutorialStep8": MessageLookupByLibrary.simpleMessage(
+      "...cliquez sur le bouton plus en bas à droite. Si vous avez besoin d\'aide...",
+    ),
+    "tutorialStep9": MessageLookupByLibrary.simpleMessage(
+      "...vous pouvez utiliser les informations du wiki pour remplir le formulaire. Vous pouvez également utiliser la reconnaissance par IA pour votre nouvelle plante.",
+    ),
+    "tutorialText": MessageLookupByLibrary.simpleMessage(
+      "Nous sommes là pour vous guider à travers l\'application grâce à une visite rapide, afin que vous découvriez toutes les fonctionnalités clés et que rien d\'important ne vous échappe. À la fin, vous utiliserez l\'application comme un pro !",
+    ),
+    "tutorialYes": MessageLookupByLibrary.simpleMessage("Oui !"),
     "undo": MessageLookupByLibrary.simpleMessage("Annuler"),
     "unknownPlant": MessageLookupByLibrary.simpleMessage("Plante inconnue"),
     "unknownPlantId": MessageLookupByLibrary.simpleMessage(
@@ -454,6 +532,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Bienvenue sur Plant Friends !",
     ),
     "welcomeQuiz": MessageLookupByLibrary.simpleMessage("Bienvenue au Quiz !"),
+    "welcomeToTutorial": MessageLookupByLibrary.simpleMessage(
+      "Bienvenue dans le tutoriel !",
+    ),
+    "welcomeTutorial": MessageLookupByLibrary.simpleMessage("Bienvenue ! 👋"),
     "wishlistEmpty": MessageLookupByLibrary.simpleMessage(
       "Votre liste de souhaits est vide.\nAllez dans le Wiki et appuyez sur le cœur pour ajouter des plantes.",
     ),

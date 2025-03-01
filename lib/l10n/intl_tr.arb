@@ -215,5 +215,6 @@
   "userId": "Kullanıcı Kimliği",
   "joinedAt": "Katılım Tarihi",
   "deleteAccount": "Hesabı Sil",
-  "changeLanguage": "Dili Değiştir"
+  "changeLanguage": "Dili Değiştir",
+  "tutorial": "Uygulama eğitimi"
 }

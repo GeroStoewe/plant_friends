@@ -13,7 +13,7 @@ on Software Engineering I using Flutter at HWR Berlin (winter term 2024 - summer
 To run this project locally, ensure the following are installed:
 
 1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
-2.  Flutter SDK (installation guide [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install)
+2.  Flutter SDK (installation guide: [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install) )
 3.	Git installed 
 4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
 5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)

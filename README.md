@@ -12,11 +12,11 @@ on Software Engineering I using Flutter at HWR Berlin (winter term 2024 - summer
 
 To run this project locally, ensure the following are installed:
 
-	1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
-	2.	Flutter SDK (installation guide [here](https://docs.flutter.dev/get-started/install)
-	3.	Git installed 
-	4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
-	5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
+1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
+2.  Flutter SDK (installation guide [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install)
+3.	Git installed 
+4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
+5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
 
 
 ## Local Development
@@ -24,15 +24,21 @@ To run this project locally, ensure the following are installed:
 This project uses Flutter as its framework. To build and run the app locally,
 follow these steps:
 
-    1. Clone the repository:
-    `git clone https://github.com/GeroStoewe/plant_friends.git`
-    `cd plant_friends`
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/GeroStoewe/plant_friends.git
+    cd plant_friends
+   ```
 
-    2. Fetch dependencies:
-    `flutter pub get`
+2. Fetch dependencies:
+    ```bash
+     flutter pub get
+     ```
 
-    3. Run the app:
-    `flutter run`
+3. Run the app:
+     ```bash
+     flutter run
+     ```
 
 
 ## 📖 Abstract

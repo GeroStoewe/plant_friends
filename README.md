@@ -15,8 +15,8 @@ To run this project locally, ensure the following are installed:
 	1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
 	2.	Flutter SDK (installation guide [here](https://docs.flutter.dev/get-started/install)
 	3.	Git installed 
-	4.  	Android Emulator through Android Studio (optional, only required if not using a physical Android device)
-	5.  	Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
+	4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
+	5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
 
 
 ## Local Development
@@ -59,10 +59,12 @@ The key features of the Plant Friends app include:
 | 📅 Watering Log                | Tracks watering history for each plant on Calendar Page.                                           |
 | 👤 User Profiles               | Users can create profiles and sync their plant data across devices using Firebase.                 |
 | 🔍 Search Plants               | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page.  |
+| ❤️Plant Wishlist               | Allows users to save plants from Wiki page they want to add in Wishlist                            |
+| 📸 Photo Journal (Zoomable)    | Enables users to add plant photos and zoom in/out for detailed viewing within the photo journal.   |
 | 🌱 Plant Quiz                  | Asks questions about room conditions of user and recommends the best plants based on user answers. |
 | 🌞🌚 Light and Dark Mode       | Offers both light and dark themes for a better user experience.                                    |
 | 🔍 Plant recognition AI        | Can identify plants from photos.                                                                   |
-| 🗣️ Different language options | Options: English, German, Turkish, Spanish, Italian, French                                        |
+| 🗣️ Different language options | Options: English, German, Turkish, Spanish, Italian, and French                                    |
 | 📖️ App Tutorial               | Offers an app tutorial after first login.                                                          |
 
 
@@ -129,7 +131,7 @@ implemented in this app. We used exploratory testing to ensure the usability.
 
 ## 📸 Sample of Views
 
-The following screenshots were taken from Android (Pixel 8) and iOS (iPhone 15) simulators.
+The following sample of views were taken from iOS (iPhone 15) and Android (Pixel 8) simulators.
 
 
 * Welcome Page:
@@ -156,7 +158,7 @@ The following screenshots were taken from Android (Pixel 8) and iOS (iPhone 15) 
   <img src="./docs/screenshots/login_page.png">
 
 
-*  Login with Google Account:
+* Login with Google Account:
   <br/>
   <br/>
   <img src="./docs/screenshots/google_login.png">

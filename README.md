@@ -65,7 +65,7 @@ The key features of the Plant Friends app include:
 | 📅 Watering Log                | Tracks watering history for each plant on Calendar Page.                                           |
 | 👤 User Profiles               | Users can create profiles and sync their plant data across devices using Firebase.                 |
 | 🔍 Search Plants               | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page.  |
-| ❤️Plant Wishlist               | Allows users to save plants from Wiki page they want to add in Wishlist                            |
+| ❤️ Plant Wishlist              | Allows users to save plants from Wiki page they want to add in Wishlist                            |
 | 📸 Photo Journal (Zoomable)    | Enables users to add plant photos and zoom in/out for detailed viewing within the photo journal.   |
 | 🌱 Plant Quiz                  | Asks questions about room conditions of user and recommends the best plants based on user answers. |
 | 🌞🌚 Light and Dark Mode       | Offers both light and dark themes for a better user experience.                                    |

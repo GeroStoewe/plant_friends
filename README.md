@@ -3,7 +3,7 @@
 Members: Laura, Lisa, Gero, and Aylin
 
 This repository contains a student project created for the ongoing course
-on Software Engineering I using Flutter at HWR Berlin (winter term 2024).
+on Software Engineering I using Flutter at HWR Berlin (winter term 2024 - summer term 2025).
 
 ⚠️ This code is for educational purposes only. Please do not rely on it!
 
@@ -75,14 +75,16 @@ The key features of the Plant Friends app include:
 The Plant Friends app follows a common Flutter project structure:
 
 lib/
-
-│── main.dart 
                
 │── firebase/
 
 │── fonts/
 
+│── generated/
+
 │── images/
+
+│── l10n/
 
 │── pages/
 
@@ -90,9 +92,10 @@ lib/
 
 │── widgets/
 
+│── main.dart
 
 
-## 🛠️ Dependencies Overview
+
 ## 🛠️ Dependencies Overview
 
 | Dependency                     | Description                                      | Why is it necessary?                                      |
@@ -126,11 +129,16 @@ implemented in this app. We used exploratory testing to ensure the usability.
 
 ## 📸 Sample of Views
 
+The following screenshots were taken from Android (Pixel 8) and iOS (iPhone 15) simulators.
+
+
 * Welcome Page:
   <br/>
   <br/>
   <img src="./docs/screenshots/welcome_page_1.png">
 
+
+* Login or Signup:
   <br/>
   <br/>
   <img src="./docs/screenshots/welcome_page_2.png">
@@ -148,10 +156,10 @@ implemented in this app. We used exploratory testing to ensure the usability.
   <img src="./docs/screenshots/login_page.png">
 
 
-* Navigation Bar:
+*  Login with Google Account:
   <br/>
   <br/>
-  <img src="./docs/screenshots/navigation_bar_dark_and_light_mode.png">
+  <img src="./docs/screenshots/google_login.png">
 
 
 * My Plants:

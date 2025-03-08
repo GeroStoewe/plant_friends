@@ -218,7 +218,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
 * Account:
   <br/>
   <br/>
-  <img height="1,110" src="./docs/screenshots/account_page.png" width="1,154"/>
+  <img height="1154" src="./docs/screenshots/account_page.png" width="1110"/>
  
   
 ## 📲🚀 Download PlantFriends on Google Play

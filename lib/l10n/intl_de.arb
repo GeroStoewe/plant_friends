@@ -247,5 +247,20 @@
   "tutorialStep20": "Glückwunsch! Du hast das Tutorial abgeschlossen. Viel Spaß mit der App!",
   "next": "Weiter",
   "finish": "Fertig",
-  "back": "Zurück"
+  "back": "Zurück",
+  "suggestions": "Feedback Teilen",
+  "featureSuggestions": "Funktionsvorschläge",
+  "featureSuggestionsHint": "Welche neuen Funktionen möchtest du sehen?",
+  "improvementSuggestions": "Verbesserungsvorschläge",
+  "improvementSuggestionsHint": "Was können wir verbessern?",
+  "plantCareSuggestions": "Pflanzenpflege-Vorschläge",
+  "plantCareSuggestionsHint": "Hast du Vorschläge für die Pflanzenpflege?",
+  "technicalFeedback": "Technisches Feedback",
+  "technicalFeedbackHint": "Melde hier Bugs oder technische Probleme.",
+  "additionalComments": "Zusätzliche Kommentare",
+  "additionalCommentsHint": "Hast du weiteres Feedback?",
+  "submit": "Absenden",
+  "thankYouForSuggestions": "Danke, dass du dein Feedback geteilt hast!",
+  "saveSuggestionsError": "Speichern der Vorschläge fehlgeschlagen. Bitte versuche es erneut.",
+  "emptyFormWarning": "Leere Formulare sind nicht erlaubt. Bitte gib Feedback."
 }

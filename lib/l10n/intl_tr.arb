@@ -247,5 +247,20 @@
   "tutorialStep20": "Tebrikler! Eğitici turu tamamladınız. Uygulamayı kullanmanın keyfini çıkarın!",
   "next": "Sonraki",
   "finish": "Bitir",
-  "back": "Geri"
+  "back": "Geri",
+  "suggestions": "Geri Bildirim Paylaş",
+  "featureSuggestions": "Özellik Önerileri",
+  "featureSuggestionsHint": "Hangi yeni özellikleri görmek istersiniz?",
+  "improvementSuggestions": "Geliştirme Önerileri",
+  "improvementSuggestionsHint": "Neleri geliştirebiliriz?",
+  "plantCareSuggestions": "Bitki Bakımı Önerileri",
+  "plantCareSuggestionsHint": "Bitki bakımıyla ilgili önerileriniz var mı?",
+  "technicalFeedback": "Teknik Geri Bildirim",
+  "technicalFeedbackHint": "Hata veya teknik sorunları buradan bildirin.",
+  "additionalComments": "Başka Öneriler",
+  "additionalCommentsHint": "Başka bir geri bildiriminiz var mı?",
+  "submit": "Gönder",
+  "thankYouForSuggestions": "Geri bildiriminizi paylaştığınız için teşekkür ederiz!",
+  "saveSuggestionsError": "Öneriler kaydedilemedi. Lütfen tekrar deneyin.",
+  "emptyFormWarning": "Boş formlar gönderilemez. Lütfen geri bildirim yazın."
 }

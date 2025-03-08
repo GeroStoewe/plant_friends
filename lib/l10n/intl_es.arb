@@ -247,5 +247,20 @@
   "tutorialStep20": "¡Felicidades! Has completado el tutorial. ¡Disfruta usando la aplicación!",
   "next": "Siguiente",
   "finish": "Finalizar",
-  "back": "Atrás"
+  "back": "Atrás",
+  "suggestions": "Compartir Comentarios",
+  "featureSuggestions": "Sugerencias de Funciones",
+  "featureSuggestionsHint": "¿Qué nuevas funciones te gustaría ver?",
+  "improvementSuggestions": "Sugerencias de Mejoras",
+  "improvementSuggestionsHint": "¿Qué podemos mejorar?",
+  "plantCareSuggestions": "Sugerencias para el Cuidado de Plantas",
+  "plantCareSuggestionsHint": "¿Tienes sugerencias para el cuidado de las plantas?",
+  "technicalFeedback": "Comentarios Técnicos",
+  "technicalFeedbackHint": "Reporta errores o problemas técnicos aquí.",
+  "additionalComments": "Comentarios Adicionales",
+  "additionalCommentsHint": "¿Tienes algún otro comentario?",
+  "submit": "Enviar",
+  "thankYouForSuggestions": "¡Gracias por compartir tus comentarios!",
+  "saveSuggestionsError": "No se pudieron guardar las sugerencias. Inténtalo de nuevo.",
+  "emptyFormWarning": "No se permiten formularios vacíos. Por favor, proporciona comentarios."
 }

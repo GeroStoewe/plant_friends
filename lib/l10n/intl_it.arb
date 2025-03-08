@@ -247,5 +247,20 @@
   "tutorialStep20": "Congratulazioni! Hai completato il tutorial. Buon divertimento con l'app!",
   "next": "Avanti",
   "finish": "Fine",
-  "back": "Indietro"
+  "back": "Indietro",
+  "suggestions": "Condividi Feedback",
+  "featureSuggestions": "Suggerimenti per le Funzionalità",
+  "featureSuggestionsHint": "Quali nuove funzionalità vorresti vedere?",
+  "improvementSuggestions": "Suggerimenti per Miglioramenti",
+  "improvementSuggestionsHint": "Cosa possiamo migliorare?",
+  "plantCareSuggestions": "Suggerimenti per la Cura delle Piante",
+  "plantCareSuggestionsHint": "Hai suggerimenti per la cura delle piante?",
+  "technicalFeedback": "Feedback Tecnico",
+  "technicalFeedbackHint": "Segnala bug o problemi tecnici qui.",
+  "additionalComments": "Commenti Aggiuntivi",
+  "additionalCommentsHint": "Hai altri feedback?",
+  "submit": "Invia",
+  "thankYouForSuggestions": "Grazie per aver condiviso il tuo feedback!",
+  "saveSuggestionsError": "Impossibile salvare i suggerimenti. Riprova.",
+  "emptyFormWarning": "Non è possibile inviare moduli vuoti. Fornisci un feedback."
 }

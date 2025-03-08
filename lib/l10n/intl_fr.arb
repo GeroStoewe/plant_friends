@@ -247,5 +247,20 @@
   "tutorialStep20": "Félicitations ! Vous avez terminé le tutoriel. Profitez de l'application !",
   "next": "Suivant",
   "finish": "Terminer",
-  "back": "Retour"
+  "back": "Retour",
+  "suggestions": "Partager un Avis",
+  "featureSuggestions": "Suggestions de Fonctionnalités",
+  "featureSuggestionsHint": "Quelles nouvelles fonctionnalités aimeriez-vous voir?",
+  "improvementSuggestions": "Suggestions d'Amélioration",
+  "improvementSuggestionsHint": "Que pouvons-nous améliorer?",
+  "plantCareSuggestions": "Suggestions pour l'Entretien des Plantes",
+  "plantCareSuggestionsHint": "Avez-vous des suggestions pour l'entretien des plantes?",
+  "technicalFeedback": "Retour Technique",
+  "technicalFeedbackHint": "Signalez les bugs ou les problèmes techniques ici.",
+  "additionalComments": "Commentaires Supplémentaires",
+  "additionalCommentsHint": "Avez-vous d'autres remarques?",
+  "submit": "Envoyer",
+  "thankYouForSuggestions": "Merci d'avoir partagé votre avis!",
+  "saveSuggestionsError": "Échec de l'enregistrement des suggestions. Veuillez réessayer.",
+  "emptyFormWarning": "Les formulaires vides ne sont pas autorisés. Veuillez donner un retour."
 }

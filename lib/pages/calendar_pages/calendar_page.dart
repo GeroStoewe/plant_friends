@@ -145,15 +145,20 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               todayDecoration: BoxDecoration(
                 border: Border.all(
-                  color: darkSeaGreen, // Farbe der Umrandung
-                  width: 2, // Breite der Umrandung
+                  color: darkSeaGreen,
+                  width: 2,
                 ),
                 shape: BoxShape.circle,
-                color: Colors.transparent, // Hintergrund transparent
+                color: Colors.transparent,
               ),
-              todayTextStyle: const TextStyle(
+              todayTextStyle: const TextStyle(),
+              markersMaxCount: 1, // Set the maximum number of markers to display
+              markerDecoration: const BoxDecoration(
+                color: Colors.blue, // Change this to your desired color
+                shape: BoxShape.circle,
               ),
             ),
+
             calendarBuilders: CalendarBuilders(
               dowBuilder: (context, day) {
                 return Center(

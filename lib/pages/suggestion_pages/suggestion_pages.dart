@@ -18,7 +18,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
   final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL:
-        'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
+    'https://plant-friends-app-default-rtdb.europe-west1.firebasedatabase.app/',
   ).ref();
 
   final _formKey = GlobalKey<FormState>();
@@ -71,13 +71,14 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
         Navigator.pop(context);
       }).catchError((error) {
         CustomSnackbar snackbar = CustomSnackbar(context);
-        snackbar.showMessage('Failed to save suggestions $error', MessageType.error);
+        snackbar.showMessage(
+            'Failed to save suggestions $error', MessageType.error);
       });
     }
   }
 
   // Clear form fields
-   void _clearForm() {
+  void _clearForm() {
     _featureController.clear();
     _improvementController.clear();
     _plantCareController.clear();
@@ -95,10 +96,14 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
       appBar: AppBar(
         title: Text(
           localizations.suggestions,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: isDarkMode ? Colors.white : Colors.black,
-              ),
+          style: Theme
+              .of(context)
+              .textTheme
+              .headlineMedium
+              ?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -136,186 +141,250 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Feature Suggestions
-                    Text(
-                      localizations.featureSuggestions,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode
-                                ? Colors.green
-                                : Colors.teal.shade800,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _featureController,
-                      decoration: InputDecoration(
-                        hintText: localizations.featureSuggestionsHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.black), // Default border color
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.green), // Border color when focused
-                        ),
-                        focusColor:
-                            Colors.green, // Cursor and selection handle color
+                  // Feature Suggestions
+                  Text(
+                  localizations.featureSuggestions,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextSelectionTheme(
+                  data: const TextSelectionThemeData(
+                      selectionHandleColor: Colors.grey,
+                      selectionColor: Colors.blueGrey), // Text selection color
+                  child: TextFormField(
+                    controller: _featureController,
+                    cursorColor: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                    decoration: InputDecoration(
+                      hintText: localizations.featureSuggestionsHint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Improvement Suggestions
-                    Text(
-                      localizations.improvementSuggestions,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode
-                                ? Colors.green
-                                : Colors.teal.shade800,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _improvementController,
-                      decoration: InputDecoration(
-                        hintText: localizations.improvementSuggestionsHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.black), // Default border color
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.green), // Border color when focused
-                        ),
-                        focusColor:
-                            Colors.green, // Cursor and selection handle color
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.black), // Default border color
                       ),
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Plant Care Suggestions
-                    Text(
-                      localizations.plantCareSuggestions,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode
-                                ? Colors.green
-                                : Colors.teal.shade800,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _plantCareController,
-                      decoration: InputDecoration(
-                        hintText: localizations.plantCareSuggestionsHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.black), // Default border color
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.green), // Border color when focused
-                        ),
-                        focusColor:
-                            Colors.green, // Cursor and selection handle color
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.green), // Border color when focused
                       ),
-                      maxLines: 3,
+                      focusColor:
+                      Colors.green, // Cursor and selection handle color
                     ),
-                    const SizedBox(height: 16),
+                    maxLines: 3,
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-                    // Technical Feedback
-                    Text(
-                      localizations.technicalFeedback,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode
-                                ? Colors.green
-                                : Colors.teal.shade800,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _technicalController,
-                      decoration: InputDecoration(
-                        hintText: localizations.technicalFeedbackHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.black), // Default border color
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.green), // Border color when focused
-                        ),
-                        focusColor:
-                            Colors.green, // Cursor and selection handle color
+                // Improvement Suggestions
+                Text(
+                  localizations.improvementSuggestions,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextSelectionTheme(
+                  data: const TextSelectionThemeData(
+                      selectionHandleColor: Colors.grey,
+                      selectionColor: Colors.blueGrey),
+                  // Text selection color
+                  child: TextFormField(
+                    controller: _improvementController,
+                    cursorColor: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                    decoration: InputDecoration(
+                      hintText: localizations.improvementSuggestionsHint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Additional Comments
-                    Text(
-                      localizations.additionalComments,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDarkMode
-                                ? Colors.green
-                                : Colors.teal.shade800,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _commentsController,
-                      decoration: InputDecoration(
-                        hintText: localizations.additionalCommentsHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.black), // Default border color
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                              color: Colors.green), // Border color when focused
-                        ),
-                        focusColor:
-                            Colors.green, // Cursor and selection handle color
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.black), // Default border color
                       ),
-                      maxLines: 3,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.green), // Border color when focused
+                      ),
+                      focusColor:
+                      Colors.green, // Cursor and selection handle color
                     ),
-                    const SizedBox(height: 24),
+                    maxLines: 3,
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-                    // Submit Button
-                    Center(
-                        child: CustomButton(
-                            onTap: _saveSuggestions,
-                            text: localizations.submit)),
+                // Plant Care Suggestions
+                Text(
+                  localizations.plantCareSuggestions,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextSelectionTheme(
+                  data: const TextSelectionThemeData(
+                      selectionHandleColor: Colors.grey,
+                      selectionColor: Colors.blueGrey),
+                  // Text selection color
+                  child: TextFormField(
+                    controller: _plantCareController,
+                    cursorColor: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                    decoration: InputDecoration(
+                      hintText: localizations.plantCareSuggestionsHint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.black), // Default border color
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.green), // Border color when focused
+                      ),
+                      focusColor:
+                      Colors.green, // Cursor and selection handle color
+                    ),
+                    maxLines: 3,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Technical Feedback
+                Text(
+                  localizations.technicalFeedback,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextSelectionTheme(
+                  data: const TextSelectionThemeData(
+                      selectionHandleColor: Colors.grey,
+                      selectionColor: Colors.blueGrey),
+                  // Text selection color
+                  child: TextFormField(
+                    controller: _technicalController,
+                    cursorColor: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                    decoration: InputDecoration(
+                      hintText: localizations.technicalFeedbackHint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.black), // Default border color
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.green), // Border color when focused
+                      ),
+                      focusColor:
+                      Colors.green, // Cursor and selection handle color
+                    ),
+                    maxLines: 3,
+                  ),
+                ),
+                  const SizedBox(height: 16),
+
+                  // Additional Comments
+                  Text(
+                    localizations.additionalComments,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isDarkMode
+                          ? Colors.green
+                          : Colors.teal.shade800,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                TextSelectionTheme(
+                  data: const TextSelectionThemeData(
+                      selectionHandleColor: Colors.grey,
+                      selectionColor: Colors.blueGrey),
+                  // Text selection color
+                  child: TextFormField(
+                    controller: _commentsController,
+                    cursorColor: isDarkMode
+                        ? Colors.green
+                        : Colors.teal.shade800,
+                    decoration: InputDecoration(
+                      hintText: localizations.additionalCommentsHint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.black), // Default border color
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: Colors.green), // Border color when focused
+                      ),
+                      focusColor:
+                      Colors.green, // Cursor and selection handle color
+                    ),
+                    maxLines: 3,
+                  ),
+                ),
+                  const SizedBox(height: 24),
+
+                  // Submit Button
+                  Center(
+                      child: CustomButton(
+                          onTap: _saveSuggestions,
+                          text: localizations.submit)),
                   ],
                 ),
               ),

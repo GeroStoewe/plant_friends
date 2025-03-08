@@ -256,48 +256,12 @@ class _PlantFilterResultPageState extends State<PlantFilterResultPage> {
         trackColor: WidgetStateProperty.all(Colors.grey.shade300), // Set track color
       ),
       child: Scaffold(
-        appBar: AppBar(
+        appBar: AppBar(title: Text(
+          _toTitleCase('${widget.filterType}: ${widget.filterValue ?? ''}'), // Convert to title case
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          actions: [
-        Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: TextButton.icon(
-          iconAlignment: IconAlignment.end,
-        icon: const Icon(
-          Icons.favorite,
-          color: Colors.red,
-          size: 28.0,
-        ),
-        label: Text(
-          localizations.wishlistTitle,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12), // Rounded corners
-          ),
-          backgroundColor: Colors.green, // Modern button color
-        ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlantWishListPage(
-                  wishlist: wishlist,
-                  plantData: plantData,
-                  onClearWishlist: _clearWishlist,
-                ),
-              ),
-            );
-          },
-        ),
-        ),
-          ],
+
         ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(seaGreen),))

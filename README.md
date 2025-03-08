@@ -192,8 +192,8 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <br/>
   <br/>
   <img src="./docs/screenshots/account_page.png">
-
-
+//TODO Update Account page as there is now a new subsection "Give Feedback"
+ 
 ## 📝 Commands Overview
 
 Since the app is built using Flutter, there are various commands you can run for development and debugging.

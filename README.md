@@ -174,7 +174,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <img src="./docs/screenshots/welcome_page_1.png">
 
 
-* Login & Signup:
+* Login & Sign up:
   <br/>
   <br/>
   <img src="./docs/screenshots/welcome_page_2.png">

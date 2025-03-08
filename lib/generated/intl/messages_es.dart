@@ -36,6 +36,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "addedToWishlist": MessageLookupByLibrary.simpleMessage(
       " agregado a la lista de deseos ",
     ),
+    "additionalComments": MessageLookupByLibrary.simpleMessage(
+      "Comentarios Adicionales",
+    ),
+    "additionalCommentsHint": MessageLookupByLibrary.simpleMessage(
+      "¿Tienes algún otro comentario?",
+    ),
     "additionalNotes": MessageLookupByLibrary.simpleMessage(
       "Notas adicionales (opcional)",
     ),
@@ -128,6 +134,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Formato de correo electrónico inválido",
     ),
     "emailProfile": MessageLookupByLibrary.simpleMessage("Correo electrónico"),
+    "emptyFormWarning": MessageLookupByLibrary.simpleMessage(
+      "No se permiten formularios vacíos. Por favor, proporciona comentarios.",
+    ),
     "enterNewPassword": MessageLookupByLibrary.simpleMessage(
       "Por favor, ingresa una nueva contraseña para cambiar la actual.",
     ),
@@ -184,6 +193,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "failedToUpdateWishlist": MessageLookupByLibrary.simpleMessage(
       "Error al actualizar la lista de deseos: ",
     ),
+    "featureSuggestions": MessageLookupByLibrary.simpleMessage(
+      "Sugerencias de Funciones",
+    ),
+    "featureSuggestionsHint": MessageLookupByLibrary.simpleMessage(
+      "¿Qué nuevas funciones te gustaría ver?",
+    ),
     "fillRequiredFields": MessageLookupByLibrary.simpleMessage(
       "Por favor, completa todos los campos obligatorios.",
     ),
@@ -234,6 +249,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Si falta una planta que conoces, por favor envía el siguiente formulario y consideraremos agregarla.",
     ),
     "imageUrl": MessageLookupByLibrary.simpleMessage("URL de la imagen"),
+    "improvementSuggestions": MessageLookupByLibrary.simpleMessage(
+      "Sugerencias de Mejoras",
+    ),
+    "improvementSuggestionsHint": MessageLookupByLibrary.simpleMessage(
+      "¿Qué podemos mejorar?",
+    ),
     "indirectLight": MessageLookupByLibrary.simpleMessage("Luz indirecta"),
     "joined": MessageLookupByLibrary.simpleMessage("Registrado: "),
     "joinedAt": MessageLookupByLibrary.simpleMessage("Registrado en"),
@@ -317,11 +338,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "plantCareInformation": MessageLookupByLibrary.simpleMessage(
       "Información sobre el cuidado de la planta",
     ),
+    "plantCareSuggestions": MessageLookupByLibrary.simpleMessage(
+      "Sugerencias para el Cuidado de Plantas",
+    ),
+    "plantCareSuggestionsHint": MessageLookupByLibrary.simpleMessage(
+      "¿Tienes sugerencias para el cuidado de las plantas?",
+    ),
     "plantDetailsUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Detalles de la planta actualizados correctamente",
     ),
     "plantName": MessageLookupByLibrary.simpleMessage("Nombre de la planta"),
-    "plantQuiz": MessageLookupByLibrary.simpleMessage("Quiz de plantas"),
+    "plantQuiz": MessageLookupByLibrary.simpleMessage(
+      "¿Qué planta me conviene?",
+    ),
     "plantType": MessageLookupByLibrary.simpleMessage("Tipo de planta"),
     "plantWiki": MessageLookupByLibrary.simpleMessage("Catálogo"),
     "plantsByDifficulty": MessageLookupByLibrary.simpleMessage(
@@ -374,6 +403,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "save": MessageLookupByLibrary.simpleMessage("Guardar"),
     "saveBig": MessageLookupByLibrary.simpleMessage("GUARDAR"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("Guardar cambios"),
+    "saveSuggestionsError": MessageLookupByLibrary.simpleMessage(
+      "No se pudieron guardar las sugerencias. Inténtalo de nuevo.",
+    ),
     "scientificName": MessageLookupByLibrary.simpleMessage("Nombre científico"),
     "searchByName": MessageLookupByLibrary.simpleMessage(
       "Busca por nombre o nombre científico",
@@ -408,12 +440,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "startQuizButton": MessageLookupByLibrary.simpleMessage("Comenzar Quiz"),
     "startTutorial": MessageLookupByLibrary.simpleMessage("Iniciar Tutorial"),
     "startedTutorial": MessageLookupByLibrary.simpleMessage("¡Empecemos!"),
+    "submit": MessageLookupByLibrary.simpleMessage("Enviar"),
     "submitRequest": MessageLookupByLibrary.simpleMessage("Enviar solicitud"),
+    "suggestions": MessageLookupByLibrary.simpleMessage(
+      "Compartir Comentarios",
+    ),
     "sureDeleting": MessageLookupByLibrary.simpleMessage(
       "¿Estás seguro de que deseas eliminar esta planta? Esto también eliminará todos los eventos de riego asociados.",
     ),
     "takeOrPickPhoto": MessageLookupByLibrary.simpleMessage(
       "Toma o selecciona una foto de la planta",
+    ),
+    "technicalFeedback": MessageLookupByLibrary.simpleMessage(
+      "Comentarios Técnicos",
+    ),
+    "technicalFeedbackHint": MessageLookupByLibrary.simpleMessage(
+      "Reporta errores o problemas técnicos aquí.",
+    ),
+    "thankYouForSuggestions": MessageLookupByLibrary.simpleMessage(
+      "¡Gracias por compartir tus comentarios!",
     ),
     "trees": MessageLookupByLibrary.simpleMessage("Árboles/Palmeras"),
     "tropicalPlants": MessageLookupByLibrary.simpleMessage(

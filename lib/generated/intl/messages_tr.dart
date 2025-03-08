@@ -36,6 +36,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "addedToWishlist": MessageLookupByLibrary.simpleMessage(
       " istek listesine eklendi ",
     ),
+    "additionalComments": MessageLookupByLibrary.simpleMessage(
+      "Başka Öneriler",
+    ),
+    "additionalCommentsHint": MessageLookupByLibrary.simpleMessage(
+      "Başka bir geri bildiriminiz var mı?",
+    ),
     "additionalNotes": MessageLookupByLibrary.simpleMessage(
       "Ek notlar (isteğe bağlı)",
     ),
@@ -122,6 +128,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Geçersiz e-posta formatı",
     ),
     "emailProfile": MessageLookupByLibrary.simpleMessage("E-posta"),
+    "emptyFormWarning": MessageLookupByLibrary.simpleMessage(
+      "Boş form gönderilemez. Lütfen geri bildirim yazın.",
+    ),
     "enterNewPassword": MessageLookupByLibrary.simpleMessage(
       "Mevcut şifrenizi değiştirmek için lütfen yeni bir şifre girin.",
     ),
@@ -176,6 +185,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "failedToUpdateWishlist": MessageLookupByLibrary.simpleMessage(
       "İstek listesi güncellenirken hata oluştu: ",
     ),
+    "featureSuggestions": MessageLookupByLibrary.simpleMessage(
+      "Özellik Önerileri",
+    ),
+    "featureSuggestionsHint": MessageLookupByLibrary.simpleMessage(
+      "Hangi yeni özellikleri görmek istersiniz?",
+    ),
     "fillRequiredFields": MessageLookupByLibrary.simpleMessage(
       "Lütfen tüm zorunlu alanları doldurun.",
     ),
@@ -226,6 +241,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Eğer eksik bir bitki olduğunu düşünüyorsanız, aşağıdaki formu doldurun ve eklemeyi değerlendireceğiz.",
     ),
     "imageUrl": MessageLookupByLibrary.simpleMessage("Resim URL"),
+    "improvementSuggestions": MessageLookupByLibrary.simpleMessage(
+      "Geliştirme Önerileri",
+    ),
+    "improvementSuggestionsHint": MessageLookupByLibrary.simpleMessage(
+      "Neleri geliştirebiliriz?",
+    ),
     "indirectLight": MessageLookupByLibrary.simpleMessage("Dolaylı Işık"),
     "joined": MessageLookupByLibrary.simpleMessage("Katılım tarihi: "),
     "joinedAt": MessageLookupByLibrary.simpleMessage("Katılım Tarihi"),
@@ -307,11 +328,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "plantCareInformation": MessageLookupByLibrary.simpleMessage(
       "Bitki Bakım Bilgileri",
     ),
+    "plantCareSuggestions": MessageLookupByLibrary.simpleMessage(
+      "Bitki Bakımı Önerileri",
+    ),
+    "plantCareSuggestionsHint": MessageLookupByLibrary.simpleMessage(
+      "Bitki bakımıyla ilgili önerileriniz var mı?",
+    ),
     "plantDetailsUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Bitki detayları başarıyla güncellendi",
     ),
     "plantName": MessageLookupByLibrary.simpleMessage("Bitki Adı"),
-    "plantQuiz": MessageLookupByLibrary.simpleMessage("Bitki Testi"),
+    "plantQuiz": MessageLookupByLibrary.simpleMessage(
+      "Hangi bitki bana uygun?",
+    ),
     "plantType": MessageLookupByLibrary.simpleMessage("Bitki Türü"),
     "plantWiki": MessageLookupByLibrary.simpleMessage("Katalog"),
     "plantsByDifficulty": MessageLookupByLibrary.simpleMessage(
@@ -364,6 +393,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage(
       "Değişiklikleri Kaydet",
     ),
+    "saveSuggestionsError": MessageLookupByLibrary.simpleMessage(
+      "Öneriler kaydedilemedi. Lütfen tekrar deneyin.",
+    ),
     "scientificName": MessageLookupByLibrary.simpleMessage("Bilimsel Ad"),
     "searchByName": MessageLookupByLibrary.simpleMessage(
       "İsme veya bilimsel isme göre ara",
@@ -398,12 +430,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Eğitici Turu Başlat",
     ),
     "startedTutorial": MessageLookupByLibrary.simpleMessage("Hadi başlayalım!"),
+    "submit": MessageLookupByLibrary.simpleMessage("Gönder"),
     "submitRequest": MessageLookupByLibrary.simpleMessage("Talebi Gönder"),
+    "suggestions": MessageLookupByLibrary.simpleMessage("Öneri Paylaş"),
     "sureDeleting": MessageLookupByLibrary.simpleMessage(
       "Bu bitkiyi silmek istediğinizden emin misiniz? Buna bağlı tüm sulama olayları da silinecektir.",
     ),
     "takeOrPickPhoto": MessageLookupByLibrary.simpleMessage(
       "Bitki fotoğrafı çek veya seç",
+    ),
+    "technicalFeedback": MessageLookupByLibrary.simpleMessage(
+      "Teknik Geri Bildirim",
+    ),
+    "technicalFeedbackHint": MessageLookupByLibrary.simpleMessage(
+      "Hata veya teknik sorunları lütfen buradan bildirin.",
+    ),
+    "thankYouForSuggestions": MessageLookupByLibrary.simpleMessage(
+      "Geri bildiriminizi paylaştığınız için teşekkür ederiz!",
     ),
     "trees": MessageLookupByLibrary.simpleMessage("Ağaçlar/Palmiye"),
     "tropicalPlants": MessageLookupByLibrary.simpleMessage("Tropikal Bitkiler"),

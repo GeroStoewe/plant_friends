@@ -128,8 +128,11 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
       ),
       body: Container(
         decoration: BoxDecoration(
+          //color: Theme.of(context).scaffoldBackgroundColor,
           gradient: LinearGradient(
-            colors: [Colors.teal.shade50, Colors.green.shade50],
+            colors:  isDarkMode
+            ? [Colors.black, Colors.grey.shade900]
+            : [Colors.teal.shade50, Colors.green.shade50],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

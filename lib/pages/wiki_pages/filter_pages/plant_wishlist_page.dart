@@ -104,7 +104,7 @@ class _PlantWishListPageState extends State<PlantWishListPage> {
                     Text(
                       localizations.wishlistEmpty,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
                       ),

@@ -261,5 +261,6 @@
   "additionalCommentsHint": "Any other feedback?",
   "submit": "Submit",
   "thankYouForSuggestions": "Thank you for sharing your feedback!",
-  "saveSuggestionsError": "Failed to save suggestions. Please try again."
+  "saveSuggestionsError": "Failed to save suggestions. Please try again.",
+  "emptyFormWarning": "Empty forms are not allowed. Please provide feedback."
 }

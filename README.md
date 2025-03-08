@@ -223,11 +223,9 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   
 ## 📲🚀 Download PlantFriends on Google Play
 
-PlantFriends is now available on Google Play! Start your plant care journey today: 
-([Download on Google Play](https://play.google.com/store/apps/details?id=com.hwr.plant_friends))
-
-
-* Play Store:
+* PlantFriends is now available on Google Play!
   <br/>
   <br/>
   <img src="./docs/screenshots/play_store.png">
+
+Start your plant care journey today: ([Download](https://play.google.com/store/apps/details?id=com.hwr.plant_friends))

@@ -63,7 +63,7 @@ The key features of the Plant Friends app include:
 To run this project locally, ensure the following are installed:
 
 1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
-2.  Flutter SDK (installation guide: [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install) )
+2.  Flutter SDK ([installation guide](https://docs.flutter.dev/get-started/install) )
 3.	Git installed 
 4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
 5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
@@ -227,4 +227,4 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <br/>
   <img src="./docs/screenshots/play_store.png">
 
-* Start your plant care journey today: [Download](https://play.google.com/store/apps/details?id=com.hwr.plant_friends)
+* Start your plant care journey today with PlantFriends! [Download](https://play.google.com/store/apps/details?id=com.hwr.plant_friends)

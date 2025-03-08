@@ -1,6 +1,7 @@
 # 🌿 Plant Friends App by Group 4!
 
-## Table of Contents
+
+## 📑 Table of Contents
 1. [Introduction](#introduction)
 2. [Abstract](#-abstract)
 3. [Features Overview](#-features-overview)

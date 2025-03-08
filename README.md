@@ -14,7 +14,7 @@
 11. [Download PlantFriends on Google Play](#-download-plantfriends-on-google-play)
 
 
-## Introduction
+## 🌟 Introduction
 Members: Laura, Lisa, Gero, and Aylin
 
 This repository contains a student project created for the ongoing course
@@ -58,7 +58,7 @@ The key features of the Plant Friends app include:
 | 🌞🌚 Light and Dark Mode       | Offers both light and dark themes for a better user experience.                                             |
  
 
-## Prerequisites
+## 🛠️ Prerequisites
 
 To run this project locally, ensure the following are installed:
 
@@ -69,7 +69,7 @@ To run this project locally, ensure the following are installed:
 5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
 
 
-## Local Development
+## 💻 Local Development
 
 This project uses Flutter as its framework. To build and run the app locally,
 follow these steps:

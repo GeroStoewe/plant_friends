@@ -207,7 +207,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <br/>
   <br/>
   <img src="./docs/screenshots/calendar_page.png">
-  /// TODO size does not match with the others
+
 
 * Plant-Wiki:
   <br/>

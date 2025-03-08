@@ -207,7 +207,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <br/>
   <br/>
   <img src="./docs/screenshots/calendar_page.png">
-
+  /// TODO size does not match with the others
 
 * Plant-Wiki:
   <br/>
@@ -219,7 +219,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <br/>
   <br/>
   <img height="1154" src="./docs/screenshots/account_page.png" width="1110"/>
- 
+ /// TODO size does not match with the others
   
 ## 📲🚀 Download PlantFriends on Google Play
 

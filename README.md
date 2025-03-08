@@ -1,6 +1,7 @@
 # 🌿 Plant Friends App by Group 4!
 
-## Table of Contents
+
+## 📑 Table of Contents
 1. [Introduction](#introduction)
 2. [Abstract](#-abstract)
 3. [Features Overview](#-features-overview)
@@ -14,7 +15,7 @@
 11. [Download PlantFriends on Google Play](#-download-plantfriends-on-google-play)
 
 
-## Introduction
+## 🌟 Introduction
 Members: Laura, Lisa, Gero, and Aylin
 
 This repository contains a student project created for the ongoing course
@@ -40,36 +41,36 @@ Dart programming language, working with state management, and backend services (
 
 The key features of the Plant Friends app include:
 
-| Feature                         | Description                                                                                         |
-|---------------------------------|-----------------------------------------------------------------------------------------------------|
-| 🌿 Add Plant                    | Allows users to add a new plant by providing its name, scientific name, and photo.                  |
-| ⏰ Plant Care Reminders          | Notifies users when their plants need watering.                                                     |
-| 📚 Plant Wiki                   | Includes a library of popular houseplants with detailed care instructions.                          |
-| 📅 Watering Log                 | Tracks watering history for each plant on Calendar Page.                                            |
-| 👤 User Profiles                | Users can create profiles and sync their plant data across devices using Firebase.                  |
-| 🔍 Search Plants                | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page.   |
-| ❤️ Plant Wishlist               | Allows users to save plants from Wiki page they want to add in Wishlist.                            |
-| 📸 Photo Journal (Zoomable)     | Enables users to add plant photos and zoom in/out for detailed viewing within the photo journal.    |
-| 🌱 Which plant suits me best?   | Asks questions about room conditions of user and recommends the best plants based on user answers.  |
-| 🔍 Plant recognition AI         | Can identify plants from photos.                                                                    |
-| 🗣️ Different language options  | Options: English, German, Turkish, Spanish, Italian, and French                                     |
-| 📖️ App Tutorial                | Offers an app tutorial after first login.                                                           |
-| 💡 Share Feedback               | Allows users to provide their thoughts and suggestions to improve this app.                         |
-| 🌞🌚 Light and Dark Mode        | Offers both light and dark themes for a better user experience.                                     |
+| Feature                        | Description                                                                                                 |
+|--------------------------------|-------------------------------------------------------------------------------------------------------------|
+| 🌿 Add Plant                   | Allows users to add a new plant by providing its name, scientific name, and photo.                          |
+| ⏰ Plant Care Reminders         | Notifies users when their plants need watering.                                                             |
+| 📚 Plant Wiki                  | Includes a library of popular houseplants with detailed care instructions.                                  |
+| 📅 Watering Log                | Tracks watering history for each plant on Calendar Page.                                                    |
+| 👤 User Profiles               | Users can create profiles and sync their plant data across devices using Firebase.                          |
+| 🔍 Search Plants               | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page.           |
+| ❤️ Plant Wishlist              | Allows users to save plants from Wiki page they want to add in Wishlist.                                    |
+| 📸 Photo Journal (Zoomable)    | Enables users to add plant photos and zoom in/out for detailed viewing within the photo journal.            |
+| ❓ Find Your Ideal Plant        | Quiz asking questions about room conditions of user and recommending the best plants based on user answers. |
+| 🔍 Plant recognition AI        | Can identify plants from photos.                                                                            |
+| 🗣️ Different language options | Options: English, German, Turkish, Spanish, Italian, and French                                             |
+| 📖️ App Tutorial               | Offers an app tutorial after first login.                                                                   |
+| 💡 Share Feedback              | Allows users to provide their thoughts and suggestions to improve this app.                                 |
+| 🌞🌚 Light and Dark Mode       | Offers both light and dark themes for a better user experience.                                             |
  
 
-## Prerequisites
+## 🛠️ Prerequisites
 
 To run this project locally, ensure the following are installed:
 
 1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
-2.  Flutter SDK (installation guide: [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install) )
+2.  Flutter SDK ([installation guide](https://docs.flutter.dev/get-started/install))
 3.	Git installed 
 4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
 5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
 
 
-## Local Development
+## 💻 Local Development
 
 This project uses Flutter as its framework. To build and run the app locally,
 follow these steps:
@@ -173,7 +174,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <img src="./docs/screenshots/welcome_page_1.png">
 
 
-* Login & Signup:
+* Login & Sign up:
   <br/>
   <br/>
   <img src="./docs/screenshots/welcome_page_2.png">
@@ -218,14 +219,13 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
 * Account:
   <br/>
   <br/>
-  <img src="./docs/screenshots/account_page.png">
- 
+  <img src="./docs/screenshots/account_page.png"/>
   
+
 ## 📲🚀 Download PlantFriends on Google Play
 
-* PlantFriends is now available on Google Play!
+* You can start your plant care journey today—PlantFriends is now available on 
+[Google Play](https://play.google.com/store/apps/details?id=com.hwr.plant_friends)!
   <br/>
   <br/>
   <img src="./docs/screenshots/play_store.png">
-
-Start your plant care journey today: ([Download](https://play.google.com/store/apps/details?id=com.hwr.plant_friends))

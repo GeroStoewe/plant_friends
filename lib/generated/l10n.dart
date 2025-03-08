@@ -1595,10 +1595,10 @@ class S {
     );
   }
 
-  /// `Which plant suits me best?`
+  /// `Find Your Ideal Plant`
   String get plantQuiz {
     return Intl.message(
-      'Which plant suits me best?',
+      'Find Your Ideal Plant',
       name: 'plantQuiz',
       desc: '',
       args: [],

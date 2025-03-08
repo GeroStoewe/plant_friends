@@ -326,9 +326,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Plant details updated successfully",
     ),
     "plantName": MessageLookupByLibrary.simpleMessage("Plant Name"),
-    "plantQuiz": MessageLookupByLibrary.simpleMessage(
-      "Which plant suits me best?",
-    ),
+    "plantQuiz": MessageLookupByLibrary.simpleMessage("Find Your Ideal Plant"),
     "plantType": MessageLookupByLibrary.simpleMessage("Plant Type"),
     "plantWiki": MessageLookupByLibrary.simpleMessage("Plant Wiki"),
     "plantsByDifficulty": MessageLookupByLibrary.simpleMessage(

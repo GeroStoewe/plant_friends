@@ -35,6 +35,23 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
 
   // Save suggestions to Firebase
   void _saveSuggestions() {
+    // Check if all fields are empty
+    if (_featureController.text.isEmpty &&
+        _improvementController.text.isEmpty &&
+        _plantCareController.text.isEmpty &&
+        _technicalController.text.isEmpty &&
+        _commentsController.text.isEmpty) {
+      // Show SnackBar warning
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Empty forms are not allowed. Please provide feedback.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return; // Exit the function early
+    }
+
+    // Proceed with saving if the form is valid and user ID is available
     if (_formKey.currentState!.validate() && userId != null) {
       final suggestionsRef = dbRef.child("Suggestions").child(userId!).push();
 

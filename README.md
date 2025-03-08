@@ -41,7 +41,7 @@ Dart programming language, working with state management, and backend services (
 The key features of the Plant Friends app include:
 
 | Feature                        | Description                                                                                                 |
-|:-------------------------------|-------------------------------------------------------------------------------------------------------------|
+|--------------------------------|-------------------------------------------------------------------------------------------------------------|
 | 🌿 Add Plant                   | Allows users to add a new plant by providing its name, scientific name, and photo.                          |
 | ⏰ Plant Care Reminders         | Notifies users when their plants need watering.                                                             |
 | 📚 Plant Wiki                  | Includes a library of popular houseplants with detailed care instructions.                                  |
@@ -63,7 +63,7 @@ The key features of the Plant Friends app include:
 To run this project locally, ensure the following are installed:
 
 1.	IDE of your choice (e.g., Android Studio or Visual Studio Code)
-2.  Flutter SDK ([installation guide](https://docs.flutter.dev/get-started/install) )
+2.  Flutter SDK ([installation guide](https://docs.flutter.dev/get-started/install))
 3.	Git installed 
 4.  Android Emulator through Android Studio (optional, only required if not using a physical Android device)
 5.  Xcode Simulator for iOS (optional, only required if not using a physical iOS device)
@@ -220,6 +220,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <br/>
   <img src="./docs/screenshots/account_page.png"/>
   
+
 ## 📲🚀 Download PlantFriends on Google Play
 
 * You can start your plant care journey today—PlantFriends is now available on 

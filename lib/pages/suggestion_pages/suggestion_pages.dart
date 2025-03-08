@@ -52,7 +52,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
             Text(
                 'Thank you for sharing your feedback!'
             ),
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 1),
           ),
         );
 
@@ -73,6 +73,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
       });
     }
   }
+
   // Clear form fields
   /* void _clearForm() {
     _featureController.clear();
@@ -85,6 +86,8 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,20 +95,49 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
           localizations.suggestions,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
           ),
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.teal.shade700, Colors.green.shade700],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        elevation: 10,
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal.shade50, Colors.green.shade50],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Feature Suggestions
-              Text(
+        child: Card(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  // Feature Suggestions
+                    Text(
                 localizations.featureSuggestions,
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? Colors.green : Colors.teal.shade800,
+                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -127,14 +159,17 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                 ),
                 maxLines: 3,
               ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
               // Improvement Suggestions
               Text(
                 localizations.improvementSuggestions,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? Colors.green : Colors.teal.shade800,
+                  ),
+                ),
+                const SizedBox(height: 8),
               TextFormField(
                 controller: _improvementController,
                 decoration: InputDecoration(
@@ -159,8 +194,11 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
               // Plant Care Suggestions
               Text(
                 localizations.plantCareSuggestions,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? Colors.green : Colors.teal.shade800,
+                  ),
+                ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _plantCareController,
@@ -186,8 +224,11 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
               // Technical Feedback
               Text(
                 localizations.technicalFeedback,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? Colors.green : Colors.teal.shade800,
+                  ),
+                ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _technicalController,
@@ -213,8 +254,11 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
               // Additional Comments
               Text(
                 localizations.additionalComments,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? Colors.green : Colors.teal.shade800,
+                  ),
+                ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _commentsController,
@@ -242,8 +286,11 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                 child: CustomButton(
                     onTap: _saveSuggestions,
                     text: localizations.submit)
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
         ),
       ),

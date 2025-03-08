@@ -247,5 +247,19 @@
   "tutorialStep20": "Congratulations! You have completed the tutorial. Enjoy using the app!",
   "next": "Next",
   "finish": "Finish",
-  "back": "Back"
+  "back": "Back",
+  "suggestions": "Share Feedback",
+  "featureSuggestions": "Feature Suggestions",
+  "featureSuggestionsHint": "What new features would you like to see?",
+  "improvementSuggestions": "Improvement Suggestions",
+  "improvementSuggestionsHint": "What can we improve?",
+  "plantCareSuggestions": "Plant Care Suggestions",
+  "plantCareSuggestionsHint": "Any suggestions for plant care tips?",
+  "technicalFeedback": "Technical Feedback",
+  "technicalFeedbackHint": "Report bugs or technical issues here.",
+  "additionalComments": "Additional Comments",
+  "additionalCommentsHint": "Any other feedback?",
+  "submit": "Submit",
+  "thankYouForSuggestions": "Thank you for sharing your feedback!",
+  "saveSuggestionsError": "Failed to save suggestions. Please try again."
 }

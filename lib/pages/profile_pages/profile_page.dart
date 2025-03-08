@@ -11,6 +11,7 @@ import 'package:plant_friends/pages/profile_pages/profile_page_edit.dart';
 import 'package:plant_friends/pages/profile_pages/other/user_information_page.dart';
 import 'package:plant_friends/pages/quiz_pages/quiz_test_page.dart';
 import 'package:plant_friends/pages/tutorial_pages/tutorial_page.dart';
+import 'package:plant_friends/pages/suggestion_pages/suggestion_pages.dart';
 import 'package:plant_friends/themes/colors.dart';
 import 'package:plant_friends/themes/theme_provider.dart';
 import 'package:plant_friends/widgets/custom_profile_button.dart';
@@ -275,6 +276,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                 text: localizations.tutorial,
                                 icon: LineAwesomeIcons.play_circle,
                               ),
+                              //TODO
+                              ProfileMenuButton(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const SuggestionsPage()));
+                                },
+                                text: localizations.suggestions,
+                                icon: LineAwesomeIcons.lightbulb_solid,
+                              ),
+
                               SizedBox(height: size.height * 0.01),
                               Divider(
                                   thickness: 0.5,

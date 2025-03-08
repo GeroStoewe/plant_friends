@@ -218,8 +218,7 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
 * Account:
   <br/>
   <br/>
-  <img height="1154" src="./docs/screenshots/account_page.png" width="1110"/>
- /// TODO size does not match with the others
+  <img src="./docs/screenshots/account_page.png"/>
   
 ## 📲🚀 Download PlantFriends on Google Play
 

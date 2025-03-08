@@ -40,22 +40,22 @@ Dart programming language, working with state management, and backend services (
 
 The key features of the Plant Friends app include:
 
-| Feature                         | Description                                                                                         |
-|---------------------------------|-----------------------------------------------------------------------------------------------------|
-| 🌿 Add Plant                    | Allows users to add a new plant by providing its name, scientific name, and photo.                  |
-| ⏰ Plant Care Reminders          | Notifies users when their plants need watering.                                                     |
-| 📚 Plant Wiki                   | Includes a library of popular houseplants with detailed care instructions.                          |
-| 📅 Watering Log                 | Tracks watering history for each plant on Calendar Page.                                            |
-| 👤 User Profiles                | Users can create profiles and sync their plant data across devices using Firebase.                  |
-| 🔍 Search Plants                | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page.   |
-| ❤️ Plant Wishlist               | Allows users to save plants from Wiki page they want to add in Wishlist.                            |
-| 📸 Photo Journal (Zoomable)     | Enables users to add plant photos and zoom in/out for detailed viewing within the photo journal.    |
-| 🌱 Which plant suits me best?   | Asks questions about room conditions of user and recommends the best plants based on user answers.  |
-| 🔍 Plant recognition AI         | Can identify plants from photos.                                                                    |
-| 🗣️ Different language options  | Options: English, German, Turkish, Spanish, Italian, and French                                     |
-| 📖️ App Tutorial                | Offers an app tutorial after first login.                                                           |
-| 💡 Share Feedback               | Allows users to provide their thoughts and suggestions to improve this app.                         |
-| 🌞🌚 Light and Dark Mode        | Offers both light and dark themes for a better user experience.                                     |
+| Feature                        | Description                                                                                                 |
+|:-------------------------------|-------------------------------------------------------------------------------------------------------------|
+| 🌿 Add Plant                   | Allows users to add a new plant by providing its name, scientific name, and photo.                          |
+| ⏰ Plant Care Reminders         | Notifies users when their plants need watering.                                                             |
+| 📚 Plant Wiki                  | Includes a library of popular houseplants with detailed care instructions.                                  |
+| 📅 Watering Log                | Tracks watering history for each plant on Calendar Page.                                                    |
+| 👤 User Profiles               | Users can create profiles and sync their plant data across devices using Firebase.                          |
+| 🔍 Search Plants               | Users can search their plant collection on My Plants Page and look for plants on Plant Wiki Page.           |
+| ❤️ Plant Wishlist              | Allows users to save plants from Wiki page they want to add in Wishlist.                                    |
+| 📸 Photo Journal (Zoomable)    | Enables users to add plant photos and zoom in/out for detailed viewing within the photo journal.            |
+| ❓ Find Your Ideal Plant        | Quiz asking questions about room conditions of user and recommending the best plants based on user answers. |
+| 🔍 Plant recognition AI        | Can identify plants from photos.                                                                            |
+| 🗣️ Different language options | Options: English, German, Turkish, Spanish, Italian, and French                                             |
+| 📖️ App Tutorial               | Offers an app tutorial after first login.                                                                   |
+| 💡 Share Feedback              | Allows users to provide their thoughts and suggestions to improve this app.                                 |
+| 🌞🌚 Light and Dark Mode       | Offers both light and dark themes for a better user experience.                                             |
  
 
 ## Prerequisites

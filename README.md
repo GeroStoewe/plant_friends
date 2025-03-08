@@ -228,4 +228,4 @@ The following sample of views were taken from iOS (iPhone 15) and Android (Pixel
   <br/>
   <img src="./docs/screenshots/play_store.png">
 
-* Start your plant care journey today: ([Download](https://play.google.com/store/apps/details?id=com.hwr.plant_friends))
+* Start your plant care journey today: [Download](https://play.google.com/store/apps/details?id=com.hwr.plant_friends)

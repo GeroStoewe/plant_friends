@@ -1595,9 +1595,14 @@ class S {
     );
   }
 
-  /// `Plant Quiz`
+  /// `Find Your Ideal Plant`
   String get plantQuiz {
-    return Intl.message('Plant Quiz', name: 'plantQuiz', desc: '', args: []);
+    return Intl.message(
+      'Find Your Ideal Plant',
+      name: 'plantQuiz',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `About`
@@ -2118,6 +2123,151 @@ class S {
   /// `Back`
   String get back {
     return Intl.message('Back', name: 'back', desc: '', args: []);
+  }
+
+  /// `Share Feedback`
+  String get suggestions {
+    return Intl.message(
+      'Share Feedback',
+      name: 'suggestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Feature Suggestions`
+  String get featureSuggestions {
+    return Intl.message(
+      'Feature Suggestions',
+      name: 'featureSuggestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What new features would you like to see?`
+  String get featureSuggestionsHint {
+    return Intl.message(
+      'What new features would you like to see?',
+      name: 'featureSuggestionsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Improvement Suggestions`
+  String get improvementSuggestions {
+    return Intl.message(
+      'Improvement Suggestions',
+      name: 'improvementSuggestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What can we improve?`
+  String get improvementSuggestionsHint {
+    return Intl.message(
+      'What can we improve?',
+      name: 'improvementSuggestionsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plant Care Suggestions`
+  String get plantCareSuggestions {
+    return Intl.message(
+      'Plant Care Suggestions',
+      name: 'plantCareSuggestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Any suggestions for plant care tips?`
+  String get plantCareSuggestionsHint {
+    return Intl.message(
+      'Any suggestions for plant care tips?',
+      name: 'plantCareSuggestionsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Technical Feedback`
+  String get technicalFeedback {
+    return Intl.message(
+      'Technical Feedback',
+      name: 'technicalFeedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report bugs or technical issues here.`
+  String get technicalFeedbackHint {
+    return Intl.message(
+      'Report bugs or technical issues here.',
+      name: 'technicalFeedbackHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Additional Comments`
+  String get additionalComments {
+    return Intl.message(
+      'Additional Comments',
+      name: 'additionalComments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Any other feedback?`
+  String get additionalCommentsHint {
+    return Intl.message(
+      'Any other feedback?',
+      name: 'additionalCommentsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit`
+  String get submit {
+    return Intl.message('Submit', name: 'submit', desc: '', args: []);
+  }
+
+  /// `Thank you for sharing your feedback!`
+  String get thankYouForSuggestions {
+    return Intl.message(
+      'Thank you for sharing your feedback!',
+      name: 'thankYouForSuggestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to save suggestions. Please try again.`
+  String get saveSuggestionsError {
+    return Intl.message(
+      'Failed to save suggestions. Please try again.',
+      name: 'saveSuggestionsError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empty forms are not allowed. Please provide feedback.`
+  String get emptyFormWarning {
+    return Intl.message(
+      'Empty forms are not allowed. Please provide feedback.',
+      name: 'emptyFormWarning',
+      desc: '',
+      args: [],
+    );
   }
 }
 

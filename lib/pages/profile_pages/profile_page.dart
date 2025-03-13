@@ -19,6 +19,8 @@ import 'package:plant_friends/widgets/profile_menu_button.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../wiki_pages/filter_pages/plant_wishlist_page.dart';
+
 class ProfilePage extends StatefulWidget {
   ProfilePage({
     Key? key,
@@ -275,6 +277,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                 },
                                 text: localizations.tutorial,
                                 icon: LineAwesomeIcons.play_circle,
+                              ),
+                              ProfileMenuButton(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const PlantWishListPage()));
+                                },
+                                text: localizations.wishlistTitle,
+                                icon: LineAwesomeIcons.heart,
                               ),
                               //TODO
                               ProfileMenuButton(

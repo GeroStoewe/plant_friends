@@ -336,7 +336,8 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
           */
 
           // Update the plant data in the database
-          await dbRef.child("Plants").child(widget.plant.key!).update(data);
+
+
 
           // Show success message
           if (mounted) {
@@ -354,6 +355,16 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
             Navigator.pop(context); // Dismiss the event loading dialog
           }
         }
+      }
+      try {
+        await dbRef.child("Plants").child(widget.plant.key!).update(data);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Update erfolgreich!")),
+        );
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Fehler beim Aktualisieren: $error")),
+        );
       }
 
       if (mounted) {
@@ -403,6 +414,7 @@ class _MyPlantsDetailsEditPageState extends State<MyPlantsDetailsEditPage> {
 
       // Retrieve and return the download URL
       String downloadUrl = await ref.getDownloadURL();
+      print("Download URL retrieved: $downloadUrl");
 
       return downloadUrl;
 
